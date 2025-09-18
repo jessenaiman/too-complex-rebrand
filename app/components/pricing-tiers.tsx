@@ -84,7 +84,7 @@ export const PricingTiers: React.FC<PricingTiersProps> = ({ className, id = "pri
       aria-labelledby="pricing-heading"
       className={cn(
         "relative py-28 md:py-36 overflow-hidden",
-        "after:pointer-events-none after:absolute after:inset-0 after:bg-gradient-to-b after:from-primary/5 after:via-transparent after:to-secondary/5",
+        "after:pointer-events-none after:absolute after:inset-0 after:bg-linear-to-b after:from-primary/5 after:via-transparent after:to-secondary/5",
         className
       )}
     >
@@ -101,7 +101,7 @@ export const PricingTiers: React.FC<PricingTiersProps> = ({ className, id = "pri
           </div>
           <h2
             id="pricing-heading"
-            className="mt-6 bg-gradient-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent text-3xl md:text-5xl font-extrabold tracking-tight"
+            className="mt-6 bg-linear-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent text-3xl md:text-5xl font-extrabold tracking-tight"
           >
             Choose Acceleration Intensity
           </h2>
@@ -144,7 +144,7 @@ export const PricingTiers: React.FC<PricingTiersProps> = ({ className, id = "pri
               transition={{ delay: 0.1 + i * 0.08, duration: 0.55, ease: [0.16, 0.8, 0.24, 1] }}
               className={cn(
                 "relative flex flex-col rounded-3xl border border-border/50 p-6 md:p-8",
-                "bg-gradient-to-br from-background/60 to-background/30 backdrop-blur-sm",
+                "bg-linear-to-br from-background/60 to-background/30 backdrop-blur-sm",
                 tier.highlight
                   ? "ring-2 ring-primary/30 shadow-lg shadow-primary/10"
                   : "hover:shadow-md hover:shadow-primary/5 transition-shadow",
@@ -156,7 +156,7 @@ export const PricingTiers: React.FC<PricingTiersProps> = ({ className, id = "pri
                 aria-hidden="true"
                 className={cn(
                   "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-600",
-                  "bg-gradient-to-br from-primary/15 via-transparent to-secondary/20",
+                  "bg-linear-to-br from-primary/15 via-transparent to-secondary/20",
                   tier.highlight ? "opacity-100" : "group-hover:opacity-100"
                 )}
                 style={{ maskImage: "radial-gradient(circle at 30% 25%, black, transparent 70%)" }}

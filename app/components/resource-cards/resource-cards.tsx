@@ -84,14 +84,14 @@ const ResourceCard = ({ resource }: { resource: Resource }) => {
       transition={{ duration: 0.5 }}
       whileHover={{ y: -5 }}
       className={cn(
-        'group relative overflow-hidden rounded-2xl border border-border/40 bg-gradient-to-br from-background/50 to-background/30 p-6 backdrop-blur-sm transition-all duration-300 hover:border-border/60 hover:shadow-xl',
+        'group relative overflow-hidden rounded-2xl border border-border/40 bg-linear-to-br from-background/50 to-background/30 p-6 backdrop-blur-sm transition-all duration-300 hover:border-border/60 hover:shadow-xl',
         resource.featured && 'ring-2 ring-primary/20',
       )}
     >
       {/* Gradient background overlay */}
       <div
         className={cn(
-          'absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-10',
+          'absolute inset-0 bg-linear-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-10',
           resource.color || 'from-primary to-secondary',
         )}
       />

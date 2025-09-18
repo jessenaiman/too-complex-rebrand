@@ -89,7 +89,7 @@ If you ever need to use a CSS property that Tailwind doesn't include a utility f
 ```html
 <!-- [!code filename:HTML] -->
 <!-- [!code classes:[mask-type:luminance]] -->
-<div class="[mask-type:luminance]">
+<div class="mask-type-luminance">
   <!-- ... -->
 </div>
 ```
@@ -99,7 +99,7 @@ This is _really_ like inline styles, but again with the benefit that you can use
 ```html
 <!-- [!code filename:HTML] -->
 <!-- [!code classes:[mask-type:luminance],hover:[mask-type:alpha]] -->
-<div class="[mask-type:luminance] hover:[mask-type:alpha]">
+<div class="mask-type-luminance hover:mask-type-alpha">
   <!-- ... -->
 </div>
 ```
@@ -123,7 +123,7 @@ Arbitrary _variants_ are like arbitrary values but for doing on-the-fly selector
 <!-- [!code word:\[&\:nth-child(-n+3)\]] -->
 <ul role="list">
   {#each items as item}
-  <li class="lg:[&:nth-child(-n+3)]:hover:underline">{item}</li>
+  <li class="lg:nth-[-n+3]:hover:underline">{item}</li>
   {/each}
 </ul>
 ```
@@ -203,7 +203,7 @@ In these situations, you can "hint" the underlying type to Tailwind by adding a 
 <div class="text-(length:--my-var)">...</div>
 
 <!-- Will generate a color utility -->
-<div class="text-(color:--my-var)">...</div>
+<div class="text-(--my-var)">...</div>
 ```
 
 ## Using custom CSS
@@ -593,7 +593,7 @@ To handle fractions, we rely on the CSS `ratio` data type. If this is used with 
 }
 ```
 
-This will match utilities like `aspect-square`, `aspect-3/4`, and `aspect-[7/9]`.
+This will match utilities like `aspect-square`, `aspect-3/4`, and `aspect-7/9`.
 
 ## Adding custom variants
 

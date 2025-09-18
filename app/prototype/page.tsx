@@ -303,7 +303,7 @@ const App = () => {
       >
         <motion.h1 
           key={shimmerKey}
-          className={`text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r ${themeColors.primary}`}
+          className={`text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-linear-to-r ${themeColors.primary}`}
           variants={shimmerVariants}
           initial="initial"
           animate="animate"
@@ -321,7 +321,7 @@ const App = () => {
           disabled={isLoading}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 flex items-center space-x-3 relative overflow-hidden bg-gradient-to-r ${themeColors.primary} text-white shadow-lg hover:from-${themeColors.primary.split(' ')[1] || 'blue-600'} hover:to-${themeColors.primary.split(' ')[3] || 'cyan-700'} shadow-${themeColors.text.replace('text-', '')}/30`}
+          className={`px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 flex items-center space-x-3 relative overflow-hidden bg-linear-to-r ${themeColors.primary} text-white shadow-lg hover:from-${themeColors.primary.split(' ')[1] || 'blue-600'} hover:to-${themeColors.primary.split(' ')[3] || 'cyan-700'} shadow-${themeColors.text.replace('text-', '')}/30`}
         >
           {isLoading ? (
             <>
@@ -350,7 +350,7 @@ const App = () => {
         animate="animate"
         className="max-w-4xl mx-auto mb-16"
       >
-        <div className={`bg-gradient-to-br ${themeColors.primary.replace('500', '500/20').replace('600', '600/20')} backdrop-blur-xl rounded-3xl p-8 shadow-2xl transform transition-all duration-700 hover:scale-105 overflow-hidden relative`}
+        <div className={`bg-linear-to-br ${themeColors.primary.replace('500', '500/20').replace('600', '600/20')} backdrop-blur-xl rounded-3xl p-8 shadow-2xl transform transition-all duration-700 hover:scale-105 overflow-hidden relative`}
         style={{ 
           borderWidth: randomBorderWidth, 
           borderStyle: 'solid',
@@ -380,7 +380,7 @@ const App = () => {
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
                   (e.target as HTMLImageElement).parentElement!.innerHTML = `
-                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br ${themeColors.primary}">
+                    <div class="w-full h-full flex items-center justify-center bg-linear-to-br ${themeColors.primary}">
                       <div class="text-center">
                         <div class="text-6xl mb-4">🎨</div>
                         <p class="text-xl font-semibold text-white">Image Generation Failed</p>
@@ -441,7 +441,7 @@ const App = () => {
             
             <div className="w-full bg-gray-700 rounded-full h-2 mb-6">
               <motion.div 
-                className={`h-2 rounded-full bg-gradient-to-r ${themeColors.primary}`}
+                className={`h-2 rounded-full bg-linear-to-r ${themeColors.primary}`}
                 initial={{ width: 0 }}
                 animate={{ width: "100%" }}
                 transition={{ duration: 1.5, delay: 0.5 }}
@@ -452,7 +452,7 @@ const App = () => {
               {[1, 2, 3].map((item) => (
                 <motion.div
                   key={item}
-                  className={`p-4 rounded-xl text-center backdrop-blur-sm bg-gradient-to-br ${themeColors.primary.replace('500', '500/30').replace('600', '600/30')} border ${randomBorderColor}`}
+                  className={`p-4 rounded-xl text-center backdrop-blur-sm bg-linear-to-br ${themeColors.primary.replace('500', '500/30').replace('600', '600/30')} border ${randomBorderColor}`}
                   style={{ borderWidth: randomBorderWidth - 1 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -501,7 +501,7 @@ const App = () => {
           ].map((feature, index) => (
             <motion.div
               key={index}
-              className={`p-6 rounded-2xl backdrop-blur-sm transition-all duration-500 hover:scale-105 bg-gradient-to-br ${themeColors.secondary.replace('400', '500/20').replace('600', '600/20')} border ${randomBorderColor}`}
+              className={`p-6 rounded-2xl backdrop-blur-sm transition-all duration-500 hover:scale-105 bg-linear-to-br ${themeColors.secondary.replace('400', '500/20').replace('600', '600/20')} border ${randomBorderColor}`}
               style={{ borderWidth: randomBorderWidth }}
               whileHover={{ y: -5 }}
               initial={{ opacity: 0, y: 30 }}
@@ -552,7 +552,7 @@ const App = () => {
           ].map((project, index) => (
             <motion.div
               key={index}
-              className={`p-6 rounded-2xl backdrop-blur-sm transition-all duration-500 hover:scale-105 bg-gradient-to-br ${themeColors.primary.replace('500', '500/20').replace('600', '600/20')} border ${randomBorderColor}`}
+              className={`p-6 rounded-2xl backdrop-blur-sm transition-all duration-500 hover:scale-105 bg-linear-to-br ${themeColors.primary.replace('500', '500/20').replace('600', '600/20')} border ${randomBorderColor}`}
               style={{ borderWidth: randomBorderWidth }}
               whileHover={{ y: -5 }}
               initial={{ opacity: 0, y: 30 }}
@@ -604,7 +604,7 @@ const App = () => {
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
-              className={`block p-6 rounded-2xl backdrop-blur-sm transition-all duration-500 hover:scale-105 bg-gradient-to-br ${themeColors.secondary.replace('400', '500/20').replace('600', '600/20')} border ${randomBorderColor}`}
+              className={`block p-6 rounded-2xl backdrop-blur-sm transition-all duration-500 hover:scale-105 bg-linear-to-br ${themeColors.secondary.replace('400', '500/20').replace('600', '600/20')} border ${randomBorderColor}`}
               style={{ borderWidth: randomBorderWidth }}
               whileHover={{ y: -5 }}
               initial={{ opacity: 0, y: 30 }}
@@ -622,7 +622,7 @@ const App = () => {
 
       {/* Info Section */}
       <motion.div
-        className={`mt-16 p-8 rounded-3xl backdrop-blur-sm border bg-gradient-to-br ${themeColors.primary.replace('500', '500/20').replace('600', '600/20')} border-${themeColors.text.replace('text-', '')}/30`}
+        className={`mt-16 p-8 rounded-3xl backdrop-blur-sm border bg-linear-to-br ${themeColors.primary.replace('500', '500/20').replace('600', '600/20')} border-${themeColors.text.replace('text-', '')}/30`}
         style={{ borderWidth: randomBorderWidth + 1 }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -639,7 +639,7 @@ const App = () => {
             href="https://pollinations.ai" 
             target="_blank" 
             rel="noopener noreferrer"
-            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 bg-gradient-to-r ${themeColors.primary} text-white shadow-lg hover:from-${themeColors.primary.split(' ')[1] || 'blue-600'} hover:to-${themeColors.primary.split(' ')[3] || 'cyan-700'} shadow-${themeColors.text.replace('text-', '')}/30`}
+            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 bg-linear-to-r ${themeColors.primary} text-white shadow-lg hover:from-${themeColors.primary.split(' ')[1] || 'blue-600'} hover:to-${themeColors.primary.split(' ')[3] || 'cyan-700'} shadow-${themeColors.text.replace('text-', '')}/30`}
           >
             <span>Visit Pollinations.AI</span>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -650,7 +650,7 @@ const App = () => {
             href="https://github.com/pollinations" 
             target="_blank" 
             rel="noopener noreferrer"
-            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 bg-gradient-to-r ${themeColors.secondary} text-white shadow-lg hover:from-${themeColors.secondary.split(' ')[1] || 'blue-600'} hover:to-${themeColors.secondary.split(' ')[3] || 'cyan-700'} shadow-${themeColors.text.replace('text-', '')}/30`}
+            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 bg-linear-to-r ${themeColors.secondary} text-white shadow-lg hover:from-${themeColors.secondary.split(' ')[1] || 'blue-600'} hover:to-${themeColors.secondary.split(' ')[3] || 'cyan-700'} shadow-${themeColors.text.replace('text-', '')}/30`}
           >
             <span>View on GitHub</span>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">

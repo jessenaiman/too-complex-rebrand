@@ -43,7 +43,7 @@ export const AnimatedSurface: React.FC<AnimatedSurfaceProps> = ({
 
   const base = cn(
     "relative rounded-2xl overflow-hidden",
-    "bg-gradient-to-br from-background/60 to-background/30 backdrop-blur-sm",
+    "bg-linear-to-br from-background/60 to-background/30 backdrop-blur-sm",
     border && "border border-border/50",
     focusRing && "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
     interactive && "transition-shadow",
@@ -71,7 +71,7 @@ export const AnimatedSurface: React.FC<AnimatedSurfaceProps> = ({
           aria-hidden="true"
           className={cn(
             "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500",
-            "bg-gradient-to-br",
+            "bg-linear-to-br",
             gradient,
             interactive && "group-hover:opacity-100"
           )}
@@ -85,7 +85,7 @@ export const AnimatedSurface: React.FC<AnimatedSurfaceProps> = ({
           aria-hidden="true"
           className={cn(
             "pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/5",
-            "before:absolute before:inset-0 before:rounded-[inherit] before:bg-gradient-to-b",
+            "before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-b",
             "before:from-white/5 before:to-transparent before:opacity-0 before:transition-opacity",
             interactive && "group-hover:before:opacity-100"
           )}

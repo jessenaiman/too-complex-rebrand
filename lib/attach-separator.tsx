@@ -31,14 +31,14 @@ export const attachSeparator: BuildPageTreeOptions['attachSeparator'] = (
     case 'Animate UI':
       node.name = (
         <Separator
-          icon={<AnimateUIIcon className="!size-3" />}
+          icon={<AnimateUIIcon className="size-3!" />}
           name="Animate UI"
         />
       );
       break;
     case 'Radix UI':
       node.name = (
-        <Separator icon={<RadixIcon className="!size-2.5" />} name="Radix UI" />
+        <Separator icon={<RadixIcon className="size-2.5!" />} name="Radix UI" />
       );
       break;
     case 'Base UI':

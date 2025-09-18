@@ -44,7 +44,7 @@ export const HeroLanding: React.FC<HeroLandingProps> = ({ className }) => {
     >
       {/* Ambient background using local HeroBackground */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background" />
+        <div className="absolute inset-0 bg-linear-to-b from-background/0 via-background/40 to-background" />
       </div>
 
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
@@ -74,7 +74,7 @@ export const HeroLanding: React.FC<HeroLandingProps> = ({ className }) => {
           <span className="sr-only">
             Designing and building animated React interfaces
           </span>
-          <span className="bg-gradient-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent">
+          <span className="bg-linear-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent">
             Build delightful{' '}
             {/* Approximate shiny effect using local SplittingText */}
             <SplittingText
@@ -87,7 +87,7 @@ export const HeroLanding: React.FC<HeroLandingProps> = ({ className }) => {
             .
           </span>
           <br className="hidden md:block" />
-          <span className="bg-gradient-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent inline-block mt-2">
+          <span className="bg-linear-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent inline-block mt-2">
             Ship
             <SplittingText
               text=" production UI "

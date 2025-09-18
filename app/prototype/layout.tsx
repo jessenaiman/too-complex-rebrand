@@ -50,13 +50,13 @@ const Layout = ({ children, themeColors, handleRebrand, isRebranded, logoImage, 
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-1000 bg-gradient-to-br ${themeColors.background}`}>
+    <div className={`min-h-screen transition-colors duration-1000 bg-linear-to-br ${themeColors.background}`}>
       {/* Animated Background Elements */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className={`absolute top-1/4 left-1/4 w-96 h-96 rounded-full filter blur-3xl opacity-30 animate-pulse bg-gradient-to-r ${themeColors.secondary}`}></div>
-        <div className={`absolute top-3/4 right-1/4 w-80 h-80 rounded-full filter blur-3xl opacity-20 animate-pulse delay-1000 bg-gradient-to-r ${themeColors.secondary}`}></div>
-        <div className={`absolute bottom-1/4 left-1/3 w-64 h-64 rounded-full filter blur-2xl opacity-25 animate-bounce bg-gradient-to-r ${themeColors.primary}`}></div>
-        <div className={`absolute top-1/3 right-1/3 w-72 h-72 rounded-full filter blur-3xl opacity-15 animate-pulse delay-700 bg-gradient-to-r ${themeColors.secondary}`}></div>
+        <div className={`absolute top-1/4 left-1/4 w-96 h-96 rounded-full filter blur-3xl opacity-30 animate-pulse bg-linear-to-r ${themeColors.secondary}`}></div>
+        <div className={`absolute top-3/4 right-1/4 w-80 h-80 rounded-full filter blur-3xl opacity-20 animate-pulse delay-1000 bg-linear-to-r ${themeColors.secondary}`}></div>
+        <div className={`absolute bottom-1/4 left-1/3 w-64 h-64 rounded-full filter blur-2xl opacity-25 animate-bounce bg-linear-to-r ${themeColors.primary}`}></div>
+        <div className={`absolute top-1/3 right-1/3 w-72 h-72 rounded-full filter blur-3xl opacity-15 animate-pulse delay-700 bg-linear-to-r ${themeColors.secondary}`}></div>
       </div>
 
       {/* RadixUI-style Navbar */}
@@ -140,7 +140,7 @@ const Layout = ({ children, themeColors, handleRebrand, isRebranded, logoImage, 
 
       {/* Footer */}
       <motion.footer
-        className={`py-8 px-6 border-t backdrop-blur-xl bg-gradient-to-r ${themeColors.background.replace('900', '900/50')} border-${themeColors.text.replace('text-', '')}/30`}
+        className={`py-8 px-6 border-t backdrop-blur-xl bg-linear-to-r ${themeColors.background.replace('900', '900/50')} border-${themeColors.text.replace('text-', '')}/30`}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}

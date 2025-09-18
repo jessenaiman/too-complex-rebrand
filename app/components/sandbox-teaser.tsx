@@ -32,13 +32,13 @@ export const SandboxTeaser: React.FC<SandboxTeaserProps> = ({ className, id = "s
               transition={{ duration: 0.7, ease: [0.16, 0.8, 0.24, 1] }}
               className={cn(
                 "relative group rounded-3xl border border-border/50",
-                "bg-gradient-to-br from-background/60 to-background/30 backdrop-blur-sm",
+                "bg-linear-to-br from-background/60 to-background/30 backdrop-blur-sm",
                 "p-6 md:p-8 overflow-hidden min-h-[420px] flex flex-col"
               )}
             >
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100 bg-gradient-to-br from-primary/15 via-transparent to-secondary/20"
+                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100 bg-linear-to-br from-primary/15 via-transparent to-secondary/20"
                 style={{ maskImage: "radial-gradient(circle at 35% 30%, black 0%, transparent 65%)" }}
               />
               <h3 className="text-sm font-semibold tracking-wide text-primary/80 mb-4">
@@ -57,7 +57,7 @@ export const SandboxTeaser: React.FC<SandboxTeaserProps> = ({ className, id = "s
                       transition={{ delay: 0.15 + i * 0.08, duration: 0.55, ease: [0.16, 0.8, 0.24, 1] }}
                       className={cn(
                         "relative rounded-xl border border-border/40",
-                        "bg-gradient-to-br from-background/80 to-background/40",
+                        "bg-linear-to-br from-background/80 to-background/40",
                         "h-28 flex items-center justify-center text-xs font-medium tracking-wide text-muted-foreground",
                         "shadow-sm"
                       )}
@@ -66,7 +66,7 @@ export const SandboxTeaser: React.FC<SandboxTeaserProps> = ({ className, id = "s
                       {!reduce && (
                         <motion.span
                           aria-hidden="true"
-                          className="absolute inset-0 rounded-[inherit] opacity-0 group-hover:opacity-100 bg-gradient-to-br from-primary/20 via-transparent to-secondary/30 transition-opacity"
+                          className="absolute inset-0 rounded-[inherit] opacity-0 group-hover:opacity-100 bg-linear-to-br from-primary/20 via-transparent to-secondary/30 transition-opacity"
                         />
                       )}
                       {!reduce && (
@@ -119,7 +119,7 @@ export const SandboxTeaser: React.FC<SandboxTeaserProps> = ({ className, id = "s
             </div>
             <h2
               id="sandbox-teaser-heading"
-              className="mt-6 text-3xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent"
+              className="mt-6 text-3xl md:text-5xl font-extrabold tracking-tight bg-linear-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent"
             >
               Experiment First. Decide Faster.
             </h2>

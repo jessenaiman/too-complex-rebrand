@@ -22,7 +22,7 @@ export const ProfessionalPathways: React.FC<ProfessionalPathwaysProps> = ({ clas
       aria-labelledby="professional-pathways-heading"
       className={cn(
         "relative py-28 md:py-36 overflow-hidden",
-        "after:pointer-events-none after:absolute after:inset-0 after:bg-gradient-to-b after:from-background/40 after:via-transparent after:to-background/60",
+        "after:pointer-events-none after:absolute after:inset-0 after:bg-linear-to-b after:from-background/40 after:via-transparent after:to-background/60",
         className
       )}
     >
@@ -39,7 +39,7 @@ export const ProfessionalPathways: React.FC<ProfessionalPathwaysProps> = ({ clas
           </div>
           <h2
             id="professional-pathways-heading"
-            className="mt-6 bg-gradient-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent text-3xl md:text-5xl font-extrabold tracking-tight"
+            className="mt-6 bg-linear-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent text-3xl md:text-5xl font-extrabold tracking-tight"
           >
             Need Momentum? Plug Me In.
           </h2>

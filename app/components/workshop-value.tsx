@@ -39,7 +39,7 @@ export const WorkshopValue: React.FC<WorkshopValueProps> = ({ className }) => {
     <section
       className={cn(
         "relative py-28 md:py-36 overflow-hidden",
-        "after:pointer-events-none after:absolute after:inset-0 after:bg-gradient-to-b after:from-primary/5 after:via-transparent after:to-secondary/5",
+        "after:pointer-events-none after:absolute after:inset-0 after:bg-linear-to-b after:from-primary/5 after:via-transparent after:to-secondary/5",
         className
       )}
       aria-labelledby="workshop-heading"
@@ -59,7 +59,7 @@ export const WorkshopValue: React.FC<WorkshopValueProps> = ({ className }) => {
             id="workshop-heading"
             className="mt-6 text-3xl md:text-5xl font-extrabold tracking-tight text-balance leading-tight"
           >
-            <span className="bg-gradient-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent">
+            <span className="bg-linear-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent">
               <SplittingText
                 text="Visual"
                 className="px-0.5 inline-block"
@@ -70,7 +70,7 @@ export const WorkshopValue: React.FC<WorkshopValueProps> = ({ className }) => {
               {" "}Adjustments
             </span>
             <span className="inline-block mx-2 text-primary/60 align-middle">→</span>
-            <span className="inline-block bg-gradient-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent">
+            <span className="inline-block bg-linear-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent">
               <SplittingText
                 text="Immediate Code Output"
                 className="inline-block text-primary"
@@ -118,13 +118,13 @@ export const WorkshopValue: React.FC<WorkshopValueProps> = ({ className }) => {
               }}
               className={cn(
                 "group relative flex flex-col rounded-2xl border border-border/50",
-                "bg-gradient-to-br from-background/60 to-background/30 backdrop-blur-sm",
+                "bg-linear-to-br from-background/60 to-background/30 backdrop-blur-sm",
                 "p-6 md:p-7 overflow-hidden"
               )}
             >
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10"
+                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-linear-to-br from-primary/10 via-transparent to-secondary/10"
                 style={{ maskImage: "radial-gradient(circle at 30% 25%, black, transparent 70%)" }}
               />
               <h3 className="relative z-10 text-sm font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">

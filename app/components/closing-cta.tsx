@@ -34,7 +34,7 @@ export const ClosingCta: React.FC<ClosingCtaProps> = ({ className, id = "wrap-up
           </div>
           <h2
             id="closing-cta-heading"
-            className="mt-8 text-balance bg-gradient-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent text-3xl md:text-5xl font-extrabold tracking-tight"
+            className="mt-8 text-balance bg-linear-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent text-3xl md:text-5xl font-extrabold tracking-tight"
           >
             Stop Wrestling Interfaces. Start Sculpting Them.
           </h2>

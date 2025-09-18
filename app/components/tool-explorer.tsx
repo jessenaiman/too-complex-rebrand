@@ -96,7 +96,7 @@ export const ToolExplorer: React.FC<ToolExplorerProps> = ({ className, id = "too
             id="tool-explorer-heading"
             className={cn(
               "mt-6 text-3xl md:text-5xl font-extrabold tracking-tight",
-              "bg-gradient-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent"
+              "bg-linear-to-b from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent"
             )}
           >
             Launch a Tool. Start Touching the Interface.
@@ -147,7 +147,7 @@ export const ToolExplorer: React.FC<ToolExplorerProps> = ({ className, id = "too
                 whileHover={!prefersReduced ? { y: -8 } : undefined}
                 className={cn(
                   "group relative flex flex-col rounded-2xl border border-border/50",
-                  "bg-gradient-to-br from-background/60 to-background/30 backdrop-blur-sm",
+                  "bg-linear-to-br from-background/60 to-background/30 backdrop-blur-sm",
                   "p-5 md:p-6 transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
                   "hover:shadow-lg hover:shadow-primary/10"
                 )}
@@ -156,7 +156,7 @@ export const ToolExplorer: React.FC<ToolExplorerProps> = ({ className, id = "too
                   aria-hidden="true"
                   className={cn(
                     "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100",
-                    "bg-gradient-to-br",
+                    "bg-linear-to-br",
                     gradient
                   )}
                   style={{ maskImage: "radial-gradient(circle at 30% 20%, black, transparent 70%)" }}
@@ -223,7 +223,7 @@ export const ToolExplorer: React.FC<ToolExplorerProps> = ({ className, id = "too
                   aria-hidden="true"
                   className={cn(
                     "pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5",
-                    "before:absolute before:inset-0 before:rounded-[inherit] before:bg-gradient-to-b",
+                    "before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-b",
                     "before:from-white/5 before:to-transparent before:opacity-0 before:transition-opacity",
                     "group-hover:before:opacity-100"
                   )}

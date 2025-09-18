@@ -50,8 +50,8 @@ const App = () => {
     <div
       className={`min-h-screen flex items-center justify-center p-8 transition-colors duration-700 ${
         isRebranded
-          ? 'bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900'
-          : 'bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900'
+          ? 'bg-linear-to-br from-purple-900 via-blue-900 to-indigo-900'
+          : 'bg-linear-to-br from-gray-900 via-slate-800 to-gray-900'
       }`}
     >
       <div className="relative z-10 w-full max-w-4xl">
@@ -61,7 +61,7 @@ const App = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-linear-to-r from-white to-gray-300">
             Rebrand Experience
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
@@ -78,8 +78,8 @@ const App = () => {
             whileTap={{ scale: 0.95 }}
             className={`px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 flex items-center space-x-3 ${
               isRebranded
-                ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-lg shadow-pink-500/30'
-                : 'bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white shadow-lg shadow-blue-500/30'
+                ? 'bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-lg shadow-pink-500/30'
+                : 'bg-linear-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white shadow-lg shadow-blue-500/30'
             }`}
           >
             {isLoading ? (
@@ -123,8 +123,8 @@ const App = () => {
             <div
               className={`${
                 isRebranded
-                  ? 'bg-gradient-to-br from-pink-500/20 to-purple-600/20 backdrop-blur-xl border border-pink-500/30'
-                  : 'bg-gradient-to-br from-blue-500/20 to-cyan-600/20 backdrop-blur-xl border border-blue-500/30'
+                  ? 'bg-linear-to-br from-pink-500/20 to-purple-600/20 backdrop-blur-xl border border-pink-500/30'
+                  : 'bg-linear-to-br from-blue-500/20 to-cyan-600/20 backdrop-blur-xl border border-blue-500/30'
               } rounded-3xl p-8 shadow-2xl transform transition-all duration-700 hover:scale-105`}
             >
               <div className="flex flex-col items-center">
@@ -136,8 +136,8 @@ const App = () => {
                 >
                   {isRebranded ? (
                     <div className="relative w-24 h-24">
-                      <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full blur-lg opacity-70 animate-pulse"></div>
-                      <div className="relative w-full h-full bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+                      <div className="absolute inset-0 bg-linear-to-br from-pink-400 to-purple-500 rounded-full blur-lg opacity-70 animate-pulse"></div>
+                      <div className="relative w-full h-full bg-linear-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
                         <span className="text-2xl font-bold text-white">
                           R+
                         </span>
@@ -145,8 +145,8 @@ const App = () => {
                     </div>
                   ) : (
                     <div className="relative w-24 h-24">
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full blur-lg opacity-70 animate-pulse"></div>
-                      <div className="relative w-full h-full bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center">
+                      <div className="absolute inset-0 bg-linear-to-br from-blue-400 to-cyan-500 rounded-full blur-lg opacity-70 animate-pulse"></div>
+                      <div className="relative w-full h-full bg-linear-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center">
                         <span className="text-2xl font-bold text-white">R</span>
                       </div>
                     </div>
@@ -171,8 +171,8 @@ const App = () => {
                   <motion.div
                     className={`h-2 rounded-full ${
                       isRebranded
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-600'
-                        : 'bg-gradient-to-r from-blue-500 to-cyan-600'
+                        ? 'bg-linear-to-r from-pink-500 to-purple-600'
+                        : 'bg-linear-to-r from-blue-500 to-cyan-600'
                     }`}
                     initial={{ width: 0 }}
                     animate={{ width: '100%' }}
@@ -186,8 +186,8 @@ const App = () => {
                       key={item}
                       className={`p-4 rounded-xl text-center ${
                         isRebranded
-                          ? 'bg-gradient-to-br from-pink-500/30 to-purple-600/30 border border-pink-500/30'
-                          : 'bg-gradient-to-br from-blue-500/30 to-cyan-600/30 border border-blue-500/30'
+                          ? 'bg-linear-to-br from-pink-500/30 to-purple-600/30 border border-pink-500/30'
+                          : 'bg-linear-to-br from-blue-500/30 to-cyan-600/30 border border-blue-500/30'
                       }`}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}

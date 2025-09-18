@@ -92,7 +92,7 @@ const App = () => {
 
   return (
     <div className={`min-h-screen transition-colors duration-700 ${
-      isRebranded ? 'bg-gradient-to-br from-purple-900 via-pink-900 to-indigo-900' : 'bg-gradient-to-br from-gray-900 via-slate-800 to-blue-900'
+      isRebranded ? 'bg-linear-to-br from-purple-900 via-pink-900 to-indigo-900' : 'bg-linear-to-br from-gray-900 via-slate-800 to-blue-900'
     }`}>
       {/* RadixUI-style Navbar */}
       <motion.nav 
@@ -171,7 +171,7 @@ const App = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <TypographyH1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
+          <TypographyH1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-linear-to-r from-white to-gray-300">
             Dynamic Rebrand Experience
           </TypographyH1>
           <TypographyP className="text-xl text-gray-300 max-w-3xl mx-auto">
@@ -186,8 +186,8 @@ const App = () => {
               disabled={isLoading}
               className={`px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 flex items-center space-x-3 ${
                 isRebranded
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-lg shadow-pink-500/30'
-                  : 'bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white shadow-lg shadow-blue-500/30'
+                  ? 'bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-lg shadow-pink-500/30'
+                  : 'bg-linear-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white shadow-lg shadow-blue-500/30'
               }`}
             >
               {isLoading ? (
@@ -220,8 +220,8 @@ const App = () => {
         >
           <div className={`${
             isRebranded 
-              ? 'bg-gradient-to-br from-pink-500/20 to-purple-600/20 backdrop-blur-xl border border-pink-500/30' 
-              : 'bg-gradient-to-br from-blue-500/20 to-cyan-600/20 backdrop-blur-xl border border-blue-500/30'
+              ? 'bg-linear-to-br from-pink-500/20 to-purple-600/20 backdrop-blur-xl border border-pink-500/30' 
+              : 'bg-linear-to-br from-blue-500/20 to-cyan-600/20 backdrop-blur-xl border border-blue-500/30'
           } rounded-3xl p-8 shadow-2xl transform transition-all duration-700 hover:scale-105 overflow-hidden`}>
             
             {/* AI Generated Background Image */}
@@ -275,7 +275,7 @@ const App = () => {
               <div className="w-full bg-gray-700 rounded-full h-2 mb-6">
                 <motion.div 
                   className={`h-2 rounded-full ${
-                    isRebranded ? 'bg-gradient-to-r from-pink-500 to-purple-600' : 'bg-gradient-to-r from-blue-500 to-cyan-600'
+                    isRebranded ? 'bg-linear-to-r from-pink-500 to-purple-600' : 'bg-linear-to-r from-blue-500 to-cyan-600'
                   }`}
                   initial={{ width: 0 }}
                   animate={{ width: "100%" }}
@@ -289,8 +289,8 @@ const App = () => {
                     key={item}
                     className={`p-4 rounded-xl text-center ${
                       isRebranded 
-                        ? 'bg-gradient-to-br from-pink-500/30 to-purple-600/30 border border-pink-500/30' 
-                        : 'bg-gradient-to-br from-blue-500/30 to-cyan-600/30 border border-blue-500/30'
+                        ? 'bg-linear-to-br from-pink-500/30 to-purple-600/30 border border-pink-500/30' 
+                        : 'bg-linear-to-br from-blue-500/30 to-cyan-600/30 border border-blue-500/30'
                     }`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

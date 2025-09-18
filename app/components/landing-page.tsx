@@ -26,7 +26,7 @@ function LandingPageContent() {
       </a>
       {/* Background */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background" />
+        <div className="absolute inset-0 bg-linear-to-b from-background/0 via-background/40 to-background" />
       </div>
 
       <div className="relative z-10">
