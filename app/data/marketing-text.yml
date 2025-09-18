@@ -17,3 +17,23 @@
 - name: "Atlas Fitness"
   tagline: "Stronger Every Day"
   description: "Atlas Fitness provides tailored training programs, nutrition coaching, and a supportive environment for all fitness levels."
+
+- name: "TechFlow Solutions"
+  tagline: "Streamline Your Success"
+  description: "TechFlow Solutions provides cutting-edge software tools and IT consulting services to help businesses optimize their operations."
+
+- name: "EcoVibe Products"
+  tagline: "Live Sustainably"
+  description: "EcoVibe offers eco-friendly household products made from recycled materials to help you reduce your environmental footprint."
+
+- name: "SkillBridge Academy"
+  tagline: "Build Your Future"
+  description: "SkillBridge Academy offers online courses and certifications in high-demand tech skills to help professionals advance their careers."
+
+- name: "Bloom Wellness"
+  tagline: "Nurture Your Wellbeing"
+  description: "Bloom Wellness provides natural health products and mindfulness resources to support holistic wellness and self-care."
+
+- name: "UrbanEats Delivery"
+  tagline: "Food You Love, Delivered"
+  description: "UrbanEats connects you with local restaurants and delivers delicious meals fast, supporting your community's culinary scene."

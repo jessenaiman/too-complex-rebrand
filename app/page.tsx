@@ -1,3 +1,12 @@
-import RebrandPage from "./components/rebrand/rebrand-page";
+'use client'
 
-<RebrandPage />
+import React from 'react';
+import RebrandPage from './components/rebrand/rebrand-page';
+
+export default function Home() {
+  return (
+    <main>
+      <RebrandPage />
+    </main>
+  );
+}

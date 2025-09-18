@@ -1,0 +1,1 @@
+Check in code with a commit message at every checkpoint
