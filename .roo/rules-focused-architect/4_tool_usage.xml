@@ -1,0 +1,82 @@
+<tool_usage_guide>
+  <tool_priorities>
+    <priority level="1">
+      <tool>use_mcp_tool (context7)</tool>
+      <when>First action when researching libraries, frameworks, or technologies</when>
+      <why>Provides authoritative, up-to-date documentation from official sources</why>
+    </priority>
+    <priority level="2">
+      <tool>execute_command (browser search)</tool>
+      <when>Context7 doesn't have the needed information or for general web research</when>
+      <why>Accesses latest community discussions, tutorials, and unofficial resources</why>
+    </priority>
+    <priority level="3">
+      <tool>ask_followup_question</tool>
+      <when>Research is inconclusive or user clarification is needed</when>
+      <why>Ensures we're solving the right problem with the right approach</why>
+    </priority>
+  </tool_priorities>
+
+  <tool_specific_guidance>
+    <tool name="use_mcp_tool">
+      <purpose>Access official documentation and code examples for libraries and frameworks</purpose>
+      <when_to_use>Whenever researching a specific technology, pattern, or library</when_to_use>
+      <syntax>
+        <command>use_mcp_tool(server_name="context7", tool_name="resolve-library-id", arguments={"libraryName": "library name"})</command>
+        <command>use_mcp_tool(server_name="context7", tool_name="get-library-docs", arguments={"context7CompatibleLibraryID": "/org/project"})</command>
+      </syntax>
+      <best_practices>
+        <practice>Always resolve library ID before getting docs</practice>
+        <practice>Specify topic when requesting docs to get focused information</practice>
+        <practice>Verify information is current by checking version/date if available</practice>
+      </best_practices>
+      <examples>
+        <example scenario="Researching state management for React">
+          <code>use_mcp_tool(server_name="context7", tool_name="resolve-library-id", arguments={"libraryName": "Redux"})</code>
+          <code>use_mcp_tool(server_name="context7", tool_name="get-library-docs", arguments={"context7CompatibleLibraryID": "/reduxjs/redux", "topic": "hooks"})</code>
+        </example>
+      </examples>
+    </tool>
+
+    <tool name="execute_command">
+      <purpose>Perform web searches and access online resources not available through Context7</purpose>
+      <when_to_use>When Context7 doesn't have sufficient information or for community insights</when_to_use>
+      <syntax>
+        <command>execute_command(command="search query")</command>
+      </syntax>
+      <best_practices>
+        <practice>Use specific, targeted search queries</practice>
+        <practice>Prefer official documentation sites in search (e.g., site:docs.example.com)</practice>
+        <practice>Check multiple sources to verify information</practice>
+      </best_practices>
+      <examples>
+        <example scenario="Finding recent blog posts about architectural patterns">
+          <code>execute_command(command="site:medium.com 'clean architecture react 2024'")</code>
+        </example>
+      </examples>
+    </tool>
+
+    <tool name="ask_followup_question">
+      <purpose>Get clarification from the user when research is insufficient or ambiguous</purpose>
+      <when_to_use>When research doesn't provide a clear answer or direction</when_to_use>
+      <syntax>
+        <command>ask_followup_question(question="Your question here", follow_up=[suggestions])</command>
+      </syntax>
+      <best_practices>
+        <practice>Provide 2-4 specific, actionable suggestions</practice>
+        <practice>Explain why you're asking the question</practice>
+        <practice>Make suggestions complete and concrete</practice>
+      </best_practices>
+      <examples>
+        <example scenario="Unclear about project constraints">
+          <code>ask_followup_question(question="What are the specific performance requirements for this system?", follow_up=[
+            "High throughput (10k+ requests/second)",
+            "Low latency (sub-100ms response time)",
+            "Cost optimization is the primary concern",
+            "Scalability for future growth is most important"
+          ])</code>
+        </example>
+      </examples>
+    </tool>
+  </tool_specific_guidance>
+</tool_usage_guide>

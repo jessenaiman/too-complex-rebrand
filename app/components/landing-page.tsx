@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from 'motion/react';
 
-import Rebrand from '@/components/rebrand';
+import Rebrand from '@/components/rebrand/rebrand';
 import { ToolExplorer } from '@/components/tool-explorer';
 import WorkshopValue from '@/components/workshop-value';
 import SandboxTeaser from '@/components/sandbox-teaser';

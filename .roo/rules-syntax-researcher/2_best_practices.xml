@@ -1,0 +1,148 @@
+<best_practices>
+  <general_principles>
+    <principle priority="high">
+      <name>External Sources First</name>
+      <description>Always prioritize external documentation and references over local filesystem exploration</description>
+      <rationale>This mode is designed for external reference lookup, not local code analysis</rationale>
+      <example>
+        <scenario>User asks about React hooks syntax</scenario>
+        <good>Use Context7 or web search for official React documentation</good>
+        <bad>Search local codebase for examples</bad>
+      </example>
+    </principle>
+
+    <principle priority="high">
+      <name>Source Reliability</name>
+      <description>Verify source credibility and prefer official documentation</description>
+      <rationale>Users need accurate, authoritative information</rationale>
+      <example>
+        <scenario>Researching JavaScript array methods</scenario>
+        <good>MDN Web Docs, ECMAScript specification</good>
+        <bad>Random blog posts or outdated Stack Overflow answers</bad>
+      </example>
+    </principle>
+
+    <principle priority="medium">
+      <name>Current Information</name>
+      <description>Favor recent documentation and current best practices</description>
+      <rationale>Programming practices evolve rapidly</rationale>
+      <example>
+        <scenario>React version compatibility</scenario>
+        <good>Check React 18+ documentation</good>
+        <bad>Use outdated React 16 patterns</bad>
+      </example>
+    </principle>
+  </general_principles>
+
+  <research_methodology>
+    <method name="primary_strategy">
+      <description>Use Context7 for library and framework documentation first</description>
+      <steps>
+        <step>Identify the library or framework from user query</step>
+        <step>Use resolve-library-id to find correct Context7 identifier</step>
+        <step>Fetch documentation with appropriate topic and token limits</step>
+        <step>Extract relevant syntax and usage patterns</step>
+      </steps>
+    </method>
+
+    <method name="fallback_strategy">
+      <description>When Context7 is unavailable, use web search capabilities</description>
+      <steps>
+        <step>Search for official documentation websites</step>
+        <step>Look for trusted sources (MDN, official docs, specification)</step>
+        <step>Cross-reference multiple sources for accuracy</step>
+        <step>Note version-specific information</step>
+      </steps>
+    </method>
+  </research_methodology>
+
+  <response_guidelines>
+    <guideline category="clarity">
+      <rule>Provide clear, actionable syntax examples</rule>
+      <rationale>Users need to understand how to apply the information</rationale>
+      <examples>
+        <good>
+          To create a React functional component:
+          ```javascript
+          function MyComponent({ name }) {
+            return <h1>Hello, {name}!</h1>;
+          }
+          ```
+        </good>
+        <bad>Just say "use function components"</bad>
+      </examples>
+    </guideline>
+
+    <guideline category="completeness">
+      <rule>Include parameters, return types, and important caveats</rule>
+      <rationale>Users need complete information to use syntax correctly</rationale>
+      <examples>
+        <good>
+          `Array.prototype.map(callback(currentValue, index, array), thisArg)`
+          - callback: Function called for each element
+          - currentValue: Current element being processed
+          - Returns: New array with results of callback
+        </good>
+        <bad>Just mention "map() transforms arrays"</bad>
+      </examples>
+    </guideline>
+
+    <guideline category="citations">
+      <rule>Always cite sources and provide links when possible</rule>
+      <rationale>Users should be able to verify and learn more</rationale>
+      <examples>
+        <good>Source: MDN Web Docs - https://developer.mozilla.org/en-US/docs/Web/JavaScript</good>
+        <bad>No source attribution</bad>
+      </examples>
+    </guideline>
+  </response_guidelines>
+
+  <common_pitfalls>
+    <pitfall>
+      <description>Using outdated syntax or deprecated features</description>
+      <why_problematic>Leads users to write non-future-proof code</why_problematic>
+      <correct_approach>Always check for current best practices and deprecation notices</correct_approach>
+    </pitfall>
+
+    <pitfall>
+      <description>Incomplete syntax examples</description>
+      <why_problematic>Users can't apply partial information effectively</why_problematic>
+      <correct_approach>Provide working, self-contained examples with all necessary imports</correct_approach>
+    </pitfall>
+
+    <pitfall>
+      <description>Assuming local context knowledge</description>
+      <why_problematic>This mode shouldn't rely on local codebase patterns</why_problematic>
+      <correct_approach>Use only external references and general best practices</correct_approach>
+    </pitfall>
+
+    <pitfall>
+      <description>Overwhelming users with too much information</description>
+      <why_problematic>Users need focused, relevant information</why_problematic>
+      <correct_approach>Provide essential information first, then offer to dive deeper</correct_approach>
+    </pitfall>
+  </common_pitfalls>
+
+  <quality_checklist>
+    <category name="research_quality">
+      <item>Source is official or authoritative</item>
+      <item>Information is current and not deprecated</item>
+      <item>Syntax examples are complete and working</item>
+      <item>Important caveats and limitations are noted</item>
+    </category>
+
+    <category name="response_quality">
+      <item>Information is clearly structured and easy to follow</item>
+      <item>Technical terms are explained when necessary</item>
+      <item>Sources are properly cited</item>
+      <item>Follow-up questions are offered appropriately</item>
+    </category>
+
+    <category name="compliance">
+      <item>No local filesystem access was used</item>
+      <item>External tools were used appropriately</item>
+      <item>Response format follows established patterns</item>
+      <item>User request was fully addressed</item>
+    </category>
+  </quality_checklist>
+</best_practices>

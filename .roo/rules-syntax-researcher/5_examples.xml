@@ -1,0 +1,316 @@
+<examples>
+  <example_workflow name="react-hooks-syntax-lookup">
+    <description>Complete workflow for researching React hooks syntax using Context7</description>
+    <user_query>"How do I use React useState hook?"</user_query>
+
+    <steps>
+      <step number="1">
+        <action>Parse query to identify library (React) and specific feature (useState hook)</action>
+        <output>Identified: React library, hooks topic, useState function</output>
+      </step>
+
+      <step number="2">de noise and create a focused plan that include numerbered tasks and mermaid diagrams
+        <action>Use Context7 resolve-library-id</action>
+        <code>
+use_mcp_tool(
+  server_name="context7",
+  tool_name="resolve-library-id",
+  arguments={"libraryName": "react"}
+)
+        </code>
+        <output>Context7 ID: "/facebook/react"</output>
+      </step>
+
+      <step number="3">
+        <action>Fetch React hooks documentation</action>
+        <code>
+use_mcp_tool(
+  server_name="context7",
+  tool_name="get-library-docs",
+  arguments={
+    "context7CompatibleLibraryID": "/facebook/react",
+    "topic": "hooks",
+    "tokens": 1500
+  }
+)
+        </code>
+        <output>React hooks documentation including useState examples</output>
+      </step>
+
+      <step number="4">
+        <action>Format response with syntax examples</action>
+        <output>
+## React useState Hook
+
+**Syntax:**
+```javascript
+const [state, setState] = useState(initialValue);
+```
+
+**Parameters:**
+- `initialValue`: The initial state value
+
+**Returns:**
+- `state`: Current state value
+- `setState`: Function to update state
+
+**Example:**
+```javascript
+import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </div>
+  );
+}
+```
+
+**Source:** React Official Documentation
+        </output>
+      </step>
+    </steps>
+  </example_workflow>
+
+  <example_workflow name="javascript-array-methods">
+    <description>Workflow for researching JavaScript array methods using web search</description>
+    <user_query>"What's the correct syntax for JavaScript array map method?"</user_query>
+
+    <steps>
+      <step number="1">
+        <action>Identify general JavaScript language feature (not library-specific)</action>
+        <output>General JavaScript syntax, not library-specific</output>
+      </step>
+
+      <step number="2">
+        <action>Try Context7 first (may not have JavaScript core docs)</action>
+        <code>
+use_mcp_tool(
+  server_name="context7",
+  tool_name="resolve-library-id",
+  arguments={"libraryName": "javascript"}
+)
+        </code>
+        <output>Context7: No JavaScript core library found</output>
+      </step>
+
+      <step number="3">
+        <action>Fall back to web search for MDN documentation</action>
+        <code>browser(search_query="JavaScript Array.prototype.map MDN")</code>
+        <output>MDN Array.prototype.map documentation</output>
+      </step>
+
+      <step number="4">
+        <action>Format comprehensive response</action>
+        <output>
+## JavaScript Array.prototype.map()
+
+**Syntax:**
+```javascript
+array.map(callback(currentValue, index, array), thisArg)
+```
+
+**Parameters:**
+- `callback`: Function called for each element
+  - `currentValue`: Current element being processed
+  - `index` (optional): Index of current element
+  - `array` (optional): Array map was called on
+- `thisArg` (optional): Value to use as `this` in callback
+
+**Return Value:** New array with results of callback function
+
+**Example:**
+```javascript
+const numbers = [1, 2, 3, 4];
+const doubled = numbers.map(num => num * 2);
+// Result: [2, 4, 6, 8]
+
+const withIndex = numbers.map((num, index) => 
+  `Item ${index}: ${num}`
+);
+// Result: ["Item 0: 1", "Item 1: 2", "Item 2: 3", "Item 3: 4"]
+```
+
+**Source:** MDN Web Docs - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+        </output>
+      </step>
+    </steps>
+  </example_workflow>
+
+  <example_workflow name="library-comparison">
+    <description>Workflow for comparing different approaches or libraries</description>
+    <user_query>"Should I use fetch or axios for HTTP requests?"</user_query>
+
+    <steps>
+      <step number="1">
+        <action>Identify comparison request between fetch (native) and axios (library)</action>
+        <output>Comparison needed: native fetch vs axios library</output>
+      </step>
+
+      <step number="2">
+        <action>Research fetch API (native JavaScript)</action>
+        <code>browser(search_query="Fetch API MDN")</code>
+        <output>Native Fetch API documentation</output>
+      </step>
+
+      <step number="3">
+        <action>Research axios library</action>
+        <code>
+use_mcp_tool(
+  server_name="context7",
+  tool_name="resolve-library-id",
+  arguments={"libraryName": "axios"}
+)
+        </code>
+        <output>Context7 axios documentation</output>
+      </step>
+
+      <step number="4">
+        <action>Format comparison response</action>
+        <output>
+## Fetch vs Axios Comparison
+
+### Fetch API (Native)
+**Pros:**
+- No additional dependencies
+- Modern browser native
+- Part of web standards
+
+**Cons:**
+- Verbose error handling
+- No automatic JSON parsing
+- No request timeout built-in
+
+**Syntax:**
+```javascript
+fetch('https://api.example.com/data')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));
+```
+
+### Axios Library
+**Pros:**
+- Automatic JSON parsing
+- Better error handling
+- Built-in timeout support
+- Request/response interceptors
+
+**Cons:**
+- Additional dependency
+- Larger bundle size
+
+**Syntax:**
+```javascript
+axios.get('https://api.example.com/data')
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+### Recommendation:
+- Use **Fetch** for simple requests in modern browsers
+- Use **Axios** for complex applications needing advanced features
+- Consider using a wrapper library for consistent API across browsers
+
+**Sources:** MDN Fetch API, Axios Documentation
+        </output>
+      </step>
+    </steps>
+  </example_workflow>
+
+  <example_workflow name="clarification-needed">
+    <description>Workflow when user query lacks necessary context</description>
+    <user_query>"How do I use hooks?"</user_query>
+
+    <steps>
+      <step number="1">
+        <action>Identify ambiguous query lacking context</action>
+        <output>Query too vague: "hooks" could refer to React, WordPress, git, etc.</output>
+      </step>
+
+      <step number="2">
+        <action>Use ask_followup_question to clarify</action>
+        <code>
+ask_followup_question(
+  question="Which type of hooks are you asking about?",
+  follow_up=["React Hooks", "WordPress Hooks", "Git Hooks", "Webhooks", "Other"]
+)
+        </code>
+        <output>User selects "React Hooks"</output>
+      </step>
+
+      <step number="3">
+        <action>Proceed with clarified research using Context7</action>
+        <code>
+use_mcp_tool(
+  server_name="context7",
+  tool_name="get-library-docs",
+  arguments={
+    "context7CompatibleLibraryID": "/facebook/react",
+    "topic": "hooks",
+    "tokens": 2000
+  }
+)
+        </code>
+        <output>React hooks documentation and examples</output>
+      </step>
+    </steps>
+  </example_workflow>
+
+  <example_workflow name="version-specific-syntax">
+    <description>Workflow for handling version-specific syntax changes</description>
+    <user_query>"What's the current syntax for async/await in JavaScript?"</user_query>
+
+    <steps>
+      <step number="1">
+        <action>Research current async/await syntax</action>
+        <code>browser(search_query="JavaScript async await MDN")</code>
+        <output>Current MDN documentation for async/await</output>
+      </step>
+
+      <step number="2">
+        <action>Include compatibility and version information</action>
+        <output>
+## JavaScript Async/Await Syntax
+
+**Current Syntax (ES2017+):**
+```javascript
+async function fetchData() {
+  try {
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Usage
+fetchData().then(data => console.log(data));
+```
+
+**Browser Support:** ES2017+ (Chrome 55+, Firefox 52+, Safari 11+)
+
+**Alternative (older browsers):**
+```javascript
+function fetchData() {
+  return fetch('https://api.example.com/data')
+    .then(response => response.json())
+    .catch(error => console.error('Error:', error));
+}
+```
+
+**Transpilation:** Use Babel for older browser support
+
+**Source:** MDN Web Docs - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+        </output>
+      </step>
+    </steps>
+  </example_workflow>
+</examples>

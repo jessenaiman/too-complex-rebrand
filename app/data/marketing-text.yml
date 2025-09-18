@@ -1,5 +1,19 @@
-- "Empower your workflow with Synergetic Labs — innovation at every click."
-- "Nimbusly: Cloud solutions that make your business soar."
-- "PixelPanda — design smarter, not harder."
-- "QuantumQuokka: Fast, friendly, and fearless tech for all."
-- "BrightBridge: Connecting ideas, building futures."
+- name: "Nimbus Analytics"
+  tagline: "See Beyond the Numbers"
+  description: "Nimbus Analytics empowers small businesses with real-time, AI-driven insights to make smarter decisions and grow faster."
+
+- name: "Petal & Stem"
+  tagline: "Nature Delivered"
+  description: "Petal & Stem is a modern floral studio offering bespoke arrangements and eco-friendly delivery for every occasion."
+
+- name: "Bytewise Tutors"
+  tagline: "Unlock Your Potential"
+  description: "Bytewise Tutors connects students with top-tier educators for personalized, online learning in STEM subjects."
+
+- name: "Urban Grind Café"
+  tagline: "Fuel Your Day"
+  description: "Urban Grind Café serves ethically sourced coffee and fresh, local fare in a vibrant, community-focused space."
+
+- name: "Atlas Fitness"
+  tagline: "Stronger Every Day"
+  description: "Atlas Fitness provides tailored training programs, nutrition coaching, and a supportive environment for all fitness levels."

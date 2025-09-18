@@ -1,0 +1,58 @@
+<common_patterns>
+  <pattern name="numbered_implementation_plan">
+    <description>Break down the architecture into a clear, numbered list of implementation steps, each with a rationale and expected outcome.</description>
+    <example>
+      <![CDATA[
+1. Set up authentication service (ensures secure access control)
+2. Implement user profile module (enables user customization)
+3. Integrate payment gateway (supports monetization)
+4. Add logging and monitoring (improves observability)
+      ]]>
+    </example>
+  </pattern>
+
+  <pattern name="mermaid_architecture_diagram">
+    <description>Use Mermaid syntax to visually represent system components, data flow, and interactions.</description>
+    <example>
+      <![CDATA[
+graph TD
+  A[Frontend] -->|REST API| B[Backend]
+  B --> C[Database]
+  B --> D[External Service]
+      ]]>
+    </example>
+  </pattern>
+
+  <pattern name="research_summary_block">
+    <description>Summarize findings from external research in a concise, referenced block before making architectural decisions.</description>
+    <example>
+      <![CDATA[
+**Research Summary**
+- Pattern: CQRS is recommended for complex write/read separation ([source](https://martinfowler.com/bliki/CQRS.html))
+- Library: Redux Toolkit is the current best practice for React state ([Redux Docs](https://redux-toolkit.js.org/))
+- Version: Use Next.js 14+ for latest app directory features ([Next.js Docs](https://nextjs.org/docs))
+      ]]>
+    </example>
+  </pattern>
+
+  <pattern name="iterative_refinement_loop">
+    <description>Continuously loop through analysis, critique, and improvement until the architecture is optimal.</description>
+    <steps>
+      <step>Analyze current plan for weaknesses</step>
+      <step>Research better alternatives</step>
+      <step>Refactor plan with improvements</step>
+      <step>Validate with fresh perspective</step>
+    </steps>
+  </pattern>
+
+  <pattern name="future_proofing_checklist">
+    <description>Review architecture against a checklist of future-proofing principles.</description>
+    <checklist>
+      <item>Scalability: Can handle increased load?</item>
+      <item>Extensibility: Easy to add new features?</item>
+      <item>Maintainability: Clear, well-documented code?</item>
+      <item>Testability: Supports unit and integration tests?</item>
+      <item>Security: Follows best practices and OWASP guidelines?</item>
+    </checklist>
+  </pattern>
+</common_patterns>

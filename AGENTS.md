@@ -1,55 +1,14 @@
-# 🤖 AI AGENT DIRECTIVE — REFACTOR page.tsx (WELL-ARCHITECTED MODE)
+# AGENTS.md
 
-## 🎯 GOAL
+This file provides guidance to agents when working with code in this repository.
 
-Refactor rebrand-page.tsx:
-
-Feature:
-
-1. Page Wide rebrand button that affects all other components that expose the rebrand element
-2. Component rebrand button that only changes that asset.
-
-What is rebrand:
-
-This is a concept that the visitor can see a disctinctly different style, theme, and assets by pressing a button
-
-- [ ] Logo changes to random letter on click
-- [ ] Random marketing text from .yml file (5+ fake companies)
-- [ ] Loading icons on all rebrand components during rebrand
-- [ ]Sequential Pollinations API calls — assets load one at a time
-  → [ ] Use magicui or motion/react for loading animations
-- [ ] Rebrand text with random colors/animations (use magicui for buttons and text design)
-      → [ ] Store 5 theme variations in array → randomize on rebrand
-      → Apply only to landing-page — never touch /apps/www
-- [ ] Button text → “Switch Back" should be able to go back, or create a new one
-  - [ ] Implement Switch Back so that it has stored values to restore
-
-Rules:
-✅ Use shadcn/ui for button/text components — find best matches
-
-Refactor `page.tsx` to be maintainable — extract logic into hooks, utils, configs — but ONLY if it reduces complexity.
-
-## ✅ ALLOWED
-
-- Create `hooks/`, `utils/`, `data/`, `themes/`, `components/` — if it simplifies `page.tsx`
-- Use `shadcn/ui`, `magicui`, `motion/react` — they’re already in the project
-- Store marketing text in `.yml` — cleaner than hardcoded array
-- Use `useState`, `useEffect` — no need for Context unless truly global
-
-## 🚫 FORBIDDEN
-
-- DO NOT touch `package.json`, `apps/www`, `packages/` install through the terminal and cli commands.
-- Do not install without checking context7 for the installation command (alternative can be shadcn, or magicui)
-- DO NOT create models, services, contexts, providers — unless directly requested and approved by specs or the developer.
-- DO NOT write tests — validate with `pnpm lint`, `tsc`, `build`, `curl 200`
-
-## ✅ VALIDATE AFTER EVERY CHANGE
-
-→ `pnpm lint`  
-→ `pnpm run dev`
-→ `curl -Is http://localhost:3000 | head -n 1`  
-→ `next build`
-
-If all of that succeeds ask the user to confirm before proceeding.
-
-## 💡 SUCCESS = Page loads + feature works + `page.tsx` is readable.
+- The canonical, up-to-date project requirements and agent rules are maintained in [`rebrand-project-specs.md`](rebrand-project-specs.md:1). Do not rely on this file for feature specs—always reference the project specs file for the latest requirements, allowed/forbidden actions, and validation steps.
+- All rebrand logic, including theming, content, and AI asset generation, must be isolated to the landing-page app (`app/`), never affecting `apps/www` or external packages.
+- Use only shadcn/ui and MagicUI components for UI—never copy MagicUI code, always install via CLI as per project rules.
+- Theme and content randomization must use 5 predefined variants, with YAML for business profiles and Tailwind/shadcn for themes.
+- All AI-generated assets (logo, card, hero images) must be produced via the Pollinations API, with asset orchestration following the sequence: theme → content → assets.
+- Do not touch `package.json` or install dependencies unless explicitly instructed and validated via context7 or shadcn/magicui CLI.
+- All validation must follow the sequence: `pnpm lint`, `pnpm run dev`, `curl -Is http://localhost:3000 | head -n 1`, `next build`.
+- Never write tests or touch test infrastructure unless specifically requested.
+- All project-specific naming conventions: use kebab-case for files (e.g., `use-rebrandable.ts`), and keep all logic in `app/` (not `src/`).
+- If you find any ambiguity, always defer to the latest `rebrand-project-specs.md` and ask for clarification.

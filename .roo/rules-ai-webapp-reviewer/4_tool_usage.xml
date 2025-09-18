@@ -1,0 +1,171 @@
+<tool_usage_guide>
+  <tool_priorities>
+    <priority level="1">
+      <tool>read_file</tool>
+      <when>Always first - to analyze the input webapp file</when>
+      <why>Complete file reading is essential for comprehensive analysis of large self-contained webapps</why>
+    </priority>
+    <priority level="2">
+      <tool>write_to_file</tool>
+      <when>Creating the final .mdx analysis report</when>
+      <why>Generate comprehensive documentation with mermaid diagrams and task lists</why>
+    </priority>
+    <priority level="3">
+      <tool>search_files</tool>
+      <when>Looking for specific patterns or issues within the code</when>
+      <why>Find CSS conflicts, component usage patterns, or specific code structures</why>
+    </priority>
+  </tool_priorities>
+
+  <tool_specific_guidance>
+    <tool name="read_file">
+      <purpose>Analyze the complete webapp file for structural understanding</purpose>
+      <when_to_use>When initially processing the input file or when detailed examination of specific sections is needed</when_to_use>
+      <best_practices>
+        <practice>Read the entire file first to understand the overall structure</practice>
+        <practice>Identify HTML, CSS, and JavaScript sections separately</practice>
+        <practice>Look for multiple pages, components, and their relationships</practice>
+        <practice>Note any framework-specific patterns (React, Vue, etc.)</practice>
+      </best_practices>
+      <analysis_focus>
+        <focus>Component identification and relationships</focus>
+        <focus>CSS organization and potential conflicts</focus>
+        <focus>JavaScript logic and state management</focus>
+        <focus>HTML structure and semantic elements</focus>
+        <focus>Performance patterns and optimization opportunities</focus>
+      </analysis_focus>
+    </tool>
+
+    <tool name="write_to_file">
+      <purpose>Create the comprehensive .mdx analysis report</purpose>
+      <when_to_use>After completing all analysis phases to generate the final output</when_to_use>
+      <output_requirements>
+        <requirement>Mermaid diagrams for code structure visualization</requirement>
+        <requirement>Checkmark task list for refactoring recommendations</requirement>
+        <requirement>Detailed analysis of identified issues</requirement>
+        <requirement>Prioritized improvement suggestions</requirement>
+        <requirement>Performance, accessibility, and maintainability assessments</requirement>
+      </output_requirements>
+      <file_naming>
+        <convention>Use same filename as input with .mdx extension</convention>
+        <example>my-webapp.js → my-webapp.mdx</example>
+      </file_naming>
+    </tool>
+
+    <tool name="search_files">
+      <purpose>Find specific patterns, conflicts, or issues in the webapp code</purpose>
+      <when_to_use>
+        <scenario>Identifying CSS class conflicts or specificity issues</scenario>
+        <scenario>Finding unused CSS rules or JavaScript functions</scenario>
+        <scenario>Locating accessibility issues or missing ARIA labels</scenario>
+        <scenario>Detecting performance bottlenecks or inefficient patterns</scenario>
+      </when_to_use>
+      <search_patterns>
+        <pattern type="css_conflicts">
+          <description>Find potentially conflicting CSS rules</description>
+          <regex>\.([a-zA-Z][\w-]*)\s*\{[^}]*\}</regex>
+          <purpose>Identify class names for conflict analysis</purpose>
+        </pattern>
+        <pattern type="unused_css">
+          <description>Find CSS rules that might be unused</description>
+          <regex>@media|\.[\w-]+\s*\{</regex>
+          <purpose>Analyze CSS usage patterns</purpose>
+        </pattern>
+        <pattern type="accessibility">
+          <description>Check for accessibility issues</description>
+          <regex>img|button|input|a\s</regex>
+          <purpose>Find elements that may need accessibility attributes</purpose>
+        </pattern>
+      </search_patterns>
+    </tool>
+  </tool_specific_guidance>
+
+  <analysis_methodology>
+    <method name="structural_analysis">
+      <tools_used>read_file, search_files</tools_used>
+      <purpose>Understand the overall architecture and organization</purpose>
+      <approach>
+        <step>Read complete file to understand scope</step>
+        <step>Identify main components and their relationships</step>
+        <step>Map CSS structure and dependencies</step>
+        <step>Analyze JavaScript logic flow</step>
+      </approach>
+    </method>
+
+    <method name="issue_detection">
+      <tools_used>search_files, read_file</tools_used>
+      <purpose>Find specific problems and improvement opportunities</purpose>
+      <approach>
+        <step>Search for CSS conflicts and unused rules</step>
+        <step>Identify component organization issues</step>
+        <step>Find performance bottlenecks</step>
+        <step>Check accessibility compliance</step>
+      </approach>
+    </method>
+
+    <method name="refactoring_planning">
+      <tools_used>read_file, search_files</tools_used>
+      <purpose>Create actionable improvement recommendations</purpose>
+      <approach>
+        <step>Prioritize issues by impact and difficulty</step>
+        <step>Provide specific code examples for improvements</step>
+        <step>Create mermaid diagrams for better visualization</step>
+        <step>Generate checkmark task list for implementation</step>
+      </approach>
+    </method>
+  </analysis_methodology>
+
+  <output_generation>
+    <phase name="diagram_creation">
+      <tools_used>write_to_file</tools_used>
+      <purpose>Visual representation of code structure</purpose>
+      <diagrams>
+        <diagram type="component_hierarchy">
+          <purpose>Show component relationships and dependencies</purpose>
+          <format>mermaid flowchart or graph</format>
+        </diagram>
+        <diagram type="css_architecture">
+          <purpose>Illustrate CSS organization and potential conflicts</purpose>
+          <format>mermaid flowchart</format>
+        </diagram>
+        <diagram type="state_flow">
+          <purpose>Show data flow and state management patterns</purpose>
+          <format>mermaid state diagram</format>
+        </diagram>
+      </diagrams>
+    </phase>
+
+    <phase name="task_list_generation">
+      <tools_used>write_to_file</tools_used>
+      <purpose>Create actionable improvement checklist</purpose>
+      <structure>
+        <item>High-priority structural improvements</item>
+        <item>Performance optimizations</item>
+        <item>Accessibility enhancements</item>
+        <item>Code organization improvements</item>
+        <item>CSS conflict resolutions</item>
+      </structure>
+      <format>Markdown checkbox list with detailed descriptions</format>
+    </phase>
+  </output_generation>
+
+  <error_handling>
+    <scenario name="file_too_large">
+      <condition>File exceeds reasonable processing limits</condition>
+      <action>Process in logical sections and provide segmented analysis</action>
+      <fallback>Focus on most critical components first</fallback>
+    </scenario>
+
+    <scenario name="unsupported_format">
+      <condition>File format not recognized or incompatible</condition>
+      <action>Attempt to parse as plain text and provide basic analysis</action>
+      <fallback>Request user clarification on file type</fallback>
+    </scenario>
+
+    <scenario name="malformed_code">
+      <condition>Syntax errors prevent proper analysis</condition>
+      <action>Continue analysis noting syntax issues</action>
+      <fallback>Focus on structural recommendations over code fixes</fallback>
+    </scenario>
+  </error_handling>
+</tool_usage_guide>

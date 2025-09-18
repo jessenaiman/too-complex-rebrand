@@ -1,0 +1,158 @@
+<workflow_instructions>
+  <mode_overview>
+    This mode handles research and reference lookup for programming syntax and online documentation.
+    It systematically searches external sources to provide accurate, up-to-date information without
+    accessing local files, prioritizing Context7 for library documentation and falling back to
+    web search when needed.
+  </mode_overview>
+
+  <prerequisites>
+    <prerequisite>Clear research question or problem statement from user</prerequisite>
+    <prerequisite>Context7 MCP server available for library documentation</prerequisite>
+    <prerequisite>Web search capabilities available as fallback</prerequisite>
+  </prerequisites>
+
+  <main_workflow>
+    <phase name="initial_assessment">
+      <description>Understand the research request and determine approach</description>
+      <steps>
+        <step number="1">
+          <title>Parse user request</title>
+          <description>Identify the specific programming concept, syntax, library, or API to research</description>
+          <actions>
+            <action>Extract key terms and technologies mentioned</action>
+            <action>Determine if this is syntax-related or documentation-related</action>
+            <action>Identify the programming language or framework context</action>
+          </actions>
+          <validation>Confirm understanding by restating the research objective</validation>
+        </step>
+
+        <step number="2">
+          <title>Determine research strategy</title>
+          <description>Choose between Context7 library lookup or web search based on the query type</description>
+          <actions>
+            <action>For library-specific queries: Use Context7 resolve-library-id and get-library-docs</action>
+            <action>For general syntax/API queries: Use web search capabilities</action>
+            <action>For ambiguous queries: Try Context7 first, then fall back to web search</action>
+          </actions>
+        </step>
+      </steps>
+    </phase>
+
+    <phase name="primary_research">
+      <description>Execute the main research using appropriate external tools</description>
+      <steps>
+        <step number="3">
+          <title>Attempt Context7 lookup</title>
+          <description>Use Context7 to find official documentation for libraries and frameworks</description>
+          <actions>
+            <action>Call resolve-library-id to find the correct Context7 library identifier</action>
+            <action>Use get-library-docs to retrieve up-to-date documentation</action>
+            <action>Specify relevant topics like 'hooks', 'routing', 'syntax', etc.</action>
+            <action>Set appropriate token limits for response length</action>
+          </actions>
+          <validation>Verify that documentation was retrieved successfully</validation>
+        </step>
+
+        <step number="4">
+          <title>Fallback to web search</title>
+          <description>If Context7 fails or is insufficient, use web search capabilities</description>
+          <actions>
+            <action>Use browser tools to search for official documentation</action>
+            <action>Look for trusted sources like MDN, official docs, Stack Overflow</action>
+            <action>Search for current best practices and syntax examples</action>
+          </actions>
+          <validation>Ensure sources are reliable and current</validation>
+        </step>
+      </steps>
+    </phase>
+
+    <phase name="information_processing">
+      <description>Process and organize the research results</description>
+      <steps>
+        <step number="5">
+          <title>Extract key information</title>
+          <description>Identify the most relevant syntax, examples, and usage patterns</description>
+          <actions>
+            <action>Pull out correct syntax examples from documentation</action>
+            <action>Note important parameters, return types, and constraints</action>
+            <action>Highlight common use cases and best practices</action>
+          </actions>
+        </step>
+
+        <step number="6">
+          <title>Verify accuracy</title>
+          <description>Cross-reference information to ensure correctness</description>
+          <actions>
+            <action>Check for consistency across multiple sources</action>
+            <action>Verify syntax examples are current and valid</action>
+            <action>Note any version-specific requirements or deprecations</action>
+          </actions>
+        </step>
+      </steps>
+    </phase>
+
+    <phase name="response_formatting">
+      <description>Format and present findings clearly</description>
+      <steps>
+        <step number="7">
+          <title>Structure response</title>
+          <description>Organize information in a clear, actionable format</description>
+          <actions>
+            <action>Provide direct syntax examples with explanations</action>
+            <action>Include source URLs for further reading</action>
+            <action>Highlight key parameters and usage notes</action>
+            <action>Note any important caveats or limitations</action>
+          </actions>
+        </step>
+
+        <step number="8">
+          <title>Offer follow-up assistance</title>
+          <description>Provide options for additional research if needed</description>
+          <actions>
+            <action>Suggest related topics that might be helpful</action>
+            <action>Offer to research specific aspects in more detail</action>
+            <action>Ask if user needs examples for different contexts</action>
+          </actions>
+        </step>
+      </steps>
+    </phase>
+  </main_workflow>
+
+  <fallback_procedures>
+    <procedure name="context7_unavailable">
+      <trigger>Context7 MCP server not responding or library not found</trigger>
+      <actions>
+        <action>Immediately switch to web search approach</action>
+        <action>Search for official documentation websites</action>
+        <action>Use trusted sources like MDN, docs.microsoft.com, developer.mozilla.org</action>
+      </actions>
+    </procedure>
+
+    <procedure name="insufficient_results">
+      <trigger>Research yields incomplete or unclear information</trigger>
+      <actions>
+        <action>Try alternative search terms or sources</action>
+        <action>Look for multiple examples and compare approaches</action>
+        <action>Ask user for additional context or clarification</action>
+      </actions>
+    </procedure>
+
+    <procedure name="ambiguous_query">
+      <trigger>User request is unclear or too broad</trigger>
+      <actions>
+        <action>Ask for specific programming language or framework</action>
+        <action>Request clarification on the exact problem or use case</action>
+        <action>Provide examples of what additional information would help</action>
+      </actions>
+    </procedure>
+  </fallback_procedures>
+
+  <completion_criteria>
+    <criterion>Accurate syntax or reference information provided</criterion>
+    <criterion>Sources cited and verified for reliability</criterion>
+    <criterion>Information is current and follows best practices</criterion>
+    <criterion>Response is clear, actionable, and well-organized</criterion>
+    <criterion>No local filesystem access was used</criterion>
+  </completion_criteria>
+</workflow_instructions>

@@ -1,0 +1,216 @@
+<best_practices>
+  <general_principles>
+    <principle priority="high" category="modularity">
+      <name>Modular Component Design</name>
+      <description>Break down large monolithic components into smaller, reusable pieces</description>
+      <rationale>Improves maintainability, testability, and reusability across the application</rationale>
+      <indicators>
+        <indicator>Single component exceeds 200 lines</indicator>
+        <indicator>Multiple responsibilities in one component</indicator>
+        <indicator>No clear separation of concerns</indicator>
+      </indicators>
+      <recommendations>
+        <recommendation>Extract repeated UI patterns into shared components</recommendation>
+        <recommendation>Use composition over inheritance for component relationships</recommendation>
+        <recommendation>Implement proper prop interfaces for component communication</recommendation>
+      </recommendations>
+    </principle>
+
+    <principle priority="high" category="styling">
+      <name>CSS Organization and Conflicts</name>
+      <description>Maintain clean, conflict-free CSS architecture</description>
+      <rationale>Prevents styling conflicts and improves maintainability</rationale>
+      <indicators>
+        <indicator>Use of !important declarations</indicator>
+        <indicator>Inline styles mixed with external CSS</indicator>
+        <indicator>Overly specific CSS selectors</indicator>
+        <indicator>Unused CSS rules</indicator>
+      </indicators>
+      <recommendations>
+        <recommendation>Use CSS modules or scoped styles</recommendation>
+        <recommendation>Implement BEM or similar naming conventions</recommendation>
+        <recommendation>Remove unused CSS and optimize selectors</recommendation>
+      </recommendations>
+    </principle>
+
+    <principle priority="medium" category="performance">
+      <name>Performance Optimization</name>
+      <description>Implement efficient rendering and resource management</description>
+      <rationale>Ensures smooth user experience and optimal resource usage</rationale>
+      <indicators>
+        <indicator>Large bundle sizes without code splitting</indicator>
+        <indicator>Missing lazy loading for components</indicator>
+        <indicator>Inefficient re-rendering patterns</indicator>
+        <indicator>Blocking synchronous operations</indicator>
+      </indicators>
+      <recommendations>
+        <recommendation>Implement code splitting and lazy loading</recommendation>
+        <recommendation>Use React.memo or useMemo for expensive operations</recommendation>
+        <recommendation>Optimize images and assets</recommendation>
+      </recommendations>
+    </principle>
+
+    <principle priority="medium" category="accessibility">
+      <name>Accessibility Compliance</name>
+      <description>Ensure webapp is usable by all users including those with disabilities</description>
+      <rationale>Legal compliance and improved user experience for all users</rationale>
+      <indicators>
+        <indicator>Missing alt text on images</indicator>
+        <indicator>Insufficient color contrast</indicator>
+        <indicator>Missing ARIA labels</indicator>
+        <indicator>Keyboard navigation issues</indicator>
+        <indicator>Missing semantic HTML elements</indicator>
+      </indicators>
+      <recommendations>
+        <recommendation>Use semantic HTML elements appropriately</recommendation>
+        <recommendation>Provide ARIA labels where needed</recommendation>
+        <recommendation>Ensure sufficient color contrast ratios</recommendation>
+        <recommendation>Implement proper focus management</recommendation>
+      </recommendations>
+    </principle>
+  </general_principles>
+
+  <code_conventions>
+    <convention category="naming">
+      <rule>Use descriptive, consistent naming conventions</rule>
+      <examples>
+        <good>userProfile, handleSubmit, isLoading</good>
+        <bad>x, foo, temp, a</bad>
+      </examples>
+      <patterns>
+        <pattern type="components">PascalCase for component names (UserCard, NavigationBar)</pattern>
+        <pattern type="functions">camelCase for functions and variables (fetchUserData)</pattern>
+        <pattern type="files">kebab-case for file names (user-profile.tsx)</pattern>
+      </patterns>
+    </convention>
+
+    <convention category="structure">
+      <rule>Maintain clear file and folder organization</rule>
+      <recommended_structure>
+        <folder>components/ - Reusable UI components</folder>
+        <folder>pages/ - Page-level components</folder>
+        <folder>hooks/ - Custom React hooks</folder>
+        <folder>utils/ - Utility functions</folder>
+        <folder>styles/ - CSS and styling files</folder>
+        <folder>types/ - TypeScript type definitions</folder>
+        <folder>constants/ - Application constants</folder>
+      </recommended_structure>
+    </convention>
+
+    <convention category="imports">
+      <rule>Organize imports logically and consistently</rule>
+      <order>
+        <group>React and framework imports</group>
+        <group>Third-party libraries</group>
+        <group>Local components and utilities</group>
+        <group>Types and interfaces</group>
+        <group>Styling imports</group>
+      </order>
+    </convention>
+  </code_conventions>
+
+  <common_pitfalls>
+    <pitfall>
+      <description>Infinite re-rendering loops</description>
+      <why_problematic>Causes performance degradation and crashes</why_problematic>
+      <detection>
+        <signal>State updates in render without dependencies</signal>
+        <signal>useEffect without proper dependency arrays</signal>
+        <signal>Direct state mutation instead of setState</signal>
+      </detection>
+      <correct_approach>Use useCallback and useMemo appropriately, ensure proper dependency arrays</correct_approach>
+    </pitfall>
+
+    <pitfall>
+      <description>Memory leaks from event listeners</description>
+      <why_problematic>Consumes memory and affects performance</why_problematic>
+      <detection>
+        <signal>Event listeners added without cleanup</signal>
+        <signal>Timers/intervals not cleared on unmount</signal>
+      </detection>
+      <correct_approach>Always clean up event listeners and timers in useEffect cleanup functions</correct_approach>
+    </pitfall>
+
+    <pitfall>
+      <description>Prop drilling through multiple component layers</description>
+      <why_problematic>Makes components tightly coupled and hard to maintain</why_problematic>
+      <detection>
+        <signal>Same props passed through 3+ component levels</signal>
+        <signal>Components receiving props they don't use</signal>
+      </detection>
+      <correct_approach>Use React Context, state management libraries, or component composition</correct_approach>
+    </pitfall>
+
+    <pitfall>
+      <description>Mixed synchronous and asynchronous patterns</description>
+      <why_problematic>Creates race conditions and unpredictable behavior</why_problematic>
+      <detection>
+        <signal>Await used inconsistently</signal>
+        <signal>Mixed promises and callbacks</signal>
+      </detection>
+      <correct_approach>Use async/await consistently or proper promise chaining</correct_approach>
+    </pitfall>
+  </common_pitfalls>
+
+  <quality_checklist>
+    <category name="structure">
+      <item priority="high">Components are properly decomposed and reusable</item>
+      <item priority="high">Clear separation of concerns between components</item>
+      <item priority="medium">Consistent file and folder naming conventions</item>
+      <item priority="medium">Logical import organization and grouping</item>
+    </category>
+
+    <category name="functionality">
+      <item priority="high">No infinite loops or memory leaks</item>
+      <item priority="high">Proper error handling for all async operations</item>
+      <item priority="medium">State management follows React patterns</item>
+      <item priority="medium">Event handling is consistent and predictable</item>
+    </category>
+
+    <category name="styling">
+      <item priority="high">No conflicting CSS rules</item>
+      <item priority="high">Responsive design implemented appropriately</item>
+      <item priority="medium">Consistent spacing and typography</item>
+      <item priority="medium">Unused CSS has been removed</item>
+    </category>
+
+    <category name="performance">
+      <item priority="high">No unnecessary re-renders</item>
+      <item priority="medium">Images and assets are optimized</item>
+      <item priority="medium">Bundle size is reasonable</item>
+      <item priority="low">Lazy loading implemented where beneficial</item>
+    </category>
+
+    <category name="accessibility">
+      <item priority="high">Semantic HTML elements used appropriately</item>
+      <item priority="high">Alt text provided for all images</item>
+      <item priority="medium">Keyboard navigation works properly</item>
+      <item priority="medium">Color contrast meets WCAG standards</item>
+    </category>
+
+    <category name="testing">
+      <item priority="medium">Critical user paths have test coverage</item>
+      <item priority="low">Components have unit tests</item>
+      <item priority="low">Integration tests for key workflows</item>
+    </category>
+  </quality_checklist>
+
+  <ai_generated_issues>
+    <common_issue>
+      <description>Over-complicated single components</description>
+      <solution>Break into smaller, focused components</solution>
+    </common_issue>
+    <common_issue>
+      <description>Repetitive code patterns</description>
+      <solution>Extract common functionality into utilities or hooks</solution>
+    </common_issue>
+    <common_issue>
+      <description>Mixed concerns in single files</description>
+      <solution>Separate business logic from presentation logic</solution>
+    </common_issue>
+    <common_issue>
+      <description>Hard-coded values and magic numbers</description>
+      <solution>Move to constants or configuration files</solution>
+    </common_issue>
+  </ai_generated_issues>
+</best_practices>

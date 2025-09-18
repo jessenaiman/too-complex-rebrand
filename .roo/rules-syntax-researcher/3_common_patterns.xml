@@ -1,0 +1,98 @@
+<common_patterns>
+  <research_patterns>
+    <pattern name="library_syntax_lookup">
+      <description>Standard pattern for looking up library-specific syntax</description>
+      <trigger>When user asks about specific library functions or APIs</trigger>
+      <steps>
+        <step>1. Identify library name from query</step>
+        <step>2. Use resolve-library-id to get Context7 identifier</step>
+        <step>3. Call get-library-docs with relevant topic</step>
+        <step>4. Extract and format syntax examples</step>
+      </steps>
+      <example>Query: "How do I use React useState?" → Context7 React hooks documentation</example>
+    </pattern>
+
+    <pattern name="language_feature_lookup">
+      <description>Pattern for general language syntax and features</description>
+      <trigger>When asking about language constructs, not specific libraries</trigger>
+      <steps>
+        <step>1. Identify programming language</step>
+        <step>2. Search for official language specification</step>
+        <step>3. Use web search for current best practices</step>
+        <step>4. Cross-reference multiple sources</step>
+      </steps>
+      <example>Query: "JavaScript destructuring syntax" → MDN documentation</example>
+    </pattern>
+
+    <pattern name="api_reference_lookup">
+      <description>Pattern for web API and browser feature references</description>
+      <trigger>When asking about browser APIs, DOM methods, or web standards</trigger>
+      <steps>
+        <step>1. Identify the API or feature</step>
+        <step>2. Check MDN Web Docs first</step>
+        <step>3. Verify browser compatibility</step>
+        <step>4. Note any polyfill requirements</step>
+      </steps>
+      <example>Query: "Fetch API syntax" → MDN Fetch API documentation</example>
+    </pattern>
+  </research_patterns>
+
+  <response_patterns>
+    <pattern name="syntax_explanation">
+      <description>Standard format for explaining syntax with examples</description>
+      <structure>
+        <element>Brief description of what the syntax does</element>
+        <element>Syntax signature with parameters</element>
+        <element>Complete working example</element>
+        <element>Key points and caveats</element>
+        <element>Source citation</element>
+      </structure>
+    </pattern>
+
+    <pattern name="comparison_response">
+      <description>Pattern for comparing different approaches or versions</description>
+      <structure>
+        <element>Context for why comparison matters</element>
+        <element>Option A with pros/cons</element>
+        <element>Option B with pros/cons</element>
+        <element>Recommendation based on use case</element>
+      </structure>
+    </pattern>
+
+    <pattern name="version_specific_response">
+      <description>Pattern for handling version-specific syntax changes</description>
+      <structure>
+        <element>Current recommended syntax</element>
+        <element>Version requirements</element>
+        <element>Legacy syntax if still supported</element>
+        <element>Migration guidance</element>
+      </structure>
+    </pattern>
+  </response_patterns>
+
+  <error_patterns>
+    <pattern name="insufficient_context">
+      <description>When user query lacks necessary details</description>
+      <response>
+        Ask for: programming language, library version, specific use case
+      </response>
+      <suggestions>
+        <suggestion>"Which programming language are you using?"</suggestion>
+        <suggestion>"What version of the library/framework?"</suggestion>
+        <suggestion>"Can you provide a specific example of what you're trying to do?"</suggestion>
+      </suggestions>
+    </pattern>
+
+    <pattern name="outdated_information">
+      <description>When sources show conflicting or outdated information</description>
+      <response>
+        Prioritize official documentation and recent sources
+      </response>
+      <validation>
+        <check>Publication date of source</check>
+        <check>Official vs community documentation</check>
+        <check>Consistency across multiple sources</check>
+      </validation>
+    </pattern>
+  </error_patterns>
+</common_patterns>

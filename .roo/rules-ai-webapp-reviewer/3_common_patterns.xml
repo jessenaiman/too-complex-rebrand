@@ -1,0 +1,530 @@
+<common_patterns>
+  <pattern_category name="component_refactoring">
+    <pattern name="monolithic_component_decomposition">
+      <description>Breaking down large components into smaller, focused pieces</description>
+      <problem_indicators>
+        <indicator>Component exceeds 150-200 lines</indicator>
+        <indicator>Multiple distinct responsibilities in one component</indicator>
+        <indicator>Complex nested JSX structures</indicator>
+      </problem_indicators>
+      <refactoring_approach>
+        <step>Identify logical boundaries and responsibilities</step>
+        <step>Extract smaller components for specific features</step>
+        <step>Create custom hooks for shared logic</step>
+        <step>Pass data through props rather than drilling</step>
+      </refactoring_approach>
+      <example>
+        <before><![CDATA[
+// BEFORE: Monolithic component
+function UserDashboard({ user }) {
+  const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPosts().then(setPosts);
+    fetchComments().then(setComments).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div className="dashboard">
+      <header>
+        <h1>Welcome {user.name}</h1>
+        <UserStats user={user} posts={posts} comments={comments} />
+      </header>
+      <main>
+        <PostsList posts={posts} onPostUpdate={setPosts} />
+        <CommentsSection comments={comments} onCommentUpdate={setComments} />
+      </main>
+    </div>
+  );
+}
+        ]]></before>
+        <after><![CDATA[
+// AFTER: Decomposed components
+function UserDashboard({ user }) {
+  return (
+    <div className="dashboard">
+      <DashboardHeader user={user} />
+      <DashboardContent user={user} />
+    </div>
+  );
+}
+
+function DashboardHeader({ user }) {
+  return (
+    <header>
+      <h1>Welcome {user.name}</h1>
+      <UserStats user={user} />
+    </header>
+  );
+}
+
+function DashboardContent({ user }) {
+  const posts = usePosts(user.id);
+  const comments = useComments(user.id);
+
+  return (
+    <main>
+      <PostsList posts={posts} />
+      <CommentsSection comments={comments} />
+    </main>
+  );
+}
+
+function usePosts(userId) {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPosts(userId).then(setPosts).finally(() => setLoading(false));
+  }, [userId]);
+
+  return { posts, loading, setPosts };
+}
+        ]]></after>
+      </example>
+    </pattern>
+
+    <pattern name="state_management_extraction">
+      <description>Moving state logic out of components into custom hooks</description>
+      <problem_indicators>
+        <indicator>Complex state management in component</indicator>
+        <indicator>State logic mixed with UI logic</indicator>
+        <indicator>Repeated state patterns across components</indicator>
+      </problem_indicators>
+      <refactoring_approach>
+        <step>Identify stateful logic that can be extracted</step>
+        <step>Create custom hooks for state management</step>
+        <step>Move side effects into hooks</step>
+        <step>Simplify component to focus on rendering</step>
+      </refactoring_approach>
+      <example>
+        <before><![CDATA[
+// BEFORE: State management in component
+function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState('all');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchTodos()
+      .then(data => setTodos(data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const addTodo = (text) => {
+    const newTodo = { id: Date.now(), text, completed: false };
+    setTodos([...todos, newTodo]);
+  };
+
+  const toggleTodo = (id) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ));
+  };
+
+  return (
+    <div>
+      {/* Complex JSX with state management */}
+    </div>
+  );
+}
+        ]]></before>
+        <after><![CDATA[
+// AFTER: Custom hook for state management
+function useTodos() {
+  const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState('all');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchTodos()
+      .then(data => setTodos(data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const addTodo = (text) => {
+    const newTodo = { id: Date.now(), text, completed: false };
+    setTodos([...todos, newTodo]);
+  };
+
+  const toggleTodo = (id) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ));
+  };
+
+  const filteredTodos = todos.filter(todo => {
+    if (filter === 'completed') return todo.completed;
+    if (filter === 'active') return !todo.completed;
+    return true;
+  });
+
+  return {
+    todos: filteredTodos,
+    filter,
+    setFilter,
+    loading,
+    error,
+    addTodo,
+    toggleTodo
+  };
+}
+
+function TodoApp() {
+  const {
+    todos,
+    filter,
+    setFilter,
+    loading,
+    error,
+    addTodo,
+    toggleTodo
+  } = useTodos();
+
+  return (
+    <div>
+      {/* Clean, focused JSX */}
+    </div>
+  );
+}
+        ]]></after>
+      </example>
+    </pattern>
+  </pattern_category>
+
+  <pattern_category name="css_organization">
+    <pattern name="css_modules_conversion">
+      <description>Converting global CSS to scoped CSS Modules</description>
+      <problem_indicators>
+        <indicator>Global CSS class name conflicts</indicator>
+        <indicator>Unused CSS rules accumulating</indicator>
+        <indicator>Styles affecting unintended elements</indicator>
+      </problem_indicators>
+      <refactoring_approach>
+        <step>Create CSS module files for each component</step>
+        <step>Use descriptive class names within modules</step>
+        <step>Import styles into components</step>
+        <step>Update JSX to use imported class names</step>
+      </refactoring_approach>
+      <example>
+        <before><![CDATA[
+// BEFORE: Global CSS
+/* styles.css */
+.button {
+  background: blue;
+  color: white;
+  padding: 10px;
+}
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* component.jsx */
+function MyComponent() {
+  return (
+    <div className="card">
+      <button className="button">Click me</button>
+    </div>
+  );
+}
+        ]]></before>
+        <after><![CDATA[
+// AFTER: CSS Modules
+/* MyComponent.module.css */
+.button {
+  background: blue;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: darkblue;
+}
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 16px;
+  margin: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* MyComponent.jsx */
+import styles from './MyComponent.module.css';
+
+function MyComponent() {
+  return (
+    <div className={styles.card}>
+      <button className={styles.button}>Click me</button>
+    </div>
+  );
+}
+        ]]></after>
+      </example>
+    </pattern>
+
+    <pattern name="responsive_design_improvement">
+      <description>Implementing proper responsive design patterns</description>
+      <problem_indicators>
+        <indicator>Fixed pixel values for layout</indicator>
+        <indicator>Missing mobile-first approach</indicator>
+        <indicator>Non-responsive grid systems</indicator>
+      </problem_indicators>
+      <refactoring_approach>
+        <step>Use relative units (rem, em, %)</step>
+        <step>Implement mobile-first CSS</step>
+        <step>Add responsive breakpoints</step>
+        <step>Test across different screen sizes</step>
+      </refactoring_approach>
+      <example>
+        <before><![CDATA[
+// BEFORE: Non-responsive layout
+.container {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.grid {
+  display: flex;
+  gap: 20px;
+}
+
+.item {
+  width: 300px;
+  height: 200px;
+}
+        ]]></before>
+        <after><![CDATA[
+// AFTER: Responsive layout
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.item {
+  padding: 1rem;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.item:hover {
+  transform: translateY(-2px);
+}
+
+/* Mobile-first responsive breakpoints */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.25rem;
+  }
+}
+        ]]></after>
+      </example>
+    </pattern>
+  </pattern_category>
+
+  <pattern_category name="performance_optimization">
+    <pattern name="lazy_loading_implementation">
+      <description>Adding lazy loading for better performance</description>
+      <problem_indicators>
+        <indicator>Large initial bundle size</indicator>
+        <indicator>All components loaded upfront</indicator>
+        <indicator>Slow initial page load</indicator>
+      </problem_indicators>
+      <refactoring_approach>
+        <step>Identify components that can be lazy loaded</step>
+        <step>Use React.lazy() for component splitting</step>
+        <step>Add Suspense boundaries</step>
+        <step>Implement proper loading states</step>
+      </refactoring_approach>
+      <example>
+        <before><![CDATA[
+// BEFORE: All components loaded
+import Dashboard from './components/Dashboard';
+import Reports from './components/Reports';
+import Settings from './components/Settings';
+
+function App() {
+  return (
+    <Router>
+      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/reports" component={Reports} />
+      <Route path="/settings" component={Settings} />
+    </Router>
+  );
+}
+        ]]></before>
+        <after><![CDATA[
+// AFTER: Lazy loaded components
+import { Suspense, lazy } from 'react';
+import LoadingSpinner from './components/LoadingSpinner';
+
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const Reports = lazy(() => import('./components/Reports'));
+const Settings = lazy(() => import('./components/Settings'));
+
+function App() {
+  return (
+    <Router>
+      <Suspense fallback={<LoadingSpinner />}>
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/reports" component={Reports} />
+        <Route path="/settings" component={Settings} />
+      </Suspense>
+    </Router>
+  );
+}
+
+// LoadingSpinner.jsx
+function LoadingSpinner() {
+  return (
+    <div className="loading-container">
+      <div className="spinner"></div>
+      <p>Loading...</p>
+    </div>
+  );
+}
+        ]]></after>
+      </example>
+    </pattern>
+
+    <pattern name="memoization_optimization">
+      <description>Adding memoization to prevent unnecessary re-renders</description>
+      <problem_indicators>
+        <indicator>Components re-rendering unnecessarily</indicator>
+        <indicator>Expensive computations on every render</indicator>
+        <indicator>Child components re-rendering when props haven't changed</indicator>
+      </problem_indicators>
+      <refactoring_approach>
+        <step>Use React.memo for component memoization</step>
+        <step>Use useMemo for expensive computations</step>
+        <step>Use useCallback for function stability</step>
+        <step>Implement proper dependency arrays</step>
+      </refactoring_approach>
+      <example>
+        <before><![CDATA[
+// BEFORE: No memoization
+function TodoItem({ todo, onToggle }) {
+  console.log('TodoItem rendered:', todo.id);
+
+  const handleToggle = () => {
+    onToggle(todo.id);
+  };
+
+  return (
+    <div>
+      <input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={handleToggle}
+      />
+      <span>{todo.text}</span>
+    </div>
+  );
+}
+
+function TodoList({ todos, onToggle }) {
+  const completedCount = todos.filter(t => t.completed).length;
+
+  return (
+    <div>
+      <h2>Completed: {completedCount}/{todos.length}</h2>
+      {todos.map(todo => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onToggle={onToggle}
+        />
+      ))}
+    </div>
+  );
+}
+        ]]></before>
+        <after><![CDATA[
+// AFTER: With memoization
+const TodoItem = React.memo(function TodoItem({ todo, onToggle }) {
+  console.log('TodoItem rendered:', todo.id);
+
+  const handleToggle = useCallback(() => {
+    onToggle(todo.id);
+  }, [todo.id, onToggle]);
+
+  return (
+    <div>
+      <input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={handleToggle}
+      />
+      <span style={{
+        textDecoration: todo.completed ? 'line-through' : 'none'
+      }}>
+        {todo.text}
+      </span>
+    </div>
+  );
+});
+
+function TodoList({ todos, onToggle }) {
+  const completedCount = useMemo(() => {
+    return todos.filter(t => t.completed).length;
+  }, [todos]);
+
+  const handleToggle = useCallback((id) => {
+    onToggle(id);
+  }, [onToggle]);
+
+  return (
+    <div>
+      <h2>Completed: {completedCount}/{todos.length}</h2>
+      {todos.map(todo => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onToggle={handleToggle}
+        />
+      ))}
+    </div>
+  );
+}
+        ]]></after>
+      </example>
+    </pattern>
+  </pattern_category>
+</common_patterns>

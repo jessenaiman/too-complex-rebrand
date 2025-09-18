@@ -1,0 +1,155 @@
+<tool_usage_guide>
+  <tool_priorities>
+    <priority level="1">
+      <tool>use_mcp_tool</tool>
+      <when>Accessing Context7 for library documentation</when>
+      <why>Primary research method for library-specific syntax</why>
+    </priority>
+    <priority level="2">
+      <tool>browser</tool>
+      <when>Context7 unavailable or insufficient</when>
+      <why>Fallback for web-based documentation search</why>
+    </priority>
+  </tool_priorities>
+
+  <tool_specific_guidance>
+    <tool name="use_mcp_tool">
+      <purpose>Access Context7 MCP server for library documentation</purpose>
+      <when_to_use>Researching specific library functions, APIs, or syntax</when_to_use>
+      <syntax>
+        <command>use_mcp_tool</command>
+        <parameters>
+          <parameter name="server_name" required="true">
+            <description>MCP server identifier (use "context7")</description>
+            <type>string</type>
+            <example>context7</example>
+          </parameter>
+          <parameter name="tool_name" required="true">
+            <description>Context7 tool to use</description>
+            <type>string</type>
+            <example>resolve-library-id or get-library-docs</example>
+          </parameter>
+          <parameter name="arguments" required="true">
+            <description>Tool-specific parameters</description>
+            <type>object</type>
+            <example>{ "libraryName": "react", "topic": "hooks" }</example>
+          </parameter>
+        </parameters>
+      </syntax>
+      <examples>
+        <example scenario="Resolving library ID">
+          <code>
+use_mcp_tool(
+  server_name="context7",
+  tool_name="resolve-library-id",
+  arguments={ "libraryName": "react" }
+)
+          </code>
+          <output>Context7-compatible library ID for React</output>
+        </example>
+        <example scenario="Getting library docs">
+          <code>
+use_mcp_tool(
+  server_name="context7",
+  tool_name="get-library-docs",
+  arguments={
+    "context7CompatibleLibraryID": "/facebook/react",
+    "topic": "hooks",
+    "tokens": 2000
+  }
+)
+          </code>
+          <output>React hooks documentation and examples</output>
+        </example>
+      </examples>
+    </tool>
+
+    <tool name="browser">
+      <purpose>Web search capabilities for documentation</purpose>
+      <when_to_use>Context7 fails or for general web documentation</when_to_use>
+      <syntax>
+        <command>browser</command>
+        <parameters>
+          <parameter name="search_query" required="true">
+            <description>Search terms for documentation</description>
+            <type>string</type>
+            <example>"JavaScript array methods MDN"</example>
+          </parameter>
+        </parameters>
+      </syntax>
+      <examples>
+        <example scenario="MDN documentation search">
+          <code>browser(search_query="JavaScript Promise MDN")</code>
+          <output>Official MDN Promise documentation</output>
+        </example>
+      </examples>
+    </tool>
+
+    <tool name="ask_followup_question">
+      <purpose>Get clarification when research query is unclear</purpose>
+      <when_to_use>User query lacks necessary details or is ambiguous</when_to_use>
+      <syntax>
+        <command>ask_followup_question</command>
+        <parameters>
+          <parameter name="question" required="true">
+            <description>Clear question seeking specific information</description>
+            <type>string</type>
+            <example>"Which programming language are you using?"</example>
+          </parameter>
+          <parameter name="follow_up" required="true">
+            <description>2-4 actionable suggestions</description>
+            <type>array</type>
+            <example>["JavaScript", "TypeScript", "Python", "Other"]</example>
+          </parameter>
+        </parameters>
+      </syntax>
+      <examples>
+        <example scenario="Ambiguous syntax query">
+          <code>
+ask_followup_question(
+  question="Which programming language are you asking about?",
+  follow_up=["JavaScript", "Python", "Java", "C#"]
+)
+          </code>
+          <output>User selects specific language</output>
+        </example>
+      </examples>
+    </tool>
+  </tool_specific_guidance>
+
+  <tool_usage_patterns>
+    <pattern name="context7_first">
+      <description>Always try Context7 before falling back to web search</description>
+      <sequence>
+        <step>1. Identify library from user query</step>
+        <step>2. Use resolve-library-id to get proper identifier</step>
+        <step>3. Call get-library-docs with relevant topic</step>
+        <step>4. If insufficient, fall back to web search</step>
+      </sequence>
+    </pattern>
+
+    <pattern name="web_fallback">
+      <description>Use web search when Context7 is unavailable</description>
+      <sequence>
+        <step>1. Search official documentation sites</step>
+        <step>2. Prioritize trusted sources (MDN, official docs)</step>
+        <step>3. Cross-reference multiple sources</step>
+        <step>4. Note version information and compatibility</step>
+      </sequence>
+    </pattern>
+  </tool_usage_patterns>
+
+  <error_handling>
+    <error_case name="context7_unavailable">
+      <description>MCP server not responding or tool unavailable</description>
+      <action>Immediately switch to web search approach</action>
+      <fallback>Use browser tool with official documentation search</fallback>
+    </error_case>
+
+    <error_case name="insufficient_results">
+      <description>Search returns incomplete or unclear information</description>
+      <action>Try alternative search terms or sources</action>
+      <fallback>Ask user for additional context or clarification</fallback>
+    </error_case>
+  </error_handling>
+</tool_usage_guide>

@@ -1,0 +1,166 @@
+<workflow_instructions>
+  <mode_overview>
+   You 
+  </mode_overview>
+
+  <initialization_steps>
+    <step number="1">
+      <action>Validate input file</action>
+      <details>
+        Ensure the provided file exists and meets criteria:
+        - Single file input
+        - Contains webapp code (HTML, CSS, JavaScript/TypeScript)
+        - Self-contained implementation
+        - Typically >500 lines
+      </details>
+      <validation>
+        File exists and is readable
+        File contains webapp-related code
+        File size suggests comprehensive implementation
+      </validation>
+    </step>
+
+    <step number="2">
+      <action>Parse file structure</action>
+      <details>
+        Use read_file to analyze the entire file and identify:
+        - Multiple pages or views
+        - Components and their relationships
+        - CSS/styling approaches
+        - State management patterns
+        - Event handling mechanisms
+      </details>
+      <tools>
+        <tool>read_file - Complete file analysis</tool>
+      </tools>
+    </step>
+  </initialization_steps>
+
+  <main_workflow>
+    <phase name="structural_analysis">
+      <description>Analyze the overall structure and architecture of the webapp</description>
+      <steps>
+        <step number="1">
+          <action>Identify components and pages</action>
+          <details>
+            Map out all components, pages, and their relationships
+          </details>
+          <output>mermaid component diagram</output>
+        </step>
+        <step number="2">
+          <action>Analyze styling approach</action>
+          <details>
+            Examine CSS organization, conflicting styles, responsive design
+          </details>
+          <output>styling architecture assessment</output>
+        </step>
+        <step number="3">
+          <action>Review state management</action>
+          <details>
+            Identify state handling patterns and data flow
+          </details>
+          <output>state management diagram</output>
+        </step>
+        <step number="4">
+          <action>Assess performance patterns</action>
+          <details>
+            Look for performance bottlenecks, optimization opportunities
+          </details>
+          <output>performance analysis</output>
+        </step>
+      </steps>
+    </phase>
+
+    <phase name="refactoring_analysis">
+      <description>Identify specific refactoring opportunities and improvements</description>
+      <steps>
+        <step number="1">
+          <action>Detect code organization issues</action>
+          <details>
+            Find monolithic functions, missing separations of concerns
+          </details>
+          <output>modularization recommendations</output>
+        </step>
+        <step number="2">
+          <action>Identify style conflicts</action>
+          <details>
+            Find CSS specificity issues, unused styles, inconsistent naming
+          </details>
+          <output>styling optimization suggestions</output>
+        </step>
+        <step number="3">
+          <action>Analyze component reusability</action>
+          <details>
+            Assess component abstraction opportunities
+          </details>
+          <output>component refactor recommendations</output>
+        </step>
+        <step number="4">
+          <action>Review accessibility compliance</action>
+          <details>
+            Check for WCAG compliance issues and improvements
+          </details>
+          <output>accessibility enhancement suggestions</output>
+        </step>
+      </steps>
+    </phase>
+
+    <phase name="documentation_generation">
+      <description>Create comprehensive documentation and task list</description>
+      <steps>
+        <step number="1">
+          <action>Generate mermaid diagrams</action>
+          <details>
+            Create flowcharts, component diagrams, state diagrams
+          </details>
+          <output>visual diagrams in mermaid format</output>
+        </step>
+        <step number="2">
+          <action>Compile refactoring opportunities</action>
+          <details>
+            Organize all identified improvement opportunities
+          </details>
+          <output>prioritized improvement list</output>
+        </step>
+        <step number="3">
+          <action>Create checkmark task list</action>
+          <details>
+            Format recommendations as actionable tasks with checkboxes
+          </details>
+          <output>interactive task list in markdown</output>
+        </step>
+        <step number="4">
+          <action>Generate output file</action>
+          <details>
+            Create comprehensive .mdx file with analysis and recommendations
+          </details>
+          <output>complete review document</output>
+        </step>
+      </steps>
+    </phase>
+  </main_workflow>
+
+  <output_requirements>
+    <requirement type="file_creation">
+      Create a file named the same as input with .mdx extension
+    </requirement>
+    <requirement type="mermaid_diagrams">
+      Include multiple mermaid diagrams for different aspects of the code
+    </requirement>
+    <requirement type="checkmark_tasks">
+      Provide prioritized task list with checkboxes for refactoring
+    </requirement>
+    <requirement type="comprehensive_analysis">
+      Cover structure, styling, performance, accessibility, and maintainability
+    </requirement>
+  </output_requirements>
+
+  <completion_criteria>
+    <criterion>Input file has been thoroughly analyzed</criterion>
+    <criterion>Mermaid diagrams accurately represent code structure</criterion>
+    <criterion>Refactoring opportunities are specific and actionable</criterion>
+    <criterion>Checkmark task list is prioritized and complete</criterion>
+    <criterion>Output .mdx file contains all analysis and recommendations</criterion>
+    <criterion>No critical issues remain unaddressed</criterion>
+  </completion_criteria>
+</workflow_instructions>

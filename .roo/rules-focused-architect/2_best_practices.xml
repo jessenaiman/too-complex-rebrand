@@ -1,0 +1,98 @@
+<best_practices>
+  <general_principles>
+    <principle priority="high">
+      <name>Research-Driven Architecture</name>
+      <description>Always verify design patterns, frameworks, and technologies against the latest authoritative sources before making architectural decisions.</description>
+      <rationale>Ensures solutions are modern, robust, and not based on outdated practices.</rationale>
+      <example>
+        <scenario>Choosing a state management library</scenario>
+        <good>Researches current best practices and recent benchmarks</good>
+        <bad>Relies on personal memory or old blog posts</bad>
+      </example>
+    </principle>
+    <principle priority="high">
+      <name>Iterative Refinement</name>
+      <description>Continuously seek improvements and never settle for "good enough" in architectural planning.</description>
+      <rationale>Drives towards future-proof, scalable, and maintainable solutions.</rationale>
+      <example>
+        <scenario>Reviewing an initial architecture diagram</scenario>
+        <good>Identifies and addresses code smells, tight coupling, or missed opportunities</good>
+        <bad>Accepts the first draft without critical review</bad>
+      </example>
+    </principle>
+    <principle priority="medium">
+      <name>Clarity and Communication</name>
+      <description>Present all plans as numbered lists and clear diagrams, with rationale for each decision.</description>
+      <rationale>Improves developer understanding and implementation accuracy.</rationale>
+      <example>
+        <scenario>Delivering an implementation plan</scenario>
+        <good>Uses numbered steps and mermaid diagrams</good>
+        <bad>Provides only a wall of text</bad>
+      </example>
+    </principle>
+    <principle priority="medium">
+      <name>Minimize Noise</name>
+      <description>Filter out irrelevant information and focus only on what is essential for the current architectural decision.</description>
+      <rationale>Prevents distraction and keeps the plan actionable.</rationale>
+      <example>
+        <scenario>Researching framework options</scenario>
+        <good>Summarizes only the most relevant pros/cons</good>
+        <bad>Includes every minor detail from all sources</bad>
+      </example>
+    </principle>
+  </general_principles>
+
+  <code_conventions>
+    <convention category="structure">
+      <rule>Use clear, hierarchical breakdowns for all plans and diagrams.</rule>
+      <template>
+        1. High-level overview
+        2. Component/module breakdown
+        3. Data flow and interactions
+        4. Implementation steps (numbered)
+      </template>
+    </convention>
+    <convention category="naming">
+      <rule>Use descriptive, consistent names for all architectural elements.</rule>
+      <examples>
+        <good>user-auth-service, payment-gateway-adapter</good>
+        <bad>foo, bar, tempModule</bad>
+      </examples>
+    </convention>
+  </code_conventions>
+
+  <common_pitfalls>
+    <pitfall>
+      <description>Skipping research and relying on outdated knowledge</description>
+      <why_problematic>Leads to suboptimal, hard-to-maintain, or insecure solutions</why_problematic>
+      <correct_approach>Always check latest references and document findings</correct_approach>
+    </pitfall>
+    <pitfall>
+      <description>Failing to iterate and improve after initial plan</description>
+      <why_problematic>Misses opportunities for optimization and future-proofing</why_problematic>
+      <correct_approach>Review, critique, and refine all plans before finalizing</correct_approach>
+    </pitfall>
+    <pitfall>
+      <description>Overcomplicating diagrams or plans</description>
+      <why_problematic>Makes implementation harder and increases risk of errors</why_problematic>
+      <correct_approach>Keep diagrams and steps as simple and clear as possible</correct_approach>
+    </pitfall>
+  </common_pitfalls>
+
+  <quality_checklist>
+    <category name="before_starting">
+      <item>Gather all requirements and constraints</item>
+      <item>Research latest design patterns and technologies</item>
+    </category>
+    <category name="during_implementation">
+      <item>Break down architecture into clear, numbered steps</item>
+      <item>Document rationale for each decision</item>
+      <item>Use diagrams for complex flows</item>
+    </category>
+    <category name="before_completion">
+      <item>Review for code smells and missed opportunities</item>
+      <item>Validate future-proofing and scalability</item>
+      <item>Ensure clarity and completeness of documentation</item>
+    </category>
+  </quality_checklist>
+</best_practices>
