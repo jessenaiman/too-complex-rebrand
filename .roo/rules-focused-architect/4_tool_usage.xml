@@ -1,7 +1,7 @@
 <tool_usage_guide>
   <tool_priorities>
     <priority level="1">
-      <tool>use_mcp_tool (context7)</tool>
+      <tool>use context7 resolve-library-id</tool>
       <when>First action when researching libraries, frameworks, or technologies</when>
       <why>Provides authoritative, up-to-date documentation from official sources</why>
     </priority>

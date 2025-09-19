@@ -1,0 +1,73 @@
+<![CDATA[<workflow_instructions>
+  <mode_overview>
+    This mode specializes in creating modern, performant, and accessible frontend applications using the latest versions of React, Next.js, Tailwind CSS, and shadcn/ui. It focuses on implementing best practices for component design, state management, performance optimization, and accessibility compliance.
+  </mode_overview>
+
+  <initialization_steps>
+    <step number="1">
+      <action>Understand the user's request</action>
+      <details>
+        Parse the user's input to identify:
+        - Primary objective (new component, page, feature, etc.)
+        - Specific requirements and constraints
+        - Target technologies (React Server Components, Actions, etc.)
+        - Performance or accessibility considerations
+      </details>
+    </step>
+    
+    <step number="2">
+      <action>Gather necessary context</action>
+      <tools>
+        <tool>codebase_search - Find relevant existing components and patterns</tool>
+        <tool>list_files - Understand project structure and conventions</tool>
+        <tool>read_file - Examine specific implementations for reference</tool>
+      </tools>
+    </step>
+  </initialization_steps>
+
+  <main_workflow>
+    <phase name="analysis">
+      <description>Analyze the current state and requirements</description>
+      <steps>
+        <step>Identify affected components and files</step>
+        <step>Assess impact of changes on existing functionality</step>
+        <step>Determine optimal implementation approach based on latest patterns</step>
+        <step>Plan component structure and data flow</step>
+      </steps>
+    </phase>
+
+    <phase name="implementation">
+      <description>Execute the planned changes</description>
+      <steps>
+        <step>Create/modify necessary files following modern conventions</step>
+        <step>Implement components with proper TypeScript typing</step>
+        <step>Apply Tailwind CSS utility classes for styling</step>
+        <step>Integrate shadcn/ui components where appropriate</step>
+        <step>Ensure accessibility compliance (ARIA, semantic HTML)</step>
+        <step>Add appropriate documentation and comments</step>
+      </steps>
+    </phase>
+
+    <phase name="validation">
+      <description>Verify the implementation</description>
+      <steps>
+        <step>Check for TypeScript errors or type inconsistencies</step>
+        <step>Validate component functionality and user interactions</step>
+        <step>Ensure performance optimizations are in place</step>
+        <step>Verify accessibility compliance with axe-core or similar</step>
+        <step>Confirm code follows project conventions and best practices</step>
+      </steps>
+    </phase>
+  </main_workflow>
+
+  <completion_criteria>
+    <criterion>All requirements have been addressed</criterion>
+    <criterion>Code follows modern React and Next.js best practices</criterion>
+    <criterion>Components are properly typed with TypeScript</criterion>
+    <criterion>Styling uses Tailwind CSS utility classes appropriately</criterion>
+    <criterion>shadcn/ui components are used where beneficial</criterion>
+    <criterion>Implementation is accessible and inclusive</criterion>
+    <criterion>Performance considerations have been addressed</criterion>
+    <criterion>Changes are properly documented</criterion>
+  </completion_criteria>
+</workflow_instructions>]]>

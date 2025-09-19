@@ -1,0 +1,807 @@
+<![CDATA[<workflow_examples>
+  <example name="create-react-component">
+    <description>Creating a new React component with TypeScript and Tailwind CSS</description>
+    <context>When a user needs to create a new UI component for their application</context>
+    <user_request>
+      <prompt>Create a reusable Button component with variants for primary, secondary, and destructive actions. It should support icons and be accessible.</prompt>
+    </user_request>
+    <implementation>
+      <step number="1">
+        <action>Analyze requirements</action>
+        <details>
+          <requirement>Button component with multiple variants</requirement>
+          <requirement>Icon support</requirement>
+          <requirement>Accessibility compliance</requirement>
+          <requirement>TypeScript typing</requirement>
+          <requirement>Tailwind CSS styling</requirement>
+        </details>
+      </step>
+      
+      <step number="2">
+        <action>Create component file</action>
+        <file_path>src/components/ui/button.tsx</file_path>
+        <code><![CDATA[
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
+
+const buttonVariants = cva(
+  'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
+  {
+    variants: {
+      variant: {
+        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        outline: 'border border-input hover:bg-accent hover:text-accent-foreground',
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        link: 'underline-offset-4 hover:underline text-primary',
+      },
+      size: {
+        default: 'h-10 py-2 px-4',
+        sm: 'h-9 px-3 rounded-md',
+        lg: 'h-11 px-8 rounded-md',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
+);
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button';
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Button.displayName = 'Button';
+
+export { Button, buttonVariants };
+        ]]></code>
+      </step>
+      
+      <step number="3">
+        <action>Create test file</action>
+        <file_path>src/components/ui/__tests__/button.test.tsx</file_path>
+        <code><![CDATA[
+import { render, screen } from '@testing-library/react';
+import { Button } from '../button';
+
+describe('Button', () => {
+  test('renders with default variant', () => {
+    render(<Button>Click me</Button>);
+    const button = screen.getByRole('button', { name: /click me/i });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveClass('bg-primary');
+  });
+
+  test('renders with secondary variant', () => {
+    render(<Button variant="secondary">Click me</Button>);
+    const button = screen.getByRole('button', { name: /click me/i });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveClass('bg-secondary');
+  });
+
+  test('renders with icon', () => {
+    render(
+      <Button>
+        <span>Click me</span>
+        <svg data-testid="icon" />
+      </Button>
+    );
+    const button = screen.getByRole('button', { name: /click me/i });
+    const icon = screen.getByTestId('icon');
+    expect(button).toBeInTheDocument();
+    expect(icon).toBeInTheDocument();
+  });
+
+  test('is disabled when disabled prop is true', () => {
+    render(<Button disabled>Click me</Button>);
+    const button = screen.getByRole('button', { name: /click me/i });
+    expect(button).toBeDisabled();
+  });
+});
+        ]]></code>
+      </step>
+      
+      <step number="4">
+        <action>Update component index</action>
+        <file_path>src/components/ui/index.ts</file_path>
+        <code><![CDATA[
+export * from './button';
+        ]]></code>
+      </step>
+      
+      <step number="5">
+        <action>Document usage</action>
+        <file_path>src/components/ui/button.stories.tsx</file_path>
+        <code><![CDATA[
+import { Button } from './button';
+import type { Meta, StoryObj } from '@storybook/react';
+
+const meta: Meta<typeof Button> = {
+  title: 'Components/Button',
+  component: Button,
+  tags: ['autodocs'],
+  argTypes: {
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+    },
+    size: {
+      control: { type: 'select' },
+      options: ['default', 'sm', 'lg'],
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof Button>;
+
+export const Default: Story = {
+  args: {
+    children: 'Button',
+    variant: 'default',
+    size: 'default',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    children: 'Button',
+    variant: 'secondary',
+    size: 'default',
+  },
+};
+
+export const Destructive: Story = {
+  args: {
+    children: 'Button',
+    variant: 'destructive',
+    size: 'default',
+  },
+};
+
+export const Outline: Story = {
+  args: {
+    children: 'Button',
+    variant: 'outline',
+    size: 'default',
+  },
+};
+
+export const Small: Story = {
+  args: {
+    children: 'Button',
+    variant: 'default',
+    size: 'sm',
+  },
+};
+
+export const Large: Story = {
+  args: {
+    children: 'Button',
+    variant: 'default',
+    size: 'lg',
+  },
+};
+
+export const WithIcon: Story = {
+  args: {
+    children: (
+      <>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="mr-2"
+        >
+          <path d="M5 12h14" />
+          <path d="M12 5v14" />
+        </svg>
+        Icon Button
+      </>
+    ),
+    variant: 'default',
+    size: 'default',
+  },
+};
+        ]]></code>
+      </step>
+    </implementation>
+    <verification>
+      <check>Component renders correctly with all variants</check>
+      <check>Tests pass for all button variations</check>
+      <check>Storybook stories display properly</check>
+      <check>Accessibility attributes are present</check>
+      <check>TypeScript types are correctly defined</check>
+    </verification>
+  </example>
+  
+  <example name="implement-nextjs-api-route">
+    <description>Creating a Next.js API route with proper error handling and validation</description>
+    <context>When a user needs to create a new API endpoint in their Next.js application</context>
+    <user_request>
+      <prompt>Create a Next.js API route for user registration that validates email and password, hashes the password, and stores the user in a database.</prompt>
+    </user_request>
+    <implementation>
+      <step number="1">
+        <action>Analyze requirements</action>
+        <details>
+          <requirement>API route for user registration</requirement>
+          <requirement>Email and password validation</requirement>
+          <requirement>Password hashing</requirement>
+          <requirement>Database storage</requirement>
+          <requirement>Proper error handling</requirement>
+          <requirement>TypeScript typing</requirement>
+        </details>
+      </step>
+      
+      <step number="2">
+        <action>Create API route file</action>
+        <file_path>src/pages/api/register.ts</file_path>
+        <code><![CDATA[
+import { hash } from 'bcryptjs';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from '@/lib/prisma';
+
+interface RegisterRequestBody {
+  email: string;
+  password: string;
+  name: string;
+}
+
+interface RegisterSuccessResponse {
+  message: string;
+  userId: string;
+}
+
+interface RegisterErrorResponse {
+  error: string;
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<RegisterSuccessResponse | RegisterErrorResponse>
+) {
+  // Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    const { email, password, name } = req.body as RegisterRequestBody;
+
+    // Validate input
+    if (!email || !password || !name) {
+      return res.status(400).json({ error: 'Email, password, and name are required' });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+
+    // Validate password strength
+    if (password.length < 8) {
+      return res.status(400).json({ error: 'Password must be at least 8 characters long' });
+    }
+
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      return res.status(409).json({ error: 'User with this email already exists' });
+    }
+
+    // Hash password
+    const hashedPassword = await hash(password, 12);
+
+    // Create user
+    const user = await prisma.user.create({
+      data: {
+        email,
+        name,
+        password: hashedPassword,
+      },
+    });
+
+    // Return success response
+    return res.status(201).json({ 
+      message: 'User registered successfully', 
+      userId: user.id 
+    });
+  } catch (error) {
+    console.error('Registration error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+        ]]></code>
+      </step>
+      
+      <step number="3">
+        <action>Create test file</action>
+        <file_path>src/pages/api/__tests__/register.test.ts</file_path>
+        <code><![CDATA[
+import { createMocks } from 'node-mocks-http';
+import handler from '../register';
+import { prisma } from '@/lib/prisma';
+
+jest.mock('@/lib/prisma', () => ({
+  prisma: {
+    user: {
+      findUnique: jest.fn(),
+      create: jest.fn(),
+    },
+  },
+}));
+
+jest.mock('bcryptjs', () => ({
+  hash: jest.fn().mockResolvedValue('hashedPassword123'),
+}));
+
+describe('Register API Route', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should register a new user successfully', async () => {
+    const { req, res } = createMocks({
+      method: 'POST',
+      body: {
+        email: 'test@example.com',
+        password: 'password123',
+        name: 'Test User',
+      },
+    });
+
+    (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
+    (prisma.user.create as jest.Mock).mockResolvedValue({
+      id: 'user123',
+      email: 'test@example.com',
+      name: 'Test User',
+    });
+
+    await handler(req, res);
+
+    expect(res._getStatusCode()).toBe(201);
+    expect(JSON.parse(res._getData())).toEqual({
+      message: 'User registered successfully',
+      userId: 'user123',
+    });
+  });
+
+  test('should return error for invalid email format', async () => {
+    const { req, res } = createMocks({
+      method: 'POST',
+      body: {
+        email: 'invalid-email',
+        password: 'password123',
+        name: 'Test User',
+      },
+    });
+
+    await handler(req, res);
+
+    expect(res._getStatusCode()).toBe(400);
+    expect(JSON.parse(res._getData())).toEqual({
+      error: 'Invalid email format',
+    });
+  });
+
+  test('should return error for weak password', async () => {
+    const { req, res } = createMocks({
+      method: 'POST',
+      body: {
+        email: 'test@example.com',
+        password: 'weak',
+        name: 'Test User',
+      },
+    });
+
+    await handler(req, res);
+
+    expect(res._getStatusCode()).toBe(400);
+    expect(JSON.parse(res._getData())).toEqual({
+      error: 'Password must be at least 8 characters long',
+    });
+  });
+
+  test('should return error for existing user', async () => {
+    const { req, res } = createMocks({
+      method: 'POST',
+      body: {
+        email: 'existing@example.com',
+        password: 'password123',
+        name: 'Existing User',
+      },
+    });
+
+    (prisma.user.findUnique as jest.Mock).mockResolvedValue({
+      id: 'existing123',
+      email: 'existing@example.com',
+      name: 'Existing User',
+    });
+
+    await handler(req, res);
+
+    expect(res._getStatusCode()).toBe(409);
+    expect(JSON.parse(res._getData())).toEqual({
+      error: 'User with this email already exists',
+    });
+  });
+
+  test('should return error for non-POST requests', async () => {
+    const { req, res } = createMocks({
+      method: 'GET',
+    });
+
+    await handler(req, res);
+
+    expect(res._getStatusCode()).toBe(405);
+    expect(JSON.parse(res._getData())).toEqual({
+      error: 'Method not allowed',
+    });
+  });
+});
+        ]]></code>
+      </step>
+      
+      <step number="4">
+        <action>Document API endpoint</action>
+        <file_path>docs/api/register.md</file_path>
+        <code><![CDATA[---
+title: User Registration
+description: Register a new user account
+method: POST
+path: /api/register
+---
+
+# User Registration API
+
+Registers a new user account in the system.
+
+## Request
+
+### Endpoint
+```
+POST /api/register
+```
+
+### Body Parameters
+| Parameter | Type   | Required | Description              |
+|-----------|--------|----------|--------------------------|
+| email     | string | Yes      | Valid email address      |
+| password  | string | Yes      | Minimum 8 characters     |
+| name      | string | Yes      | User's full name         |
+
+### Example Request
+```json
+{
+  "email": "user@example.com",
+  "password": "securePassword123",
+  "name": "John Doe"
+}
+```
+
+## Response
+
+### Success (201 Created)
+```json
+{
+  "message": "User registered successfully",
+  "userId": "user123"
+}
+```
+
+### Errors
+| Status Code | Error Message                           | Description                          |
+|-------------|-----------------------------------------|--------------------------------------|
+| 400         | Email, password, and name are required  | Missing required fields              |
+| 400         | Invalid email format                    | Malformed email address              |
+| 400         | Password must be at least 8 characters  | Weak password                        |
+| 405         | Method not allowed                      | Non-POST request                     |
+| 409         | User with this email already exists     | Duplicate email                      |
+| 500         | Internal server error                   | Unexpected server error              |
+
+## Implementation Details
+
+- Passwords are securely hashed using bcrypt
+- Email uniqueness is enforced at the database level
+- Input validation is performed before database operations
+- Proper HTTP status codes are returned for different scenarios
+        ]]></code>
+      </step>
+    </implementation>
+    <verification>
+      <check>API route handles all required cases</check>
+      <check>Tests cover success and error scenarios</check>
+      <check>Documentation is complete and accurate</check>
+      <check>Password hashing is implemented securely</check>
+      <check>Database operations are properly structured</check>
+    </verification>
+  </example>
+  
+  <example name="optimize-react-component-performance">
+    <description>Optimizing a React component for better performance using useMemo and useCallback</description>
+    <context>When a user has a performance issue with a React component that re-renders too frequently</context>
+    <user_request>
+      <prompt>I have a React component that renders a list of products and seems to be slow. Can you optimize it for better performance?</prompt>
+    </user_request>
+    <implementation>
+      <step number="1">
+        <action>Analyze the component</action>
+        <details>
+          <requirement>Identify performance bottlenecks</requirement>
+          <requirement>Check for unnecessary re-renders</requirement>
+          <requirement>Review component structure</requirement>
+          <requirement>Look for expensive calculations</requirement>
+        </details>
+      </step>
+      
+      <step number="2">
+        <action>Optimize the component</action>
+        <file_path>src/components/ProductList.tsx</file_path>
+        <code><![CDATA[
+import * as React from 'react';
+import { ProductItem } from './ProductItem';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  inStock: boolean;
+}
+
+interface ProductListProps {
+  products: Product[];
+  searchTerm: string;
+  selectedCategory: string;
+  onAddToCart: (productId: number) => void;
+}
+
+// Memoized component to prevent unnecessary re-renders
+const ProductList = React.memo(({ 
+  products, 
+  searchTerm, 
+  selectedCategory,
+  onAddToCart 
+}: ProductListProps) => {
+  // Memoize filtered products to avoid recalculating on every render
+  const filteredProducts = React.useMemo(() => {
+    return products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === '' || product.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [products, searchTerm, selectedCategory]);
+
+  // Memoize expensive calculation of total inventory value
+  const totalInventoryValue = React.useMemo(() => {
+    return products.reduce((total, product) => {
+      return total + (product.inStock ? product.price : 0);
+    }, 0);
+  }, [products]);
+
+  // Memoize callback to prevent recreation on every render
+  const handleAddToCart = React.useCallback((productId: number) => {
+    onAddToCart(productId);
+  }, [onAddToCart]);
+
+  return (
+    <div className="product-list">
+      <div className="product-summary">
+        <p>Total Products: {filteredProducts.length}</p>
+        <p>Total Inventory Value: ${totalInventoryValue.toFixed(2)}</p>
+      </div>
+      
+      <div className="product-grid">
+        {filteredProducts.map(product => (
+          <ProductItem
+            key={product.id}
+            product={product}
+            onAddToCart={handleAddToCart}
+          />
+        ))}
+      </div>
+    </div>
+  );
+});
+
+export { ProductList };
+        ]]></code>
+      </step>
+      
+      <step number="3">
+        <action>Optimize child component</action>
+        <file_path>src/components/ProductItem.tsx</file_path>
+        <code><![CDATA[
+import * as React from 'react';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  inStock: boolean;
+}
+
+interface ProductItemProps {
+  product: Product;
+  onAddToCart: (productId: number) => void;
+}
+
+// Memoized component with custom comparison function
+const ProductItem = React.memo(({ product, onAddToCart }: ProductItemProps) => {
+  // Memoize formatted price to avoid recalculation
+  const formattedPrice = React.useMemo(() => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(product.price);
+  }, [product.price]);
+
+  // Memoize callback to prevent recreation
+  const handleClick = React.useCallback(() => {
+    onAddToCart(product.id);
+  }, [onAddToCart, product.id]);
+
+  return (
+    <div className="product-item" data-testid={`product-${product.id}`}>
+      <h3 className="product-name">{product.name}</h3>
+      <p className="product-category">{product.category}</p>
+      <p className="product-price">{formattedPrice}</p>
+      <button 
+        className={`add-to-cart ${!product.inStock ? 'out-of-stock' : ''}`}
+        onClick={handleClick}
+        disabled={!product.inStock}
+      >
+        {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+      </button>
+    </div>
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison function to determine when to re-render
+  return (
+    prevProps.product.id === nextProps.product.id &&
+    prevProps.product.name === nextProps.product.name &&
+    prevProps.product.price === nextProps.product.price &&
+    prevProps.product.category === nextProps.product.category &&
+    prevProps.product.inStock === nextProps.product.inStock &&
+    prevProps.onAddToCart === nextProps.onAddToCart
+  );
+});
+
+export { ProductItem };
+        ]]></code>
+      </step>
+      
+      <step number="4">
+        <action>Create performance test</action>
+        <file_path>src/components/__tests__/ProductList.performance.test.tsx</file_path>
+        <code><![CDATA[
+import { render, screen } from '@testing-library/react';
+import { ProductList } from '../ProductList';
+
+// Mock performance API
+global.performance = {
+  ...global.performance,
+  now: jest.fn().mockReturnValue(0),
+};
+
+describe('ProductList Performance', () => {
+  const mockProducts = Array.from({ length: 1000 }, (_, i) => ({
+    id: i + 1,
+    name: `Product ${i + 1}`,
+    price: Math.random() * 100,
+    category: `Category ${Math.floor(i / 100) + 1}`,
+    inStock: i % 2 === 0,
+  }));
+
+  const mockOnAddToCart = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (global.performance.now as jest.Mock).mockReset();
+  });
+
+  test('should render 1000 products efficiently', () => {
+    // Mock performance measurements
+    let callCount = 0;
+    (global.performance.now as jest.Mock).mockImplementation(() => {
+      return callCount++ * 10; // Simulate 10ms per call
+    });
+
+    const startTime = performance.now();
+    
+    render(
+      <ProductList
+        products={mockProducts}
+        searchTerm=""
+        selectedCategory=""
+        onAddToCart={mockOnAddToCart}
+      />
+    );
+    
+    const endTime = performance.now();
+    const renderTime = endTime - startTime;
+
+    // Expect render time to be reasonable (less than 100ms for 1000 items)
+    expect(renderTime).toBeLessThan(100);
+    
+    // Verify all products are rendered
+    expect(screen.getAllByRole('button', { name: /Add to Cart/i })).toHaveLength(500); // Only in-stock products
+  });
+
+  test('should not re-render unnecessarily when unrelated props change', () => {
+    const { rerender } = render(
+      <ProductList
+        products={mockProducts}
+        searchTerm=""
+        selectedCategory=""
+        onAddToCart={mockOnAddToCart}
+      />
+    );
+
+    // Mock performance for second render
+    let callCount = 0;
+    (global.performance.now as jest.Mock).mockImplementation(() => {
+      return 1000 + callCount++ * 10; // Start at 1000ms
+    });
+
+    const startTime = performance.now();
+    
+    // Re-render with same products but different callback (should not cause child re-renders)
+    const newOnAddToCart = jest.fn();
+    rerender(
+      <ProductList
+        products={mockProducts}
+        searchTerm=""
+        selectedCategory=""
+        onAddToCart={newOnAddToCart}
+      />
+    );
+    
+    const endTime = performance.now();
+    const renderTime = endTime - startTime;
+
+    // Expect very fast re-render since children are memoized
+    expect(renderTime).toBeLessThan(20);
+  });
+});
+        ]]></code>
+      </step>
+    </implementation>
+    <verification>
+      <check>Component uses useMemo for expensive calculations</check>
+      <check>Callbacks are memoized with useCallback</check>
+      <check>Child components are properly memoized</check>
+      <check>Performance tests verify optimization effectiveness</check>
+      <check>No unnecessary re-renders occur</check>
+    </verification>
+  </example>
+</workflow_examples>]]>

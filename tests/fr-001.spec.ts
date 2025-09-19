@@ -19,8 +19,8 @@ test('FR-001: Page-wide rebrand affects all rebrandable components simultaneousl
   await rebrandButton.click();
   
   // Wait for loading state to appear and disappear
-  await expect(page.getByText('Generating New Brand')).toBeVisible();
-  await expect(page.getByText('Generating New Brand')).toBeHidden({ timeout: 10000 });
+  await expect(page.getByTestId('rebrand-loading-overlay')).toBeVisible();
+  await expect(page.getByTestId('rebrand-loading-overlay')).toBeHidden({ timeout: 10000 });
   
   // Check that button now shows "Switch Back"
   await expect(page.getByRole('button', { name: 'Switch Back' })).toBeVisible();
@@ -36,8 +36,8 @@ test('FR-001: Page-wide rebrand affects all rebrandable components simultaneousl
   await page.getByRole('button', { name: 'Switch Back' }).click();
   
   // Wait for loading state to appear and disappear
-  await expect(page.getByText('Generating New Brand')).toBeVisible();
-  await expect(page.getByText('Generating New Brand')).toBeHidden({ timeout: 10000 });
+  await expect(page.getByTestId('rebrand-loading-overlay')).toBeVisible();
+  await expect(page.getByTestId('rebrand-loading-overlay')).toBeHidden({ timeout: 10000 });
   
   // Check that button now shows "Rebrand Now" again
   await expect(rebrandButton).toBeVisible();

@@ -1,0 +1,429 @@
+<![CDATA[<best_practices>
+  <general_principles>
+    <principle priority="high">
+      <name>Component Composition Over Inheritance</name>
+      <description>Prefer composing components using props and children rather than creating complex inheritance hierarchies. This leads to more flexible and reusable components.</description>
+      <rationale>Composition provides greater flexibility and reusability compared to inheritance, making it easier to modify and extend components without tight coupling.</rationale>
+      <example>
+        <scenario>Creating a button with different variants</scenario>
+        <good><![CDATA[
+// Good: Using composition with props
+<Button variant="primary">Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="destructive">Delete</Button>
+        ]]></good>
+        <bad><![CDATA[
+// Bad: Creating separate classes for each variant
+<PrimaryButton>Primary</PrimaryButton>
+<SecondaryButton>Secondary</SecondaryButton>
+<DestructiveButton>Delete</DestructiveButton>
+        ]]></bad>
+      </example>
+    </principle>
+    
+    <principle priority="high">
+      <name>Single Responsibility Principle</name>
+      <description>Each component should have one reason to change and should focus on doing one thing well. This makes components easier to understand, test, and maintain.</description>
+      <rationale>Components with a single responsibility are more modular, easier to debug, and less prone to breaking when changes are made.</rationale>
+      <example>
+        <scenario>Handling user profile display and editing</scenario>
+        <good><![CDATA[
+// Good: Separate components for viewing and editing
+<UserProfileView user={user} />
+<UserProfileEdit user={user} onSave={handleSave} />
+        ]]></good>
+        <bad><![CDATA[
+// Bad: One component handling both concerns
+<UserProfile user={user} onSave={handleSave} isEditing={isEditing} />
+        ]]></bad>
+      </example>
+    </principle>
+    
+    <principle priority="high">
+      <name>Accessibility-First Development</name>
+      <description>Build components with accessibility in mind from the start, not as an afterthought. This includes proper semantic HTML, ARIA attributes, keyboard navigation, and screen reader support.</description>
+      <rationale>Accessibility benefits all users, not just those with disabilities. Building with accessibility in mind from the start is more efficient than retrofitting it later.</rationale>
+      <example>
+        <scenario>Creating a custom dropdown component</scenario>
+        <good><![CDATA[
+// Good: Accessible dropdown with proper ARIA attributes
+<div role="combobox" aria-expanded={isOpen} aria-controls="dropdown-list">
+  <button 
+    onClick={toggleDropdown}
+    aria-haspopup="listbox"
+    id="dropdown-button"
+  >
+    {selectedValue}
+  </button>
+  <ul 
+    id="dropdown-list"
+    role="listbox"
+    aria-labelledby="dropdown-button"
+    hidden={!isOpen}
+  >
+    {options.map(option => (
+      <li 
+        key={option.value}
+        role="option"
+        aria-selected={option.value === selectedValue}
+        onClick={() => selectOption(option)}
+      >
+        {option.label}
+      </li>
+    ))}
+  </ul>
+</div>
+        ]]></good>
+        <bad><![CDATA[
+// Bad: Inaccessible dropdown without proper semantics
+<div>
+  <div onClick={toggleDropdown}>
+    {selectedValue}
+  </div>
+  <div hidden={!isOpen}>
+    {options.map(option => (
+      <div key={option.value} onClick={() => selectOption(option)}>
+        {option.label}
+      </div>
+    ))}
+  </div>
+</div>
+        ]]></bad>
+      </example>
+    </principle>
+    
+    <principle priority="medium">
+      <name>Performance Optimization Through Memoization</name>
+      <description>Use React.memo for components, useMemo for expensive calculations, and useCallback for functions passed as props to prevent unnecessary re-renders.</description>
+      <rationale>Preventing unnecessary re-renders improves application performance, especially for components that render frequently or have complex calculations.</rationale>
+      <example>
+        <scenario>Optimizing a list component with expensive item rendering</scenario>
+        <good><![CDATA[
+// Good: Using memoization to optimize performance
+const ExpensiveItem = React.memo(({ item, onUpdate }) => {
+  const processedData = useMemo(() => {
+    // Expensive calculation
+    return item.data.map(transformExpensively);
+  }, [item.data]);
+  
+  const handleClick = useCallback(() => {
+    onUpdate(item.id);
+  }, [item.id, onUpdate]);
+  
+  return (
+    <div>
+      <h3>{item.name}</h3>
+      <ul>
+        {processedData.map(data => (
+          <li key={data.id}>{data.value}</li>
+        ))}
+      </ul>
+      <button onClick={handleClick}>Update</button>
+    </div>
+  );
+});
+
+const ItemList = ({ items, onUpdateItem }) => {
+  return (
+    <div>
+      {items.map(item => (
+        <ExpensiveItem 
+          key={item.id} 
+          item={item} 
+          onUpdate={onUpdateItem} 
+        />
+      ))}
+    </div>
+  );
+};
+        ]]></good>
+        <bad><![CDATA[
+// Bad: No memoization causing unnecessary re-renders
+const ExpensiveItem = ({ item, onUpdate }) => {
+  const processedData = item.data.map(transformExpensively); // Recalculated every render
+  
+  const handleClick = () => {
+    onUpdate(item.id);
+  };
+  
+  return (
+    <div>
+      <h3>{item.name}</h3>
+      <ul>
+        {processedData.map(data => (
+          <li key={data.id}>{data.value}</li>
+        ))}
+      </ul>
+      <button onClick={handleClick}>Update</button>
+    </div>
+  );
+};
+
+const ItemList = ({ items, onUpdateItem }) => {
+  return (
+    <div>
+      {items.map(item => (
+        <ExpensiveItem 
+          key={item.id} 
+          item={item} 
+          onUpdate={onUpdateItem} // New function created every render
+        />
+      ))}
+    </div>
+  );
+};
+        ]]></bad>
+      </example>
+    </principle>
+  </general_principles>
+
+  <code_conventions>
+    <convention category="naming">
+      <rule>Use descriptive, consistent naming conventions for components, variables, and functions</rule>
+      <examples>
+        <good><![CDATA[
+// Good: Descriptive component names
+UserProfileCard
+NavigationMenu
+DataTable
+SearchInput
+
+// Good: Descriptive variable names
+const isLoading = true;
+const userProfile = getUserProfile(userId);
+const filteredProducts = products.filter(product => product.inStock);
+        ]]></good>
+        <bad><![CDATA[
+// Bad: Unclear component names
+Card
+Nav
+Table
+Input
+
+// Bad: Unclear variable names
+const flag = true;
+const data = getUserProfile(userId);
+const list = products.filter(p => p.inStock);
+        ]]></bad>
+      </examples>
+    </convention>
+    
+    <convention category="structure">
+      <rule>Organize component files with consistent structure: imports, component definition, helper functions, exports</rule>
+      <template><![CDATA[
+// 1. External imports
+import React from 'react';
+import { Button } from '@/components/ui/button';
+
+// 2. Internal imports
+import { UserProfile } from '@/types/user';
+
+// 3. Component definition
+interface UserCardProps {
+  user: UserProfile;
+  onEdit: (userId: string) => void;
+}
+
+export const UserCard: React.FC<UserCardProps> = ({ user, onEdit }) => {
+  // 4. State and refs
+  const [isExpanded, setIsExpanded] = React.useState(false);
+  
+  // 5. Effects
+  React.useEffect(() => {
+    // Side effects
+  }, []);
+  
+  // 6. Callbacks and handlers
+  const handleToggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+  
+  // 7. Memoized values
+  const displayName = React.useMemo(() => {
+    return `${user.firstName} ${user.lastName}`;
+  }, [user.firstName, user.lastName]);
+  
+  // 8. Render
+  return (
+    <div className="user-card">
+      <h3>{displayName}</h3>
+      {isExpanded && (
+        <div>
+          <p>Email: {user.email}</p>
+          <p>Role: {user.role}</p>
+        </div>
+      )}
+      <Button onClick={handleToggleExpand}>
+        {isExpanded ? 'Collapse' : 'Expand'}
+      </Button>
+      <Button onClick={() => onEdit(user.id)}>Edit</Button>
+    </div>
+  );
+};
+
+// 9. Helper functions (if any)
+const formatUserRole = (role: string): string => {
+  return role.charAt(0).toUpperCase() + role.slice(1);
+};
+
+// 10. Default export (if applicable)
+export default UserCard;
+      ]]></template>
+    </convention>
+    
+    <convention category="typescript">
+      <rule>Use TypeScript interfaces for props and explicit typing for function parameters and return values</rule>
+      <examples>
+        <good><![CDATA[
+// Good: Explicit typing with interfaces
+interface ProductCardProps {
+  product: {
+    id: string;
+    name: string;
+    price: number;
+    inStock: boolean;
+  };
+  onAddToCart: (productId: string) => void;
+  className?: string;
+}
+
+export const ProductCard: React.FC<ProductCardProps> = ({ 
+  product, 
+  onAddToCart,
+  className = '' 
+}) => {
+  // Implementation
+};
+        ]]></good>
+        <bad><![CDATA[
+// Bad: Implicit typing
+const ProductCard = ({ product, onAddToCart, className = '' }) => {
+  // Implementation
+};
+        ]]></bad>
+      </examples>
+    </convention>
+  </code_conventions>
+
+  <common_pitfalls>
+    <pitfall>
+      <description>Direct DOM manipulation instead of using React's declarative approach</description>
+      <why_problematic>Direct DOM manipulation can cause conflicts with React's virtual DOM, leading to unpredictable behavior and making components harder to test and maintain.</why_problematic>
+      <correct_approach><![CDATA[
+// Correct: Use React state to manage UI changes
+const ToggleButton = () => {
+  const [isActive, setIsActive] = React.useState(false);
+  
+  return (
+    <button 
+      className={isActive ? 'active' : ''}
+      onClick={() => setIsActive(!isActive)}
+    >
+      {isActive ? 'On' : 'Off'}
+    </button>
+  );
+};
+
+// Incorrect: Direct DOM manipulation
+const ToggleButton = () => {
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+  
+  const handleClick = () => {
+    if (buttonRef.current) {
+      if (buttonRef.current.classList.contains('active')) {
+        buttonRef.current.classList.remove('active');
+        buttonRef.current.textContent = 'Off';
+      } else {
+        buttonRef.current.classList.add('active');
+        buttonRef.current.textContent = 'On';
+      }
+    }
+  };
+  
+  return (
+    <button ref={buttonRef} onClick={handleClick}>
+      Off
+    </button>
+  );
+};
+      ]]></correct_approach>
+    </pitfall>
+    
+    <pitfall>
+      <description>Passing inline functions as props without useCallback</description>
+      <why_problematic>This causes unnecessary re-renders of child components since a new function is created on every render, breaking React.memo optimizations.</why_problematic>
+      <correct_approach><![CDATA[
+// Correct: Use useCallback for functions passed as props
+const ParentComponent = () => {
+  const [count, setCount] = React.useState(0);
+  
+  const handleClick = React.useCallback(() => {
+    setCount(c => c + 1);
+  }, []);
+  
+  return <ChildComponent onClick={handleClick} />;
+};
+
+// Incorrect: Inline function as prop
+const ParentComponent = () => {
+  const [count, setCount] = React.useState(0);
+  
+  return (
+    <ChildComponent 
+      onClick={() => setCount(c => c + 1)} // New function every render
+    />
+  );
+};
+      ]]></correct_approach>
+    </pitfall>
+    
+    <pitfall>
+      <description>Using index as key in lists</description>
+      <why_problematic>Using index as a key can cause issues with component state when items are added, removed, or reordered, leading to incorrect UI behavior.</why_problematic>
+      <correct_approach><![CDATA[
+// Correct: Use unique IDs as keys
+const TodoList = ({ todos }) => {
+  return (
+    <ul>
+      {todos.map(todo => (
+        <li key={todo.id}>{todo.text}</li>
+      ))}
+    </ul>
+  );
+};
+
+// Incorrect: Using index as key
+const TodoList = ({ todos }) => {
+  return (
+    <ul>
+      {todos.map((todo, index) => (
+        <li key={index}>{todo.text}</li> // Problematic when items change
+      ))}
+    </ul>
+  );
+};
+      ]]></correct_approach>
+    </pitfall>
+  </common_pitfalls>
+
+  <quality_checklist>
+    <category name="before_starting">
+      <item>Define component requirements and props interface</item>
+      <item>Check existing components for reusable patterns</item>
+      <item>Plan component structure and state management</item>
+    </category>
+    <category name="during_implementation">
+      <item>Follow established naming conventions</item>
+      <item>Use TypeScript for type safety</item>
+      <item>Implement accessibility features</item>
+      <item>Optimize performance with memoization when needed</item>
+      <item>Write clear, self-documenting code</item>
+    </category>
+    <category name="before_completion">
+      <item>Verify component works with various prop combinations</item>
+      <item>Test keyboard navigation and screen reader compatibility</item>
+      <item>Check performance with React DevTools Profiler</item>
+      <item>Ensure proper error handling and edge case coverage</item>
+    </category>
+  </quality_checklist>
+</best_practices>]]>

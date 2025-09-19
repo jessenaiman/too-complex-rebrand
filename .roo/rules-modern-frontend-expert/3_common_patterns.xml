@@ -1,0 +1,925 @@
+<![CDATA[<common_patterns>
+  <component_patterns>
+    <pattern name="compound_component">
+      <description>A pattern for creating components that work together through implicit state sharing, similar to how HTML select, option, andoptgroup work together.</description>
+      <when_to_use>
+        When you need to create a set of components that are tightly coupled and share implicit state.
+        This pattern is particularly useful for UI components like:
+        - Accordions with multiple panels
+        - Tabs with tab panels
+        - Form controls with associated labels and error messages
+        - Data tables with headers, rows, and cells
+      </when_to_use>
+      <implementation>
+        <approach>
+          Use React Context to share state between parent and child components.
+          The parent component manages the state and provides it through context.
+          Child components consume the context to access shared state and callbacks.
+        </approach>
+        <example>
+          <code language="tsx"><![CDATA[
+import * as React from 'react';
+
+// Define the context
+interface AccordionContextType {
+  activeIndex: number | null;
+  setActiveIndex: (index: number | null) => void;
+}
+
+const AccordionContext = React.createContext<AccordionContextType | null>(null);
+
+// Parent component that manages state
+const Accordion = ({ children }: { children: React.ReactNode }) => {
+  const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
+  
+  return (
+    <AccordionContext.Provider value={{ activeIndex, setActiveIndex }}>
+      <div className="accordion">{children}</div>
+    </AccordionContext.Provider>
+  );
+};
+
+// Child component that consumes context
+const AccordionItem = ({ 
+  children, 
+  index 
+}: { 
+  children: React.ReactNode; 
+  index: number;
+}) => {
+  const context = React.useContext(AccordionContext);
+  
+  if (!context) {
+    throw new Error('AccordionItem must be used within Accordion');
+  }
+  
+  const { activeIndex, setActiveIndex } = context;
+  const isActive = activeIndex === index;
+  
+  const toggle = () => {
+    setActiveIndex(isActive ? null : index);
+  };
+  
+  return (
+    <div className={`accordion-item ${isActive ? 'active' : ''}`}>
+      {React.Children.map(children, child => 
+        React.isValidElement(child) 
+          ? React.cloneElement(child, { isActive, toggle } as any) 
+          : child
+      )}
+    </div>
+  );
+};
+
+// Header component that triggers toggle
+const AccordionHeader = ({ 
+  children, 
+  isActive, 
+  toggle 
+}: { 
+  children: React.ReactNode; 
+  isActive?: boolean; 
+  toggle?: () => void;
+}) => {
+  return (
+    <button 
+      className={`accordion-header ${isActive ? 'active' : ''}`}
+      onClick={toggle}
+    >
+      {children}
+      <span className="accordion-icon">{isActive ? '−' : '+'}</span>
+    </button>
+  );
+};
+
+// Panel component that shows/hides content
+const AccordionPanel = ({ 
+  children, 
+  isActive 
+}: { 
+  children: React.ReactNode; 
+  isActive?: boolean;
+}) => {
+  return (
+    <div 
+      className={`accordion-panel ${isActive ? 'active' : ''}`}
+      hidden={!isActive}
+    >
+      {children}
+    </div>
+  );
+};
+
+// Usage
+const MyAccordion = () => {
+  return (
+    <Accordion>
+      <AccordionItem index={0}>
+        <AccordionHeader>Section 1</AccordionHeader>
+        <AccordionPanel>
+          <p>Content for section 1</p>
+        </AccordionPanel>
+      </AccordionItem>
+      <AccordionItem index={1}>
+        <AccordionHeader>Section 2</AccordionHeader>
+        <AccordionPanel>
+          <p>Content for section 2</p>
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  );
+};
+          ]]></code>
+        </example>
+        <explanation>
+          This pattern uses React Context to share state between the parent Accordion component and its children.
+          The AccordionItem component consumes the context to determine if it's active and to get the toggle function.
+          This allows the components to work together seamlessly without requiring explicit prop passing.
+        </explanation>
+      </implementation>
+      <benefits>
+        <benefit>Reduces prop drilling by using context for state sharing</benefit>
+        <benefit>Provides a clean, intuitive API for consumers</benefit>
+        <benefit>Enables flexible component composition</benefit>
+        <benefit>Maintains encapsulation of component logic</benefit>
+      </benefits>
+      <drawbacks>
+        <drawback>Can be overkill for simple component hierarchies</drawback>
+        <drawback>May introduce unnecessary re-renders if not optimized with useMemo/useCallback</drawback>
+        <drawback>Requires careful context management to avoid misuse</drawback>
+      </drawbacks>
+    </pattern>
+    
+    <pattern name="render_props">
+      <description>A pattern for sharing code between components using a prop whose value is a function that returns React elements.</description>
+      <when_to_use>
+        When you need to share stateful logic between components but want to maintain flexibility in how that logic is rendered.
+        This pattern is particularly useful for:
+        - Components that need to share state but render differently
+        - Cross-cutting concerns like data fetching, animations, or form handling
+        - Creating highly reusable component utilities
+      </when_to_use>
+      <implementation>
+        <approach>
+          Create a component that manages state internally and exposes that state through a function prop.
+          Consumers of the component can use the state values to render whatever UI they need.
+        </approach>
+        <example>
+          <code language="tsx"><![CDATA[
+import * as React from 'react';
+
+// Component that manages toggle state and exposes it via render prop
+const Toggle = ({ 
+  children 
+}: { 
+  children: (props: { 
+    isToggled: boolean; 
+    toggle: () => void 
+  }) => React.ReactNode;
+}) => {
+  const [isToggled, setIsToggled] = React.useState(false);
+  
+  const toggle = React.useCallback(() => {
+    setIsToggled(prev => !prev);
+  }, []);
+  
+  return (
+    <>
+      {children({ isToggled, toggle })}
+    </>
+  );
+};
+
+// Usage with different renderings
+const MyToggle = () => {
+  return (
+    <div>
+      <Toggle>
+        {({ isToggled, toggle }) => (
+          <button 
+            onClick={toggle}
+            className={`toggle-btn ${isToggled ? 'on' : 'off'}`}
+          >
+            {isToggled ? 'ON' : 'OFF'}
+          </button>
+        )}
+      </Toggle>
+      
+      <Toggle>
+        {({ isToggled, toggle }) => (
+          <div className="toggle-container">
+            <span>Status: {isToggled ? 'Enabled' : 'Disabled'}</span>
+            <button onClick={toggle}>
+              Switch {isToggled ? 'Off' : 'On'}
+            </button>
+          </div>
+        )}
+      </Toggle>
+    </div>
+  );
+};
+          ]]></code>
+        </example>
+        <explanation>
+          The Toggle component manages the isToggled state internally but exposes it through a render prop function.
+          This allows consumers to render whatever UI they want while reusing the toggle logic.
+          The pattern provides maximum flexibility in how the state is used.
+        </explanation>
+      </implementation>
+      <benefits>
+        <benefit>Maximum flexibility in rendering</benefit>
+        <benefit>Encapsulation of complex logic</benefit>
+        <benefit>Reusability across different UI implementations</benefit>
+        <benefit>No prop drilling required</benefit>
+      </benefits>
+      <drawbacks>
+        <drawback>Can lead to deeply nested code that's hard to read</drawback>
+        <drawback>Less intuitive for developers unfamiliar with the pattern</drawback>
+        <drawback>May cause performance issues if not properly optimized</drawback>
+        <drawback>Has largely been superseded by React Hooks for logic reuse</drawback>
+      </drawbacks>
+    </pattern>
+    
+    <pattern name="controlled_uncontrolled">
+      <description>A pattern for creating components that can work both as controlled (state managed by parent) and uncontrolled (state managed internally) components.</description>
+      <when_to_use>
+        When creating form components or components that manage state, to provide flexibility for consumers.
+        This pattern is particularly useful for:
+        - Input components (text fields, selects, checkboxes)
+        - Form elements
+        - Components that track internal state but may need external control
+      </when_to_use>
+      <implementation>
+        <approach>
+          Accept both value and defaultValue props, along with onChange handlers.
+          Use the value prop when provided (controlled), otherwise use internal state (uncontrolled).
+          Provide both onChange and onValueChange handlers for flexibility.
+        </approach>
+        <example>
+          <code language="tsx"><![CDATA[
+import * as React from 'react';
+
+interface TextInputProps {
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+  onValueChange?: (value: string) => void;
+  placeholder?: string;
+  className?: string;
+}
+
+const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
+  ({ 
+    value, 
+    defaultValue, 
+    onChange, 
+    onValueChange,
+    placeholder,
+    className = '',
+    ...props 
+  }, ref) => {
+    // Determine if component is controlled
+    const isControlled = value !== undefined;
+    
+    // Manage internal state for uncontrolled component
+    const [internalValue, setInternalValue] = React.useState(defaultValue || '');
+    
+    // Use controlled value or internal state
+    const inputValue = isControlled ? value : internalValue;
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      
+      // Update internal state if uncontrolled
+      if (!isControlled) {
+        setInternalValue(newValue);
+      }
+      
+      // Call change handlers
+      onChange?.(newValue);
+      onValueChange?.(newValue);
+    };
+    
+    return (
+      <input
+        ref={ref}
+        value={inputValue}
+        onChange={handleChange}
+        placeholder={placeholder}
+        className={`text-input ${className}`}
+        {...props}
+      />
+    );
+  }
+);
+
+TextInput.displayName = 'TextInput';
+
+// Usage as controlled component
+const ControlledForm = () => {
+  const [name, setName] = React.useState('');
+  
+  return (
+    <form>
+      <TextInput 
+        value={name} 
+        onChange={setName} 
+        placeholder="Enter your name" 
+      />
+    </form>
+  );
+};
+
+// Usage as uncontrolled component
+const UncontrolledForm = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Access value through ref or form data
+  };
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <TextInput 
+        defaultValue="" 
+        placeholder="Enter your name" 
+      />
+    </form>
+  );
+};
+          ]]></code>
+        </example>
+        <explanation>
+          The TextInput component checks if a value prop is provided to determine if it's controlled.
+          If controlled, it uses the value prop; otherwise, it manages state internally.
+          Both onChange and onValueChange handlers are provided for flexibility.
+          This pattern gives consumers the choice of how they want to manage state.
+        </explanation>
+      </implementation>
+      <benefits>
+        <benefit>Flexibility for consumers to choose control strategy</benefit>
+        <benefit>Backwards compatibility with existing code</benefit>
+        <benefit>Consistent with native HTML form elements</benefit>
+        <benefit>Supports both simple and complex state management</benefit>
+      </benefits>
+      <drawbacks>
+        <drawback>Increased complexity in component implementation</drawback>
+        <drawback>Potential for confusion if both value and defaultValue are provided</drawback>
+        <drawback>More props to document and maintain</drawback>
+        <drawback>Can lead to inconsistent usage patterns in a codebase</drawback>
+      </drawbacks>
+    </pattern>
+  </component_patterns>
+  
+  <hook_patterns>
+    <pattern name="custom_state_management">
+      <description>A pattern for creating custom hooks that encapsulate complex state management logic.</description>
+      <when_to_use>
+        When you have complex state logic that needs to be reused across multiple components.
+        This pattern is particularly useful for:
+        - Complex form validation with multiple fields
+        - Data fetching with loading, error, and caching states
+        - Animation state management
+        - Complex UI interactions with multiple states
+      </when_to_use>
+      <implementation>
+        <approach>
+          Create a custom hook that returns state values and updater functions.
+          Encapsulate all related state logic within the hook.
+          Use other hooks like useState, useEffect, useCallback, etc. as needed.
+        </approach>
+        <example>
+          <code language="tsx"><![CDATA[
+import * as React from 'react';
+
+// Type definitions
+interface FieldState<T> {
+  value: T;
+  error: string | null;
+  touched: boolean;
+}
+
+interface FormState<T> {
+  [K in keyof T]: FieldState<T[K]>;
+}
+
+type FormErrors<T> = {
+  [K in keyof T]?: string;
+};
+
+// Custom hook for form management
+const useForm = <T extends Record<string, any>>(initialValues: T, validate: (values: T) => FormErrors<T>) => {
+  const [values, setValues] = React.useState<T>(initialValues);
+  const [errors, setErrors] = React.useState<FormErrors<T>>({});
+  const [touched, setTouched] = React.useState<Record<keyof T, boolean>>(
+    Object.keys(initialValues).reduce((acc, key) => ({ ...acc, [key]: false }), {} as Record<keyof T, boolean>)
+  );
+  
+  // Validate form
+  const validateForm = React.useCallback(() => {
+    const newErrors = validate(values);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [values, validate]);
+  
+  // Handle field change
+  const handleChange = <K extends keyof T>(field: K, value: T[K]) => {
+    setValues(prev => ({ ...prev, [field]: value }));
+    
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: null }));
+    }
+  };
+  
+  // Handle field blur
+  const handleBlur = <K extends keyof T>(field: K) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+    
+    // Validate field on blur
+    const fieldErrors = validate({ ...values, [field]: values[field] });
+    setErrors(prev => ({ ...prev, [field]: fieldErrors[field] || null }));
+  };
+  
+  // Reset form
+  const reset = React.useCallback(() => {
+    setValues(initialValues);
+    setErrors({});
+    setTouched(
+      Object.keys(initialValues).reduce((acc, key) => ({ ...acc, [key]: false }), {} as Record<keyof T, boolean>)
+    );
+  }, [initialValues]);
+  
+  // Check if form is valid
+  const isValid = React.useMemo(() => {
+    return Object.keys(errors).every(key => !errors[key as keyof T]);
+  }, [errors]);
+  
+  // Check if form is dirty (values changed from initial)
+  const isDirty = React.useMemo(() => {
+    return JSON.stringify(values) !== JSON.stringify(initialValues);
+  }, [values, initialValues]);
+  
+  return {
+    values,
+    errors,
+    touched,
+    isValid,
+    isDirty,
+    handleChange,
+    handleBlur,
+    validateForm,
+    reset
+  };
+};
+
+// Usage
+const MyForm = () => {
+  const validate = (values: { name: string; email: string }) => {
+    const errors: FormErrors<{ name: string; email: string }> = {};
+    
+    if (!values.name.trim()) {
+      errors.name = 'Name is required';
+    }
+    
+    if (!values.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      errors.email = 'Email is invalid';
+    }
+    
+    return errors;
+  };
+  
+  const {
+    values,
+    errors,
+    touched,
+    isValid,
+    isDirty,
+    handleChange,
+    handleBlur,
+    validateForm,
+    reset
+  } = useForm({ name: '', email: '' }, validate);
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (validateForm()) {
+      // Submit form
+      console.log('Form submitted:', values);
+    }
+  };
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <input
+          type="text"
+          value={values.name}
+          onChange={(e) => handleChange('name', e.target.value)}
+          onBlur={() => handleBlur('name')}
+          placeholder="Name"
+          className={touched.name && errors.name ? 'error' : ''}
+        />
+        {touched.name && errors.name && (
+          <span className="error-message">{errors.name}</span>
+        )}
+      </div>
+      
+      <div>
+        <input
+          type="email"
+          value={values.email}
+          onChange={(e) => handleChange('email', e.target.value)}
+          onBlur={() => handleBlur('email')}
+          placeholder="Email"
+          className={touched.email && errors.email ? 'error' : ''}
+        />
+        {touched.email && errors.email && (
+          <span className="error-message">{errors.email}</span>
+        )}
+      </div>
+      
+      <button type="submit" disabled={!isValid || !isDirty}>
+        Submit
+      </button>
+      <button type="button" onClick={reset}>
+        Reset
+      </button>
+    </form>
+  );
+};
+          ]]></code>
+        </example>
+        <explanation>
+          The useForm hook encapsulates all the logic for form state management, validation, and error handling.
+          It returns an object with values, errors, helper functions, and form state indicators.
+          This keeps the component clean and allows the form logic to be reused across different forms.
+        </explanation>
+      </implementation>
+      <benefits>
+        <benefit>Encapsulation of complex state logic</benefit>
+        <benefit>Reusability across components</benefit>
+        <benefit>Cleaner component code</benefit>
+        <benefit>Easier testing of state logic</benefit>
+        <benefit>Consistent state management patterns</benefit>
+      </benefits>
+      <drawbacks>
+        <drawback>Can be overkill for simple state management</drawback>
+        <drawback>Learning curve for team members</drawback>
+        <drawback>Potential for over-abstraction</drawback>
+        <drawback>Debugging can be more complex</drawback>
+      </drawbacks>
+    </pattern>
+    
+    <pattern name="data_fetching">
+      <description>A pattern for creating custom hooks that handle data fetching with loading, error, and caching states.</description>
+      <when_to_use>
+        When you need to fetch data from an API and manage the various states associated with that request.
+        This pattern is particularly useful for:
+        - Fetching data for display in components
+        - Handling loading and error states
+        - Implementing caching strategies
+        - Managing request cancellation
+      </when_to_use>
+      <implementation>
+        <approach>
+          Create a custom hook that manages the data fetching lifecycle.
+          Use useState for data, loading, and error states.
+          Use useEffect to trigger the fetch when dependencies change.
+          Implement cleanup to handle component unmounting.
+          Consider caching strategies for performance.
+        </approach>
+        <example>
+          <code language="tsx"><![CDATA[
+import * as React from 'react';
+
+// Type definitions
+interface FetchState<T> {
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+}
+
+// Custom hook for data fetching
+const useFetch = <T,>(url: string, options?: RequestInit) => {
+  const [state, setState] = React.useState<FetchState<T>>({
+    data: null,
+    loading: true,
+    error: null
+  });
+  
+  const [retryCount, setRetryCount] = React.useState(0);
+  
+  React.useEffect(() => {
+    let cancelled = false;
+    
+    const fetchData = async () => {
+      try {
+        setState(prev => ({ ...prev, loading: true, error: null }));
+        
+        const response = await fetch(url, options);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Check if component is still mounted
+        if (!cancelled) {
+          setState({ data, loading: false, error: null });
+        }
+      } catch (error) {
+        // Check if component is still mounted
+        if (!cancelled) {
+          setState({ data: null, loading: false, error: error as Error });
+        }
+      }
+    };
+    
+    fetchData();
+    
+    // Cleanup function
+    return () => {
+      cancelled = true;
+    };
+  }, [url, options, retryCount]);
+  
+  const retry = React.useCallback(() => {
+    setRetryCount(prev => prev + 1);
+  }, []);
+  
+  const refetch = React.useCallback(() => {
+    setRetryCount(prev => prev + 1);
+  }, []);
+  
+  return { ...state, retry, refetch };
+};
+
+// Usage
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const UserProfile = ({ userId }: { userId: number }) => {
+  const { data: user, loading, error, retry } = useFetch<User>(
+    `/api/users/${userId}`,
+    { method: 'GET' }
+  );
+  
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+        <button onClick={retry}>Retry</button>
+      </div>
+    );
+  }
+  
+  if (!user) {
+    return <div>No user found</div>;
+  }
+  
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <p>{user.email}</p>
+    </div>
+  );
+};
+          ]]></code>
+        </example>
+        <explanation>
+          The useFetch hook manages the entire data fetching lifecycle, including loading, error, and success states.
+          It handles component unmounting to prevent state updates on unmounted components.
+          It provides retry functionality to allow users to retry failed requests.
+          The hook is generic, allowing it to be used with any data type.
+        </explanation>
+      </implementation>
+      <benefits>
+        <benefit>Centralized data fetching logic</benefit>
+        <benefit>Automatic cleanup to prevent memory leaks</benefit>
+        <benefit>Reusable across components</benefit>
+        <benefit>Type-safe with generics</benefit>
+        <benefit>Built-in error and loading states</benefit>
+      </benefits>
+      <drawbacks>
+        <drawback>Doesn't handle caching by default</drawback>
+        <drawback>Simple for basic use cases, overkill for complex ones</drawback>
+        <drawback>Doesn't handle request deduplication</drawback>
+        <drawback>May need additional features for advanced use cases</drawback>
+      </drawbacks>
+    </pattern>
+  </hook_patterns>
+  
+  <styling_patterns>
+    <pattern name="tailwind_component_styling">
+      <description>A pattern for styling React components using Tailwind CSS utility classes with a focus on maintainability and consistency.</description>
+      <when_to_use>
+        When building React components with Tailwind CSS where you want to:
+        - Maintain consistent styling across the application
+        - Create reusable component variants
+        - Implement responsive designs
+        - Follow design system principles
+      </when_to_use>
+      <implementation>
+        <approach>
+          Use Tailwind's utility classes directly on components for styling.
+          Create reusable component variants using conditional class application.
+          Implement responsive designs with Tailwind's breakpoint prefixes.
+          Use Tailwind's configuration to extend with custom values when needed.
+        </approach>
+        <example>
+          <code language="tsx"><![CDATA[
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
+
+// Define button variants using class-variance-authority
+const buttonVariants = cva(
+  // Base classes that apply to all buttons
+  'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
+  {
+    variants: {
+      variant: {
+        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        outline: 'border border-input hover:bg-accent hover:text-accent-foreground',
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        link: 'underline-offset-4 hover:underline text-primary',
+      },
+      size: {
+        default: 'h-10 py-2 px-4',
+        sm: 'h-9 px-3 rounded-md',
+        lg: 'h-11 px-8 rounded-md',
+        icon: 'h-10 w-10',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
+);
+
+// Type for button props including variants
+interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {}
+
+// Button component implementation
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, ...props }, ref) => {
+    return (
+      <button
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Button.displayName = 'Button';
+
+// Card component with Tailwind styling
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        'rounded-lg border bg-card text-card-foreground shadow-sm',
+        className
+      )}
+      {...props}
+    />
+  )
+);
+Card.displayName = 'Card';
+
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn('flex flex-col space-y-1.5 p-6', className)}
+    {...props}
+  />
+));
+CardHeader.displayName = 'CardHeader';
+
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      'text-2xl font-semibold leading-none tracking-tight',
+      className
+    )}
+    {...props}
+  />
+));
+CardTitle.displayName = 'CardTitle';
+
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn('text-sm text-muted-foreground', className)}
+    {...props}
+  />
+));
+CardDescription.displayName = 'CardDescription';
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
+));
+CardContent.displayName = 'CardContent';
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn('flex items-center p-6 pt-0', className)}
+    {...props}
+  />
+));
+CardFooter.displayName = 'CardFooter';
+
+// Usage example
+const MyComponent = () => {
+  return (
+    <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>Create Project</CardTitle>
+        <CardDescription>
+          Deploy your new project in one-click.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <label htmlFor="name">Name</label>
+              <input
+                id="name"
+                placeholder="Name of your project"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+          </div>
+        </form>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Button variant="outline">Cancel</Button>
+        <Button>Deploy</Button>
+      </CardFooter>
+    </Card>
+  );
+};
+          ]]></code>
+        </example>
+        <explanation>
+          This pattern uses Tailwind CSS utility classes for styling components.
+          The button component uses class-variance-authority (cva) to create variants.
+          The card components demonstrate consistent styling using Tailwind classes.
+          The cn utility function combines classes and handles conditional styling.
+          This approach maintains consistency while allowing for customization.
+        </explanation>
+      </implementation>
+      <benefits>
+        <benefit>Rapid development with utility-first CSS</benefit>
+        <benefit>Consistent styling across the application</benefit>
+        <benefit>Easy responsive design with breakpoint prefixes</benefit>
+        <benefit>No context switching between CSS and JSX</benefit>
+        <benefit>Built-in design system with Tailwind's defaults</benefit>
+      </benefits>
+      <drawbacks>
+        <drawback>Large HTML class attributes</drawback>
+        <drawback>Learning curve for developers unfamiliar with Tailwind</drawback>
+        <drawback>Potential for inconsistent styling without strict conventions</drawback>
+        <drawback>Harder to override styles in downstream components</drawback>
+      </drawbacks>
+    </pattern>
+  </styling_patterns>
+</common_patterns>]]>

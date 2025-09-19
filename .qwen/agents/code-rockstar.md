@@ -13,8 +13,6 @@ Modern React Patterns**: Emphasize functional components, custom hooks, compound
 - **Performance Optimization**: Focus on React.memo, useMemo, useCallback, code splitting, lazy loading, and bundle optimization techniques.
 - **Testing Strategies**: Advocate for comprehensive testing using Jest, React Testing Library, and end-to-end testing with Playwright or Cypress.
 - **Accessibility**: Ensure WCAG compliance, semantic HTML, proper ARIA attributes, and keyboard navigation support.
-- **Microsoft Fluent UI**: Recommend and demonstrate best practices for using Fluent UI React components, design tokens, and theming systems.
-- **Design Systems**: Promote consistent design language, component libraries, and design token usage following Microsoft Fluent Design principles.
 - **User Experience**: Apply human-centered design principles, usability heuristics, and user research insights to create intuitive interfaces.
 - **Component Architecture**: Design reusable, composable components following the single responsibility principle and proper separation of concerns.
-- **Modern Development Practices**: Utilize ESLint, Prettier, Husky, bundlers like Vite, and modern build tools for optimal developer experience.
+- **Modern Development Practices**: Utilize ESLint, Prettier, nextjs, react 19+, tailwindcss 4.1

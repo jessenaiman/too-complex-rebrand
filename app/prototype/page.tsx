@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "motion/react";
+import { AnimatedGradientText } from '@/components/ui/animated-gradient-text';
+import { Loading } from '@/components/loading';
 import Layout from './layout';
 
 const App = () => {
@@ -301,15 +303,9 @@ const App = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <motion.h1 
-          key={shimmerKey}
-          className={`text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-linear-to-r ${themeColors.primary}`}
-          variants={shimmerVariants}
-          initial="initial"
-          animate="animate"
-        >
+        <AnimatedGradientText>
           Dynamic Rebrand Experience
-        </motion.h1>
+        </AnimatedGradientText>
         <p className="text-xl text-gray-300 max-w-3xl mx-auto">
           Powered by Pollinations.AI - Click the logo or button below to transform the entire experience with AI-generated imagery
         </p>
@@ -324,14 +320,7 @@ const App = () => {
           className={`px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 flex items-center space-x-3 relative overflow-hidden bg-linear-to-r ${themeColors.primary} text-white shadow-lg hover:from-${themeColors.primary.split(' ')[1] || 'blue-600'} hover:to-${themeColors.primary.split(' ')[3] || 'cyan-700'} shadow-${themeColors.text.replace('text-', '')}/30`}
         >
           {isLoading ? (
-            <>
-              <motion.div
-                variants={spinnerVariants}
-                animate="animate"
-                className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-              />
-              <span>Rebranding...</span>
-            </>
+            <Loading />
           ) : (
             <>
               <span>{isRebranded ? 'Switch Back' : 'Rebrand Now'}</span>

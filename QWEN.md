@@ -59,9 +59,9 @@ public/                    # Static assets and AI-generated images
 - Color adjustments with hue shifts and intensity variations
 
 ### Content System
-- Business profiles stored in `app/data/marketing-text.yml`
+- Business profiles stored in `app/content/marketing-text.yml`
 - 5 distinct mock business profiles for randomization
-- Additional marketing texts in `app/data/rebrand-content.ts`
+- Additional marketing texts in `app/content/rebrand-content.ts`
 
 ### AI Integration
 - Uses Pollinations.AI API for image and text generation

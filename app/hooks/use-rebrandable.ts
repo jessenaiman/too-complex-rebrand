@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { orchestrateRebrand, generateSingleAsset } from "../utils/rebrand-orchestrator";
+import { orchestrateRebrand, generateSingleAsset } from "../../utils/rebrand-orchestrator";
 
 type UseRebrandableResult = {
   isRebranded: boolean;
