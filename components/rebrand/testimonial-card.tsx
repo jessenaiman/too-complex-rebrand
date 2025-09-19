@@ -32,6 +32,7 @@ const TestimonialCard = () => {
             {testimonial.role}
           </Rebrandable>
         </div>
+      </div>
       <Rebrandable componentType="text" className="italic">
         "{testimonial.quote}"
       </Rebrandable>
