@@ -1,8 +1,19 @@
 # AGENTS.md
 
-This file provides guidance to agents when working with code in this repository.
+This is a single-page web app that allows users to trigger page-wide or individual component rebranding that affects all rebrandable components simultaneously. The system rebrands on-screen content using text from a predefined set of modern professional companies described in the content files.
 
-Review the 
+## Success Criteria
+1. A fully responsive modern website with shadcn supported theme switching using the animated-theme-toggle
+2. The rebrand button on the page properly calling each rebranded componenent: no broken images, no terminal errors, no linting errors. A beatiful and professional page redesign with the click of a button
+3. The rebrand components have a way to click on them, or an element to rebrand them indivdually. They always are professionally designed to fit the theme and layout. They are always accessible, and responsive.
+4. Zero custom logic overwritting tailwindcss or shadcn theme. No inline brittle and breaking css elements in pages or components.
+5. Zero suggestions, warnings, fixes, and an A+ from codacy
+
+## Check Engine
+1. Review the codebase with the correct tool
+2. Review react 19+, nextjs, tailwindcss 4.1, shadcn storing the essential knoweldge using your memory mcp tool
+3. Use the memory tool to retrieve react, nextjs, tailwindcss 4.1, and shadcn and explain how this project is setup.
+4. Repeat the project plan core 
 
 Before you start complete always run the validation sequence
 
@@ -13,7 +24,7 @@ Before you start complete always run the validation sequence
 4. `curl -Is http://localhost:3000 | head -n 1` → Must return `HTTP/1.1 200 OK`  
 5. `next build` → Must complete without warnings or failures
 
-Before you submit your code as complete run the Validattion Sequence  
+Before you submit your code as complete run the Validation Sequence  
 
 ## WARNINGS
 
