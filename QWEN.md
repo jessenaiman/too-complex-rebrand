@@ -1,164 +1,165 @@
-# QWEN.md - Project Context for Too Complex Rebrand
+## Project Facts:
 
-## Project Overview
+This is a professional portfolio website with a unique feature to redesign the website, or individual components using a combination of static arrays and ai content generation through the use of the Pollinations API
 
-This repository is a Next.js portfolio/blog template that has been extended with a dynamic AI-powered rebranding feature. The project allows users to instantly redesign the entire page or individual components with a single click by dynamically swapping themes, textual content, and AI-generated visual assets using the Pollinations.AI API.
+- You are operating in a react 19+, nextjs, tailwindcss 4.1 application
+# Rebrand Orchestrator System
 
-### Core Technologies
-- **Framework**: Next.js (v15.5.3) with React (v19.1.0)
-- **Styling**: Tailwind CSS (v4.1.13) with Shadcn UI components
-- **Animation**: Motion (from Framer Motion) and MagicUI
-- **AI Service**: Pollinations.AI API for image and text generation
-- **State Management**: React hooks and context
-- **Build Tool**: pnpm
+> A single-page application for dynamically rebranding UI components using AI-generated content and predefined themes.
 
-### Key Features
-1. **Component-Level Rebrand**: Individual elements wrapped in a special component can be independently regenerated
-2. **Page-Level Rebrand**: A global button triggers a full-site redesign
-3. **Dynamic Theme Switching**: Randomly selects from predefined Shadcn themes
-4. **AI-Generated Content**: Uses Pollinations API to generate logos, images, and marketing text
-5. **Visual Feedback**: Animated borders and loading states for interactive elements
+This system allows users to trigger visual refreshes of individual components or the entire page, swapping styles, images, and text while maintaining a professional aesthetic and responsive layout.
 
-## Project Structure
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js v18+
+- pnpm v8+
+
+### Installation
+
+```bash
+pnpm install
+```
+
+### Development
+
+```bash
+pnpm run dev
+```
+
+Visit `http://localhost:3000` to view the application.
+
+### Build
+
+```bash
+pnpm run build
+```
+
+---
+
+## 🧩 Core Architecture
+
+The system is built around a central **Orchestrator** that manages sequential processing of rebranding tasks, ensuring stability and a professional user experience.
+
+### Key Utilities
+
+- **`app/utils/pollinations-image.ts`**: Handles all interactions with the Pollinations.AI API.
+    - `generatePollinationsImage`: Synchronously generates an image URL.
+    - `generatePollinationsImageAsync`: Asynchronously generates an image URL and verifies its availability.
+    - `processPollinationsPromptsSequentially`: **NEW** Processes an array of prompts one-by-one, waiting for each image to be ready before proceeding to the next. This is the core function for reliable, sequential AI image generation.
+
+- **`app/utils/rebrand-orchestrator.ts`**: The central brain. It receives rebrand requests, determines the type of rebrand needed (image, theme, content, etc.), and delegates the task to the appropriate module.
+
+- **`app/utils/rebrand-theme.ts`**: Manages theme switching between 5 predefined Shadcn UI themes.
+
+- **`app/utils/rebrand-content.ts`**: Fetches and processes company data from `app/content/companies.ts` for dynamic text replacement.
+
+- **`app/utils/rebrand-background.ts`**: Swaps the page background with a component from `components/backgrounds/`.
+
+---
+
+## 🛠️ For New Developers
+
+### 1. Understanding Sequential Processing
+
+The most critical new feature is `processPollinationsPromptsSequentially`. This function ensures that AI-generated images load reliably without overwhelming the API or the UI.
+
+```typescript
+// Example usage in a component
+import { processPollinationsPromptsSequentially } from '@/app/utils/pollinations-image';
+
+const handleRebrand = async () => {
+  const prompts = [
+    "Minimalist logo for a fintech startup",
+    "Futuristic background for a tech conference",
+    "Portrait of a friendly customer service AI"
+  ];
+
+  await processPollinationsPromptsSequentially(
+    prompts,
+    { isLogo: false },
+    (prompt, imageUrl, index) => {
+      // Success: Update your component state with the new image URL
+      console.log(`Image ${index + 1} ready:`, imageUrl);
+    },
+    (prompt, error, index) => {
+      // Error: Handle gracefully, show a fallback
+      console.error(`Failed to generate image for: ${prompt}`, error);
+    }
+  );
+};
+```
+
+### 2. Adding a New Rebrandable Component
+
+1.  Wrap your component with the `<Rebrand>` wrapper.
+2.  Define its `elementType` (e.g., `'logo'`, `'hero-image'`, `'testimonial'`).
+3.  The Orchestrator will automatically handle the rest when the component is clicked.
+
+### 3. Modifying Themes
+
+Themes are defined in `app/global.css`. To add a new theme:
+
+1.  Add a new CSS class following the Shadcn theming convention.
+2.  Update the theme selection logic in `rebrand-theme.ts`.
+3.  Add corresponding mood/feeling metadata to `app/content/themes.yml`.
+
+### 4. Adding New Company Data
+
+Add new entries to `app/content/companies.ts`. This data is used by `rebrand-content.ts` to generate context-aware prompts for the Pollinations API.
+
+---
+
+## 📁 Project Structure
 
 ```
 app/
-├── components/
-│   ├── rebrand/           # Rebrand-specific documentation
-│   ├── ui/                # Shadcn UI components
-│   └── rebrand-page.tsx   # Main rebrand component
-├── hooks/
-│   ├── use-rebrandable.ts # Core rebrand logic hook
-│   └── ...                # Additional rebrand hooks
-├── themes/
-│   ├── rebrand-theme.ts   # Theme management
-│   └── theme-*.ts         # Individual theme definitions
-├── data/
-│   ├── marketing-text.yml # Business profiles
-│   └── rebrand-content.ts # Content management
-├── utils/
-│   ├── rebrand-ai.ts      # Pollinations API integration
-│   └── ...                # Additional utilities
-├── layout.tsx             # Main layout
-└── ...                    # Other page components
-
-public/                    # Static assets and AI-generated images
+├── content/                   # Static data (companies, themes)
+├── utils/                     # Core logic (orchestrator, API clients)
+│   ├── pollinations-image.ts  # AI image generation (DO NOT MODIFY)
+│   ├── rebrand-orchestrator.ts
+│   ├── rebrand-theme.ts
+│   ├── rebrand-content.ts
+│   └── rebrand-background.ts
+├── components/                # UI components
+│   ├── backgrounds/           # Background components
+│   ├── buttons/               # Button variants
+│   └── ui/                    # Loaders, animations
+└── global.css                 # 5 Shadcn themes
 ```
 
-## Development Guidelines
+---
 
-### Code Structure
-- All rebrand logic must be isolated to the `app/` directory
-- File naming follows kebab-case convention (e.g., `use-rebrandable.ts`)
-- Components use Shadcn UI and MagicUI primitives exclusively
-- Never modify files outside `app/` directory for rebrand functionality
+## ⚠️ Important Notes
 
-### Theme System
-- 5 predefined Shadcn themes with random selection
-- Theme randomization selects from these 5 distinct palettes
-- Color adjustments with hue shifts and intensity variations
+- **Do not modify `pollinations-image.ts`** unless explicitly instructed. It is a stable, tested module.
+- All new code must use **kebab-case** file naming.
+- Prioritize **professional design** over experimental features. Layout must never break.
+- Use the provided loading states (`components/ui/progress.tsx`, `components/loading.tsx`) to ensure a smooth user experience during rebrands.
 
-### Content System
-- Business profiles stored in `app/content/marketing-text.yml`
-- 5 distinct mock business profiles for randomization
-- Additional marketing texts in `app/content/rebrand-content.ts`
+This system is designed for stability and scalability. New features should integrate with the existing Orchestrator pattern.
 
-### AI Integration
-- Uses Pollinations.AI API for image and text generation
-- All generated assets stored in `public/` directory
-- Sequential asset generation: theme → content → assets
-- Error handling for API failures with UI feedback
 
-## Key Commands
+## ✅ Validation Checklist
 
-### Development
+Before committing or merging, ensure the following commands pass:
+
 ```bash
-# Start development server
-pnpm dev
+# 1. Fix all linting errors
+pnpm lint --fix
 
-# Build for production
-pnpm build
+# 2. Verify the dev server runs without errors
+pnpm run dev
 
-# Run linter
-pnpm lint
+# 3. Check the server responds
+curl -Is http://localhost:3000 | head -n 1
+# Should return: HTTP/1.1 200 OK
+
+# 4. Ensure the production build succeeds
+pnpm run build
 ```
 
-### Validation Sequence (Mandatory After Changes)
-1. `pnpm lint`
-2. `pnpm run dev`
-3. `curl -Is http://localhost:3000 | head -n 1`
-4. `next build`
-
-## Component Architecture
-
-### Main Components
-- `app/components/rebrand-page.tsx` - Primary rebrand interface
-- `app/hooks/use-rebrandable.ts` - Core rebrand state and logic
-- `app/themes/rebrand-theme.ts` - Theme management
-- `app/data/rebrand-content.ts` - Content management
-- `app/utils/rebrand-ai.ts` - AI service integration
-
-### Rebrand Flow
-1. User triggers rebrand (page-level or component-level)
-2. New theme is selected and applied
-3. New business profile is selected
-4. AI assets are generated sequentially via Pollinations API
-5. UI updates with new content and assets
-6. Loading states shown during generation
-
-## Important Rules
-
-### Forbidden Actions
-- Do not touch or edit `package.json` directly
-- Do not install dependencies without validation
-- Do not write or modify test files unless requested
-- Do not use code outside the `app/` directory for rebrand logic
-- Do not use file/folder names that are not kebab-case for logic files
-
-### Required Validation
-After every change, run the complete validation sequence:
-1. `pnpm lint`
-2. `pnpm run dev`
-3. `curl -Is http://localhost:3000 | head -n 1`
-4. `next build`
-
-If any step fails, resolve the issue before proceeding.
-
-## AI Asset Management
-
-All AI-generated images (logos, cards, hero images) are saved in the `public/` directory. The Pollinations API is used for generation with the following pattern:
-
-```
-https://pollinations.ai/p/{prompt}?width={width}&height={height}&nologo=true&seed={seed}
-```
-
-Assets are generated in sequence:
-1. Fetch new theme
-2. Fetch new content
-3. Generate AI assets one at a time
-
-## Theme and Content Randomization
-
-### Themes
-- 5 predefined themes in `app/themes/`
-- Random selection with optional exclusion of current theme
-- Color adjustment with hue shifts and intensity variations
-
-### Content
-- 5 business profiles in `app/data/marketing-text.yml`
-- Additional profiles in `app/data/rebrand-content.ts`
-- Random selection from all available profiles
-
-## Error Handling
-
-- Robust error handling for all API calls
-- Clear UI states for failures
-- Retry mechanisms for failed asset generation
-- Graceful degradation when AI services are unavailable
-
-## Performance Considerations
-
-- Sequential asset loading to prevent overwhelming the API
-- Loading states for all rebrandable components
-- Caching of generated assets in `public/` directory
-- Efficient theme switching without full page reloads
+---

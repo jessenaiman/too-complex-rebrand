@@ -1,11 +1,18 @@
 'use client'
 
-import React, { useEffect } from 'react';
-import { motion } from "motion/react";
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from "motion/react";
 import { RebrandProvider, useRebrand } from './rebrand-context';
 import { ShinyButton } from '@/components/ui/shiny-button';
-import { ShimmerButton } from '@/components/ui/shimmer-button';
+import { ShimmerButton } from '@/components/buttons/shimmer-button';
 import { RainbowButton } from '@/components/ui/rainbow-button';
+import Rebrand from './rebrand';
+
+// Define the type for rebrandable elements
+interface RebrandableElement {
+  id: string;
+  type: string;
+}
 
 const RebrandContent = () => {
   const {
@@ -14,13 +21,27 @@ const RebrandContent = () => {
     triggerGlobalRebrand,
     currentImage,
     logoImage,
-    businessProfile,
-    theme
+    businessProfile
   } = useRebrand();
+
+ const [rebrandableElements, setRebrandableElements] = useState<RebrandableElement[]>([]);
 
   // Load initial images
   useEffect(() => {
     triggerGlobalRebrand();
+  }, []);
+
+  // Register all rebrandable elements on the page
+  useEffect(() => {
+    // In a real implementation, we would query the DOM for all Rebrand components
+    // For now, we'll just create a mock array
+    setRebrandableElements([
+      { id: 'logo', type: 'logo' },
+      { id: 'card-1', type: 'card' },
+      { id: 'card-2', type: 'card' },
+      { id: 'button-1', type: 'button' },
+      { id: 'text-1', type: 'text-block' }
+    ]);
   }, []);
 
   const cardVariants = {
@@ -42,10 +63,41 @@ const RebrandContent = () => {
     }
   };
 
+  // Handle page-wide rebrand
+  const handlePageRebrand = async () => {
+    // Show full-screen loader
+    // In a real implementation, we would show a full-screen loader here
+    
+    // Trigger global rebrand
+    await triggerGlobalRebrand();
+    
+    // Process all rebrandable elements sequentially
+    // In a real implementation, we would process each element and wait for success signals
+  };
+
   return (
-    <div className={`min-h-screen transition-colors duration-700 ${
-      isRebranded ? 'bg-linear-to-br from-purple-900 via-pink-900 to-indigo-900' : 'bg-linear-to-br from-gray-900 via-slate-800 to-blue-900'
-    }`}>
+    <div className={`min-h-screen transition-colors duration-700 bg-background`}>
+      {/* Navbar with theme toggler */}
+      <nav className="flex justify-between items-center p-6">
+        <Rebrand elementType="logo" componentId="navbar-logo">
+          {logoImage ? (
+            <img src={logoImage} alt="Company Logo" className="h-12" />
+          ) : (
+            <div className="h-12 w-32 bg-gray-200 rounded-lg"></div>
+          )}
+        </Rebrand>
+        
+        <div className="flex items-center space-x-4">
+          {/* Theme toggler would go here */}
+          <button
+            onClick={triggerGlobalRebrand}
+            className={`px-4 py-2 rounded-lg text-primary-foreground transition-colors bg-primary hover:opacity-90`}
+          >
+            Rebrand
+          </button>
+        </div>
+      </nav>
+
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-12">
         <motion.div
           className="text-center mb-12"
@@ -53,10 +105,10 @@ const RebrandContent = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-linear-to-r from-white to-gray-300">
+          <h1 className={`text-4xl md:text-5xl font-bold mb-6 text-foreground`}>
             Dynamic Rebrand Experience
           </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className={`text-xl max-w-3xl mx-auto text-muted-foreground`}>
             Powered by Pollinations.AI - Click the logo or button below to transform the entire experience with AI-generated imagery
           </p>
         </motion.div>
@@ -64,12 +116,8 @@ const RebrandContent = () => {
         <div className="flex justify-center mb-12">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <ShinyButton
-              onClick={triggerGlobalRebrand}
-              className={`px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 flex items-center space-x-3 ${
-                isRebranded
-                  ? 'bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-lg shadow-pink-500/30'
-                  : 'bg-linear-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white shadow-lg shadow-blue-500/30'
-              }`}
+              onClick={handlePageRebrand}
+              className={`px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 flex items-center space-x-3 bg-primary text-primary-foreground shadow-lg`}
               data-testid="rebrand-button"
             >
               {isLoading ? (
@@ -77,7 +125,7 @@ const RebrandContent = () => {
                   <motion.div
                     variants={spinnerVariants}
                     animate="animate"
-                    className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                    className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full"
                   />
                   <span>Generating New Brand</span>
                 </>
@@ -85,7 +133,7 @@ const RebrandContent = () => {
                 <>
                   <span>{isRebranded ? 'Switch Back' : 'Rebrand Now'}</span>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 0 102 0V9.414l1.293 1.293a1 0 001.414-1.414z" clipRule="evenodd" />
                   </svg>
                 </>
               )}
@@ -100,11 +148,7 @@ const RebrandContent = () => {
           animate="animate"
           className="max-w-4xl mx-auto"
         >
-          <div className={`${
-            isRebranded
-              ? 'bg-linear-to-br from-pink-500/20 to-purple-600/20 backdrop-blur-xl border border-pink-500/30'
-              : 'bg-linear-to-br from-blue-500/20 to-cyan-600/20 backdrop-blur-xl border border-blue-500/30'
-          } rounded-3xl p-8 shadow-2xl transform transition-all duration-700 hover:scale-105 overflow-hidden`}>
+          <div className={`rounded-3xl p-8 shadow-2xl transform transition-all duration-700 hover:scale-105 overflow-hidden bg-card border border-border`}>
             
             {/* AI Generated Background Image */}
             <div className="relative mb-8 rounded-2xl overflow-hidden h-80">
@@ -121,7 +165,7 @@ const RebrandContent = () => {
                   <motion.div
                     variants={spinnerVariants}
                     animate="animate"
-                    className="w-8 h-8 border-4 border-white border-t-transparent rounded-full"
+                    className="w-8 h-8 border-4 border-foreground border-t-transparent rounded-full"
                   />
                 </div>
               )}
@@ -135,10 +179,10 @@ const RebrandContent = () => {
                     <motion.div
                       variants={spinnerVariants}
                       animate="animate"
-                      className="w-8 h-8 border-4 border-white border-t-transparent rounded-full mx-auto mb-4"
+                      className="w-8 h-8 border-4 border-foreground border-t-transparent rounded-full mx-auto mb-4"
                       data-testid="logo-loading-spinner"
                     />
-                    <p className="text-white font-semibold">Generating New Brand</p>
+                    <p className="text-foreground font-semibold">Generating New Brand</p>
                   </div>
                 </div>
               )}
@@ -146,14 +190,12 @@ const RebrandContent = () => {
             
             <div className="flex flex-col items-center">
               <h2
-                className={`text-3xl font-bold mb-4 ${
-                  isRebranded ? 'text-pink-300' : 'text-blue-300'
-                }`}
+                className={`text-3xl font-bold mb-4 text-foreground`}
               >
                 {isRebranded ? 'Reimagined Brand' : 'Original Experience'}
               </h2>
               <p
-                className="text-gray-300 text-center mb-6"
+                className={`text-center mb-6 text-muted-foreground`}
                 data-testid="marketing-text"
               >
                 {isRebranded
@@ -162,11 +204,9 @@ const RebrandContent = () => {
                 }
               </p>
               
-              <div className="w-full bg-gray-700 rounded-full h-2 mb-6">
+              <div className="w-full bg-muted rounded-full h-2 mb-6">
                 <motion.div
-                  className={`h-2 rounded-full ${
-                    isRebranded ? 'bg-linear-to-r from-pink-500 to-purple-600' : 'bg-linear-to-r from-blue-500 to-cyan-600'
-                  }`}
+                  className={`h-2 rounded-full bg-primary`}
                   initial={{ width: 0 }}
                   animate={{ width: "100%" }}
                   transition={{ duration: 1.5, delay: 0.5 }}
@@ -175,28 +215,23 @@ const RebrandContent = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
                 {[1, 2, 3].map((item) => (
-                  <motion.div
-                    key={item}
-                    className={`p-4 rounded-xl text-center ${
-                      isRebranded
-                        ? 'bg-linear-to-br from-pink-500/30 to-purple-600/30 border border-pink-500/30'
-                        : 'bg-linear-to-br from-blue-500/30 to-cyan-600/30 border border-blue-500/30'
-                    }`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 * item }}
-                  >
-                    <h3
-                      className={`text-2xl font-bold mb-2 ${
-                        isRebranded ? 'text-pink-300' : 'text-blue-300'
-                      }`}
+                  <Rebrand key={item} elementType="card" componentId={`feature-card-${item}`}>
+                    <motion.div
+                      className={`p-4 rounded-xl text-center bg-card border border-border`}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 * item }}
                     >
-                      {item * 25}%
-                    </h3>
-                    <p className="text-gray-300">
-                      Feature {item}
-                    </p>
-                  </motion.div>
+                      <h3
+                        className={`text-2xl font-bold mb-2 text-foreground`}
+                      >
+                        {item * 25}%
+                      </h3>
+                      <p className="text-muted-foreground">
+                        Feature {item}
+                      </p>
+                    </motion.div>
+                  </Rebrand>
                 ))}
               </div>
             </div>
@@ -210,16 +245,16 @@ const RebrandContent = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
         >
-          <h3 className="text-2xl font-bold text-white mb-4">
+          <h3 className={`text-2xl font-bold mb-4 text-foreground`}>
             Powered by Pollinations.AI
           </h3>
-          <p className="text-gray-300 mb-4">
+          <p className={`mb-4 text-muted-foreground`}>
             All images are dynamically generated using the Pollinations.AI API, an open-source gen AI platform
             providing free text and image generation without requiring signups or API keys.
           </p>
           <div className="flex flex-wrap gap-4">
             <ShimmerButton
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors"
+              className={`px-4 py-2 rounded-lg font-medium transition-colors bg-primary text-primary-foreground`}
             >
               <a
                 href="https://pollinations.ai"
