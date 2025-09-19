@@ -19,6 +19,11 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
       "components/ui/**",
+      "@to-remove/**",
+      ".specify/**",
+      ".codacy/**",
+      ".github/**",
+      "scripts/**",
     ],
   },
 ];

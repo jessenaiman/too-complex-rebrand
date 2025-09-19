@@ -1,27 +1,14 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { orchestrateRebrand } from '../../utils/rebrand-orchestrator';
+import { Theme, getRandomTheme, applyThemeCssClass } from '../../utils/rebrand-theme';
+import { getCookie, setCookie } from 'cookies-next';
 
 interface BusinessProfile {
   name: string;
   tagline: string;
   description: string;
-}
-
-interface Theme {
-  name: string;
-  colors: {
-    primary: string;
-    secondary: string;
-    accent: string;
-    background: string;
-    foreground: string;
-    muted: string;
-    border: string;
-  };
-  fontFamily: string;
-  borderRadius: string;
 }
 
 interface RebrandContextType {
@@ -46,20 +33,37 @@ export function RebrandProvider({ children }: { children: ReactNode }) {
     tagline: "See Beyond the Numbers",
     description: "Nimbus Analytics empowers small businesses with real-time, AI-driven insights to make smarter decisions and grow faster."
   });
-  const [theme, setTheme] = useState<Theme>({
-    name: "Sunrise",
-    colors: {
-      primary: "#FFB300",
-      secondary: "#FF7043",
-      accent: "#29B6F6",
-      background: "#FFF8E1",
-      foreground: "#212121",
-      muted: "#FFE082",
-      border: "#FFD54F"
-    },
-    fontFamily: "Inter, sans-serif",
-    borderRadius: "0.5rem"
-  });
+  const [theme, setTheme] = useState<Theme>(getRandomTheme());
+
+  // Initialize theme from cookies or get a random theme
+  useEffect(() => {
+    const savedThemeName = getCookie('rebrand-theme-name');
+    if (savedThemeName) {
+      // In a real implementation, we would get the theme by name
+      // For now, we'll just get a random theme
+      const newTheme = getRandomTheme();
+      setTheme(newTheme);
+      applyThemeCssClass(newTheme);
+    } else {
+      const newTheme = getRandomTheme();
+      setTheme(newTheme);
+      applyThemeCssClass(newTheme);
+    }
+  }, []);
+
+  // Update theme CSS class when theme changes
+  useEffect(() => {
+    applyThemeCssClass(theme);
+  }, [theme]);
+
+  // Update cookies when theme changes
+  useEffect(() => {
+    setCookie('rebrand-theme-name', theme.name, { 
+      maxAge: 60 * 24 * 365, // 1 year
+      sameSite: true,
+      path: '/'
+    });
+  }, [theme]);
 
   const triggerGlobalRebrand = async () => {
     setIsLoading(true);
