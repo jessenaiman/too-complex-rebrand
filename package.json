@@ -5,7 +5,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "watch:lint": "onchange 'app/**/*.{ts,tsx}' -- pnpm lint --fix",
+    "watch:build": "nodemon --watch app --exec \"pnpm run build\""
   },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-beta.3",
@@ -41,6 +43,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cookies-next": "^6.1.0",
     "geist": "^1.5.1",
     "gsap": "^3.13.0",
     "lucide-react": "^0.544.0",
@@ -64,6 +67,8 @@
     "eslint-config-next": "15.5.3",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^16.4.0",
+    "nodemon": "^3.1.10",
+    "onchange": "^7.1.0",
     "tailwindcss": "^4.1.13",
     "tw-animate-css": "^1.3.8",
     "typescript": "^5"

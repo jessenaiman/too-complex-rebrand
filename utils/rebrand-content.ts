@@ -1,6 +1,6 @@
 // app/data/rebrand-content.ts
 export interface BusinessProfile {
-  name: string;
+ name: string;
   tagline: string;
   description: string;
 }
@@ -108,6 +108,9 @@ const businessProfiles: BusinessProfile[] = [
   }
 ];
 
+// Track used profiles to ensure we don't repeat until all are used
+let usedProfiles: BusinessProfile[] = [];
+
 /**
  * Returns business profiles from the static array.
  */
@@ -116,13 +119,26 @@ function loadBusinessProfiles(): BusinessProfile[] {
 }
 
 /**
- * Returns a random business profile from the YAML file.
+ * Returns a random business profile from the YAML file that hasn't been used recently.
  */
 export function getRandomBusinessProfile(): BusinessProfile {
   const profiles = loadBusinessProfiles();
   const allProfiles = [...profiles, ...additionalMarketingTexts];
   
-  if (allProfiles.length === 0) {
+  // If all profiles have been used, reset the used profiles array
+  if (usedProfiles.length >= allProfiles.length) {
+    usedProfiles = [];
+  }
+  
+  // Filter out used profiles
+  const availableProfiles = allProfiles.filter(profile =>
+    !usedProfiles.some(used => used.name === profile.name)
+  );
+  
+  // If no profiles are available (shouldn't happen), use all profiles
+  const selectionPool = availableProfiles.length > 0 ? availableProfiles : allProfiles;
+  
+  if (selectionPool.length === 0) {
     return {
       name: "Default Business",
       tagline: "Innovate Your Future",
@@ -130,8 +146,13 @@ export function getRandomBusinessProfile(): BusinessProfile {
     };
   }
   
-  const idx = Math.floor(Math.random() * allProfiles.length);
-  return allProfiles[idx];
+  const idx = Math.floor(Math.random() * selectionPool.length);
+  const selectedProfile = selectionPool[idx];
+  
+  // Add the selected profile to the used profiles array
+  usedProfiles.push(selectedProfile);
+  
+  return selectedProfile;
 }
 
 /**

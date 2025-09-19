@@ -15,7 +15,9 @@
       ],
       "disabledTools": [
         "read_file"
-      ]
+      ],
+      "disabled": true,
+      "alwaysAllow": []
     }
   }
 }
