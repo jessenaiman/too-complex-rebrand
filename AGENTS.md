@@ -12,8 +12,12 @@ This is a single-page web app that allows users to trigger page-wide or individu
 ## Check Engine
 1. Review the codebase with the correct tool
 2. Review react 19+, nextjs, tailwindcss 4.1, shadcn storing the essential knoweldge using your memory mcp tool
-3. Use the memory tool to retrieve react, nextjs, tailwindcss 4.1, and shadcn and explain how this project is setup.
-4. Repeat the project plan core 
+3. Check the git status.
+  - If we are not checked in start a new branch
+  - -> check for open a github issue connected to current branch
+  - -> if no issue is connected create a new issue
+  - commit the current status attached with the github issue number 
+5. Repeat the project plan core
 
 Before you start complete always run the validation sequence
 
@@ -23,6 +27,8 @@ Before you start complete always run the validation sequence
 3. `pnpm run dev` → Verify no terminal or console errors  
 4. `curl -Is http://localhost:3000 | head -n 1` → Must return `HTTP/1.1 200 OK`  
 5. `next build` → Must complete without warnings or failures
+6. If the project is in better shape than when the validation sequence first ran commit the changes
+7. If all the above are not problem and warning free repeat the 6 steps
 
 Before you submit your code as complete run the Validation Sequence  
 
