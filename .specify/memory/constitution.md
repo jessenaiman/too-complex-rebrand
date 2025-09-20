@@ -1,50 +1,99 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- SYNC IMPACT REPORT v1.0.0
+Version Change: N/A (initial constitution) → 1.0.0 (first version)
+Modified Principles: All principles are new (initial creation)
+Added Sections: Core Principles (5 principles), Development Standards, Build System Requirements, Governance
+Removed Sections: None (initial creation)
+Templates Requiring Updates:
+✅ .specify/templates/plan-template.md - Update "Constitution Check" alignment
+✅ .specify/templates/spec-template.md - Update scope/requirements alignment
+✅ .specify/templates/tasks-template.md - Update task categorization
+✅ .specify/templates/commands/ - Verify no outdated references
+⚠️ README.md - Update references to new principles
+⚠️ docs/quickstart.md - Update runtime guidance references
+Follow-up TODOs:
+- None (initial constitution)
+-->
+# Rebrand System Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Orchestrator-First Architecture (NON-NEGOTIABLE)
+All rebranding operations MUST be coordinated through the orchestrator system following the specific sequence: theme → content → assets. Components MUST NOT contain hardcoded rebrand logic but instead connect to the orchestrator via the event emitter system. This ensures consistent AI processing and prevents duplicate functionality.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+**Rationale**: The orchestrator pattern provides centralized control over the complex rebranding process, ensuring proper sequencing and preventing race conditions during AI generation.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Theme-Content-Asset Coupling (NON-NEGOTIABLE)
+Business profiles MUST match theme metadata for proper AI generation. All AI prompts MUST combine company information, theme mood, and element type to create cohesive rebranding. This coupling ensures professional, contextually appropriate results.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+**Rationale**: Professional rebranding requires semantic consistency between visual themes, business content, and generated assets to maintain brand coherence.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Sequential AI Processing (NON-NEGOTIABLE)
+AI generation requests MUST be processed sequentially using `processPollinationsPromptsSequentially` to respect rate limits. No concurrent AI requests are permitted. Each request MUST include a delay between operations to prevent API throttling.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+**Rationale**: Rate limiting prevents service disruption and ensures reliable AI generation, which is critical for user experience during rebranding operations.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. Validation Sequence Compliance (NON-NEGOTIABLE)
+All development work MUST follow the exact validation sequence: `pnpm lint --fix` → `pnpm run dev` → `curl -Is http://localhost:3000 | head -n 1` → `next build`. Each step MUST pass completely before proceeding. Zero lint warnings, build errors, or console errors are acceptable.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+**Rationale**: This sequence ensures code quality, runtime stability, and production readiness while preventing the accumulation of technical debt.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Component Integration Standards (NON-NEGOTIABLE)
+All rebrandable components MUST use the `<Rebrandable>` wrapper pattern and implement proper loading states. Components MUST be accessible with ARIA labels, tooltips, and keyboard navigation. Individual component rebranding MUST trigger via click handlers that emit orchestrator events.
+
+**Rationale**: Consistent component patterns ensure maintainability, accessibility compliance, and proper integration with the orchestrator system.
+
+## Development Standards
+
+### Technology Stack Requirements
+- **Framework**: Next.js 15.5.3 with React 19.1.0 (no version downgrades permitted)
+- **Styling**: Tailwind CSS 4.1.13 with shadcn/ui components only
+- **AI Service**: Pollinations.AI API for all asset generation
+- **Package Manager**: pnpm exclusively (no npm/yarn usage)
+- **Directory Structure**: All rebrand logic confined to `app/` directory using kebab-case naming
+
+### Code Quality Requirements
+- **Zero Inline Styles**: No custom CSS overrides of shadcn/Tailwind themes
+- **No Component Duplication**: Use only shadcn/ui and MagicUI via CLI installation
+- **TypeScript Strict**: All code must pass strict type checking
+- **Performance**: Implement proper React.memo, useMemo, and useCallback patterns
+- **Accessibility**: WCAG 2.1 AA compliance with proper ARIA attributes
+
+## Build System Requirements
+
+### Mandatory Validation Process
+1. **Linting**: `pnpm lint --fix` MUST pass with zero warnings or errors
+2. **Development Server**: `pnpm run dev` MUST start without console errors
+3. **HTTP Validation**: `curl -Is http://localhost:3000 | head -n 1` MUST return `HTTP/1.1 200 OK`
+4. **Production Build**: `next build` MUST complete without warnings or failures
+5. **Codacy Grade**: MUST achieve A+ grade with zero issues
+
+### Directory and Naming Conventions
+- **Rebrand Logic**: All rebranding functionality confined to `app/` directory
+- **File Naming**: Use kebab-case exclusively (e.g., `use-rebrandable.ts`)
+- **Component Location**: UI components only in `components/` directory
+- **Utility Organization**: All rebrand utilities in `utils/` with clear separation of concerns
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### Amendment Process
+The constitution supersedes all other development practices and documentation. Amendments require:
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+1. **Issue Creation**: GitHub issue documenting the proposed change
+2. **Validation**: All existing functionality must pass validation sequence
+3. **Approval**: Technical review by project maintainers
+4. **Migration Plan**: Clear upgrade path for existing implementations
+5. **Documentation**: Update of all dependent templates and guides
+
+### Versioning Policy
+- **MAJOR**: Breaking changes to orchestrator interface or core principles
+- **MINOR**: New principle additions or architectural enhancements
+- **PATCH**: Clarifications, bug fixes, or non-breaking improvements
+- Version increments require corresponding updates to all dependent artifacts
+
+### Compliance Requirements
+- **Code Reviews**: All PRs must verify constitutional compliance
+- **Quality Gates**: CI/CD must enforce all principles
+- **Documentation**: Runtime guidance must reference active principles
+- **Template Alignment**: All `.specify/templates/` files must align with constitution
+
+**Version**: 1.0.0 | **Ratified**: 2025-01-20 | **Last Amended**: 2025-01-20

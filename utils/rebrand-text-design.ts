@@ -1,8 +1,19 @@
 // utils/rebrand-text-design.ts
 // Module for swapping text rendering components
 
+// Define the type for theme colors
+interface ThemeColors {
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
+  foreground: string;
+  muted: string;
+  border: string;
+}
+
 // Apply theme-coordinated animations
-export const applyTextAnimation = (element: HTMLElement, themeColors: any) => {
+export const applyTextAnimation = (element: HTMLElement, themeColors: ThemeColors) => {
   // Apply animation with theme colors
   element.style.transition = 'all 500ms ease-in-out';
   

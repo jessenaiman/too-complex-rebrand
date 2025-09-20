@@ -7,6 +7,7 @@ import { ShinyButton } from '@/components/ui/shiny-button';
 import { ShimmerButton } from '@/components/buttons/shimmer-button';
 import { RainbowButton } from '@/components/ui/rainbow-button';
 import Rebrand from './rebrand';
+import { orchestrateRebrand, orchestrateElementRebrand, rebrandEventEmitter, RebrandData } from '@/utils/rebrand-orchestrator';
 
 // Define the type for rebrandable elements
 interface RebrandableElement {
@@ -31,17 +32,43 @@ const RebrandContent = () => {
     triggerGlobalRebrand();
   }, []);
 
-  // Register all rebrandable elements on the page
+  // Query DOM for all Rebrand elements on the page
   useEffect(() => {
-    // In a real implementation, we would query the DOM for all Rebrand components
-    // For now, we'll just create a mock array
-    setRebrandableElements([
-      { id: 'logo', type: 'logo' },
-      { id: 'card-1', type: 'card' },
-      { id: 'card-2', type: 'card' },
-      { id: 'button-1', type: 'button' },
-      { id: 'text-1', type: 'text-block' }
-    ]);
+    const queryRebrandableElements = () => {
+      // Query for all elements with data-rebrand-component attribute
+      const rebrandElements = document.querySelectorAll('[data-rebrand-component]');
+
+      const elements: RebrandableElement[] = [];
+
+      rebrandElements.forEach((element, index) => {
+        const componentId = element.getAttribute('data-rebrand-id') || `rebrand-${index}`;
+        const componentType = element.getAttribute('data-rebrand-type') || 'card';
+
+        elements.push({
+          id: componentId,
+          type: componentType
+        });
+      });
+
+      return elements;
+    };
+
+    // Initial scan
+    setRebrandableElements(queryRebrandableElements());
+
+    // Set up observer for dynamic content
+    const observer = new MutationObserver(() => {
+      setRebrandableElements(queryRebrandableElements());
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-rebrand-component', 'data-rebrand-id', 'data-rebrand-type']
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const cardVariants = {
@@ -63,16 +90,39 @@ const RebrandContent = () => {
     }
   };
 
-  // Handle page-wide rebrand
+  // Handle page-wide rebrand with proper orchestrator integration
   const handlePageRebrand = async () => {
-    // Show full-screen loader
-    // In a real implementation, we would show a full-screen loader here
-    
-    // Trigger global rebrand
-    await triggerGlobalRebrand();
-    
-    // Process all rebrandable elements sequentially
-    // In a real implementation, we would process each element and wait for success signals
+    try {
+      // Trigger global rebrand first (theme → content → assets sequence)
+      const rebrandData: RebrandData = await orchestrateRebrand();
+
+      // Process all rebrandable elements sequentially
+      for (const element of rebrandableElements) {
+        try {
+          await orchestrateElementRebrand({
+            elementType: element.type as 'logo' | 'button' | 'card' | 'text-block' | 'background' | 'theme',
+            currentThemeId: rebrandData.theme.name,
+            companyContext: rebrandData.businessProfile
+          });
+
+          // Small delay to respect rate limits
+          await new Promise(resolve => setTimeout(resolve, 500));
+        } catch (error) {
+          console.error(`Failed to rebrand element ${element.id}:`, error);
+          // Continue with other elements even if one fails
+        }
+      }
+
+      // Emit page rebrand completed event
+      rebrandEventEmitter.emit('pageRebrandCompleted', {
+        rebrandedElements: rebrandableElements.length,
+        rebrandData
+      });
+
+    } catch (error) {
+      console.error('Page-wide rebrand failed:', error);
+      rebrandEventEmitter.emit('pageRebrandError', { error });
+    }
   };
 
   return (

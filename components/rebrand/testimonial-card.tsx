@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Rebrandable from '@/components/rebrand/rebrandable';
-import { useAIContent } from '@/hooks/use-ai-content';
 
 /**
  * Simple component to demonstrate adding rebrandable AI content to existing pages
@@ -34,7 +33,7 @@ const TestimonialCard = () => {
         </div>
       </div>
       <Rebrandable componentType="text" className="italic">
-        "{testimonial.quote}"
+        &ldquo;{testimonial.quote}&rdquo;
       </Rebrandable>
       <div className="flex mt-4">
         {[...Array(5)].map((_, i) => (

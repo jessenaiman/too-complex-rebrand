@@ -1,10 +1,9 @@
 // app/utils/rebrand-orchestrator.ts
 // Service that orchestrates the theme → content → assets sequence for rebranding
 
-import { getRandomTheme, Theme, getThemeMetadata } from "@/utils/rebrand-theme";
+import { getRandomTheme, Theme } from "@/utils/rebrand-theme";
 import { getRandomBusinessProfile, BusinessProfile } from "@/utils/rebrand-content";
 import { processPollinationsPromptsSequentially } from "@/utils/pollinations-image";
-import { generateSingleAsset } from "@/utils/rebrand-orchestrator";
 
 // Create event emitter for animation sync
 class RebrandEventEmitter {

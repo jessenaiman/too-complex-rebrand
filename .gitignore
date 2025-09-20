@@ -49,3 +49,7 @@ node_modules/
 
 .gemini/
 gha-creds-*.json
+.codacy/
+.qwen/
+.windsurf
+./s

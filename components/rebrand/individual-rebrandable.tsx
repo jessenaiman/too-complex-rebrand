@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDemoRebrand } from '@/hooks/use-demo-rebrand';
-import { generatePollinationsImageAsync } from '@/utils/rebrand-ai';
+import { generateSingleAsset, rebrandEventEmitter } from '@/utils/rebrand-orchestrator';
 
 /**
  * Individual rebrandable component that can be selected and rebranded independently
@@ -25,9 +25,25 @@ const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({
   componentId,
   componentType = 'card'
 }) => {
-  const { themeColors, isLoading } = useDemoRebrand();
+  const { isLoading, themeColors, currentImage, logoImage } = useDemoRebrand();
   const [localImage, setLocalImage] = useState<string | null>(null);
   const [isLocalLoading, setIsLocalLoading] = useState(false);
+
+  // Listen for orchestrator events to coordinate animations
+  useEffect(() => {
+    const handleElementRebranded = (data: Record<string, unknown>) => {
+      if (data.elementType === 'logo' && typeof data.imageUrl === 'string') {
+        setLocalImage(data.imageUrl);
+        setIsLocalLoading(false);
+      }
+    };
+
+    rebrandEventEmitter.on('elementRebranded', handleElementRebranded);
+
+    return () => {
+      rebrandEventEmitter.off('elementRebranded', handleElementRebranded);
+    };
+  }, []);
 
   // Apply theme-based styling
   const getThemedClassName = () => {
@@ -43,28 +59,40 @@ const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({
     }
   };
 
-  // Handle individual rebranding of this component
+  // Handle individual rebranding of this component using orchestrator
   const handleIndividualRebrand = async () => {
     setIsLocalLoading(true);
+
     try {
-      // Generate a new image specific to this component
-      const prompt = `Modern ${themeColors.primary.replace('from-', '').replace('-500', '')} themed component background, professional, high quality`;
-      const imageUrl = await generatePollinationsImageAsync(prompt);
-      setLocalImage(imageUrl);
+      // Use orchestrator to generate asset following theme → content → assets sequence
+      const assetUrl = await generateSingleAsset(
+        'logo', // Generate a logo-type asset for individual components
+        {
+          name: 'Ocean Breeze', // This would come from current theme
+          className: 'ocean-breeze',
+          mood: 'calm',
+          feeling: 'refreshing',
+          description: 'A clean, refreshing theme with cool blue tones that evoke a sense of calm and clarity'
+        },
+        {
+          name: 'Nimbus Analytics',
+          tagline: 'See Beyond the Numbers',
+          description: 'AI-driven business insights'
+        }
+      );
+
+      setLocalImage(assetUrl);
     } catch (error) {
-      console.error('Error generating individual component image:', error);
-      // Set a fallback
+      console.error('Error generating individual component asset:', error);
       setLocalImage(null);
-    } finally {
       setIsLocalLoading(false);
     }
   };
 
   return (
-    <div 
-      className={getThemedClassName()}
+    <div
+      className={`${getThemedClassName()} cursor-pointer relative`}
       onClick={handleIndividualRebrand}
-      style={{ cursor: 'pointer', position: 'relative' }}
     >
       {componentType === 'image' && (isLocalLoading || isLoading) ? (
         <div className="w-full h-48 flex items-center justify-center bg-gray-800 rounded-xl">

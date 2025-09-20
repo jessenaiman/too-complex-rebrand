@@ -3,12 +3,24 @@
 
 import { processPollinationsPromptsSequentially } from "@/utils/pollinations-image";
 
+// Define interfaces for better type safety
+interface CompanyInfo {
+  name: string;
+  description: string;
+}
+
+interface StylesheetTokens {
+  primary?: string;
+  secondary?: string;
+  [key: string]: string | undefined;
+}
+
 // Construct prompt from various inputs
 export const constructImagePrompt = (
-  companyInfo: any,
+  companyInfo: CompanyInfo,
   themeMood: string,
   elementType: string,
-  stylesheetTokens: any
+  stylesheetTokens: StylesheetTokens
 ) => {
   // Extract colors from stylesheet
   const primaryColor = stylesheetTokens?.primary || 'professional';
@@ -36,10 +48,10 @@ export const constructImagePrompt = (
 
 // Generate image with Pollinations API
 export const generateRebrandImage = async (
-  companyInfo: any,
+  companyInfo: CompanyInfo,
   themeMood: string,
   elementType: string,
-  stylesheetTokens: any
+  stylesheetTokens: StylesheetTokens
 ) => {
   try {
     // Construct the prompt

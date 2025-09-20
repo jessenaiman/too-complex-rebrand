@@ -1,8 +1,19 @@
 // utils/rebrand-button.ts
 // Module for swapping button components
 
+// Define the type for theme colors
+interface ThemeColors {
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
+  foreground: string;
+  muted: string;
+  border: string;
+}
+
 // Apply theme-coordinated styling to button
-export const applyButtonTheme = (element: HTMLElement, themeColors: any) => {
+export const applyButtonTheme = (element: HTMLElement, themeColors: ThemeColors) => {
   // Apply theme colors if available
   if (themeColors?.primary) {
     // Extract color values from theme
