@@ -132,21 +132,58 @@ export async function orchestrateElementRebrand(input: OrchestratorInput): Promi
     // Decision flow based on element type
     switch (elementType) {
       case 'logo':
-      case 'background':
-        // For images, call rebrand-image.ts
-        const imageUrl = await generateSingleAsset(elementType, currentTheme, currentContent);
+        // For logo images, call rebrand-image.ts
+        const logoImageUrl = await generateSingleAsset('logo', currentTheme, currentContent);
         rebrandEventEmitter.emit('elementRebranded', {
-          elementType,
-          imageUrl
+          elementType: 'logo',
+          imageUrl: logoImageUrl
         });
-        return { imageUrl };
+        return { imageUrl: logoImageUrl };
+        
+      case 'background':
+        // For background, use dynamic component discovery to get available variants
+        const availableBackgroundComponents = await componentDiscovery.discoverComponents('components/backgrounds');
+
+        if (availableBackgroundComponents.length === 0) {
+          console.warn('[REBRAND] No background components found');
+          // Fallback to a default background
+          rebrandEventEmitter.emit('elementRebranded', {
+            elementType: 'background',
+            componentType: 'background',
+            variant: 'default-background',
+            displayName: 'Default Background'
+          });
+          return {
+            componentType: 'background',
+            variant: 'default-background',
+            displayName: 'Default Background',
+            props: {}
+          };
+        }
+
+        // Select a random component variant
+        const randomBackgroundComponent = availableBackgroundComponents[Math.floor(Math.random() * availableBackgroundComponents.length)];
+
+        rebrandEventEmitter.emit('elementRebranded', {
+          elementType: 'background',
+          componentType: 'background',
+          variant: randomBackgroundComponent.name,
+          displayName: randomBackgroundComponent.displayName
+        });
+
+        return {
+          componentType: 'background',
+          variant: randomBackgroundComponent.name,
+          displayName: randomBackgroundComponent.displayName,
+          props: {}
+        };
         
       case 'text-block':
         // For text, call rebrand-content.ts
         // In a real implementation, we would generate new text content
         const textContent = currentContent.description;
         rebrandEventEmitter.emit('elementRebranded', {
-          elementType,
+          elementType: 'text-block',
           textContent
         });
         return { textContent };
@@ -157,38 +194,122 @@ export async function orchestrateElementRebrand(input: OrchestratorInput): Promi
 
         if (availableButtonComponents.length === 0) {
           console.warn('[REBRAND] No button components found');
-          return { buttonVariant: 'default' };
+          // Fallback to a default button
+          rebrandEventEmitter.emit('elementRebranded', {
+            elementType: 'button',
+            componentType: 'button',
+            variant: 'default-button',
+            displayName: 'Default Button'
+          });
+          return {
+            componentType: 'button',
+            variant: 'default-button',
+            displayName: 'Default Button',
+            props: {}
+          };
         }
 
         // Select a random component variant
-        const randomComponent = availableButtonComponents[Math.floor(Math.random() * availableButtonComponents.length)];
+        const randomButtonComponent = availableButtonComponents[Math.floor(Math.random() * availableButtonComponents.length)];
 
         rebrandEventEmitter.emit('elementRebranded', {
-          elementType,
+          elementType: 'button',
           componentType: 'button',
-          variant: randomComponent.name,
-          displayName: randomComponent.displayName
+          variant: randomButtonComponent.name,
+          displayName: randomButtonComponent.displayName
         });
 
         return {
           componentType: 'button',
-          variant: randomComponent.name,
-          displayName: randomComponent.displayName,
+          variant: randomButtonComponent.name,
+          displayName: randomButtonComponent.displayName,
           props: {
             // Add theme-aware props
             shimmerColor: '#ffffff', // Use a default color for now
           }
         };
         
-      case 'background':
-        // For background, call rebrand-background.ts
-        // In a real implementation, we would get a new background component
-        const backgroundComponent = 'default'; // This would be randomized
+      case 'card':
+        // For cards, use dynamic component discovery to get available variants
+        const availableCardComponents = await componentDiscovery.discoverComponents('components/rebrand');
+
+        // Filter for card-like components
+        const cardComponents = availableCardComponents.filter(component =>
+          component.name.includes('card') || component.name.includes('testimonial')
+        );
+
+        if (cardComponents.length === 0) {
+          console.warn('[REBRAND] No card components found');
+          // Fallback to a default card
+          rebrandEventEmitter.emit('elementRebranded', {
+            elementType: 'card',
+            componentType: 'card',
+            variant: 'default-card',
+            displayName: 'Default Card'
+          });
+          return {
+            componentType: 'card',
+            variant: 'default-card',
+            displayName: 'Default Card',
+            props: {}
+          };
+        }
+
+        // Select a random component variant
+        const randomCardComponent = cardComponents[Math.floor(Math.random() * cardComponents.length)];
+
         rebrandEventEmitter.emit('elementRebranded', {
-          elementType,
-          backgroundComponent
+          elementType: 'card',
+          componentType: 'card',
+          variant: randomCardComponent.name,
+          displayName: randomCardComponent.displayName
         });
-        return { backgroundComponent };
+
+        return {
+          componentType: 'card',
+          variant: randomCardComponent.name,
+          displayName: randomCardComponent.displayName,
+          props: {}
+        };
+        
+      case 'text-block':
+        // For text components, use dynamic component discovery to get available variants
+        // Check both text directories
+        const textComponentsFromTextDir = await componentDiscovery.discoverComponents('components/text');
+        const textComponentsFromAnimateDir = await componentDiscovery.discoverComponents('components/animate-ui/primitives/texts');
+        
+        // Combine text components from both directories
+        const allTextComponents = [...textComponentsFromTextDir, ...textComponentsFromAnimateDir];
+
+        if (allTextComponents.length === 0) {
+          console.warn('[REBRAND] No text components found');
+          // Fallback to default text content
+          const textContent = currentContent.description;
+          rebrandEventEmitter.emit('elementRebranded', {
+            elementType: 'text-block',
+            textContent
+          });
+          return { textContent };
+        }
+
+        // Select a random component variant
+        const randomTextComponent = allTextComponents[Math.floor(Math.random() * allTextComponents.length)];
+
+        rebrandEventEmitter.emit('elementRebranded', {
+          elementType: 'text-block',
+          componentType: 'text',
+          variant: randomTextComponent.name,
+          displayName: randomTextComponent.displayName,
+          textContent: currentContent.description
+        });
+
+        return {
+          componentType: 'text',
+          variant: randomTextComponent.name,
+          displayName: randomTextComponent.displayName,
+          textContent: currentContent.description,
+          props: {}
+        };
         
       case 'theme':
         // For theme, call rebrand-theme.ts

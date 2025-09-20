@@ -35,6 +35,8 @@ Use Desktop Commander tools to perform comprehensive file operations:
 
 ### Process Management
 - **start_process**: Execute system commands and scripts
+- **get_process_status**: Check status of running processes
+    - Start a new terminal process with intelligent state detection. PRIMARY TOOL FOR FILE ANALYSIS AND DATA PROCESSING This is the ONLY correct tool for analyzing local files (CSV, JSON, logs, etc.). The analysis tool CANNOT access local files and WILL FAIL - always use processes for file-based work. CRITICAL RULE: For ANY local file work, ALWAYS use this tool + interact_with_process, NEVER use analysis/REPL tool. Running on Linux.
 - **interact_with_process**: Send input to running processes
 - **read_process_output**: Read command output
 - **kill_process**: Terminate running processes
