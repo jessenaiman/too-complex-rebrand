@@ -69,7 +69,7 @@ const Rebrand: React.FC<RebrandProps> = ({
       
       switch (elementType) {
         case 'logo':
-          if (result?.imageUrl) {
+          if (result && typeof result === 'object' && 'imageUrl' in result && typeof result.imageUrl === 'string') {
             newContent = (
               <img
                 src={result.imageUrl}
@@ -80,7 +80,7 @@ const Rebrand: React.FC<RebrandProps> = ({
           }
           break;
         case 'background':
-          if (result?.imageUrl) {
+          if (result && typeof result === 'object' && 'imageUrl' in result && typeof result.imageUrl === 'string') {
             newContent = (
               <div
                 className={`${className} bg-cover bg-center`}

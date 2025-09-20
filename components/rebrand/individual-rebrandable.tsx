@@ -31,8 +31,8 @@ const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({
 
   // Listen for orchestrator events to coordinate animations
   useEffect(() => {
-    const handleElementRebranded = (data: Record<string, unknown>) => {
-      if (data.elementType === 'logo' && typeof data.imageUrl === 'string') {
+    const handleElementRebranded = (data?: unknown) => {
+      if (data && typeof data === 'object' && 'elementType' in data && data.elementType === 'logo' && 'imageUrl' in data && typeof data.imageUrl === 'string') {
         setLocalImage(data.imageUrl);
         setIsLocalLoading(false);
       }

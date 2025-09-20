@@ -65,7 +65,7 @@ export default function Home() {
                     <h4 className="text-lg font-bold mb-2">Feature Card</h4>
                     <p className="mb-4">This is an example of a rebrandable card component.</p>
                     <Rebrand elementType="button" componentId="card-button">
-                      <ShimmerButton size="sm">
+                      <ShimmerButton>
                         Learn More
                       </ShimmerButton>
                     </Rebrand>
@@ -99,7 +99,7 @@ export default function Home() {
                 <Rebrand elementType="theme" componentId="showcase-theme">
                   <div className="rounded-lg p-4 text-white text-center">
                     <p className="mb-2">Click to switch themes</p>
-                    <ShinyButton size="sm">
+                    <ShinyButton>
                       Rebrand Theme
                     </ShinyButton>
                   </div>
