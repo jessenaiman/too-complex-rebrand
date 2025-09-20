@@ -4,6 +4,7 @@
 import { getRandomTheme, Theme } from "@/utils/rebrand-theme";
 import { getRandomBusinessProfile, BusinessProfile } from "@/utils/rebrand-content";
 import { processPollinationsPromptsSequentially } from "@/utils/pollinations-image";
+import { componentDiscovery } from "@/utils/component-registry/component-discovery";
 
 // Create event emitter for animation sync
 class RebrandEventEmitter {
@@ -151,14 +152,33 @@ export async function orchestrateElementRebrand(input: OrchestratorInput): Promi
         return { textContent };
         
       case 'button':
-        // For buttons, swap component
-        // In a real implementation, we would return the new button component
-        const buttonVariant = 'default'; // This would be randomized
+        // For buttons, use dynamic component discovery to get available variants
+        const availableButtonComponents = await componentDiscovery.discoverComponents('components/buttons');
+
+        if (availableButtonComponents.length === 0) {
+          console.warn('[REBRAND] No button components found');
+          return { buttonVariant: 'default' };
+        }
+
+        // Select a random component variant
+        const randomComponent = availableButtonComponents[Math.floor(Math.random() * availableButtonComponents.length)];
+
         rebrandEventEmitter.emit('elementRebranded', {
           elementType,
-          buttonVariant
+          componentType: 'button',
+          variant: randomComponent.name,
+          displayName: randomComponent.displayName
         });
-        return { buttonVariant };
+
+        return {
+          componentType: 'button',
+          variant: randomComponent.name,
+          displayName: randomComponent.displayName,
+          props: {
+            // Add theme-aware props
+            shimmerColor: '#ffffff', // Use a default color for now
+          }
+        };
         
       case 'background':
         // For background, call rebrand-background.ts
