@@ -33,15 +33,15 @@ export const getRandomBackground = () => {
 
 // Apply subtle entrance animation
 export const applyBackgroundAnimation = (element: HTMLElement) => {
-  // Apply opacity transition
-  element.style.opacity = '0';
-  element.style.transition = 'opacity 300ms ease-in-out';
-  
+  // Apply Tailwind classes for smooth fade-in animation
+  element.classList.add('opacity-0', 'transition-opacity', 'duration-300', 'ease-in-out');
+
   // Trigger reflow
   void element.offsetHeight;
-  
+
   // Animate in
-  element.style.opacity = '1';
+  element.classList.remove('opacity-0');
+  element.classList.add('opacity-100');
 };
 
 export default {

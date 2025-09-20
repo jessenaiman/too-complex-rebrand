@@ -7,23 +7,23 @@ import { processPollinationsPromptsSequentially } from "@/utils/pollinations-ima
 
 // Create event emitter for animation sync
 class RebrandEventEmitter {
-  private listeners: { [key: string]: Function[] } = {};
+  private listeners: { [key: string]: ((data?: unknown) => void)[] } = {};
 
-  on(event: string, callback: Function) {
+  on(event: string, callback: (data?: unknown) => void): void {
     if (!this.listeners[event]) {
       this.listeners[event] = [];
     }
     this.listeners[event].push(callback);
   }
 
-  emit(event: string, data?: any) {
+  emit(event: string, data?: unknown) {
     console.log(`[REBRAND] Emitting event: ${event}`, data);
     if (this.listeners[event]) {
       this.listeners[event].forEach(callback => callback(data));
     }
   }
 
-  off(event: string, callback: Function) {
+  off(event: string, callback: (data?: unknown) => void) {
     if (this.listeners[event]) {
       this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
     }
@@ -114,7 +114,7 @@ export async function orchestrateRebrand(): Promise<RebrandData> {
  * @param input Orchestrator input data
  * @returns Promise that resolves when rebrand task completes
  */
-export async function orchestrateElementRebrand(input: OrchestratorInput): Promise<any> {
+export async function orchestrateElementRebrand(input: OrchestratorInput): Promise<unknown> {
   const { elementType, currentThemeId, companyContext } = input;
   
   console.log(`[REBRAND] Orchestrating rebrand for element type: ${elementType}`);
