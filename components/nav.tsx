@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { useRebrand } from './rebrand/rebrand-context'
 import { motion } from "motion/react";
 

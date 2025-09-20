@@ -96,7 +96,7 @@ const Rebrand: React.FC<RebrandProps> = ({
           // This is a simplified implementation
           newContent = (
             <button
-              ref={componentRef as React.RefObject<HTMLButtonElement>}
+              ref={componentRef as unknown as React.RefObject<HTMLButtonElement>}
               className={`px-4 py-2 rounded-lg text-primary-foreground transition-all duration-300 bg-primary hover:opacity-90 ${className}`}
             >
               Rebranded Button

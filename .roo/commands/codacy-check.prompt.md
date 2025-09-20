@@ -1,6 +1,6 @@
 ---
 description: Run Codacy analysis on edited files and check for security issues
-argument-hint: <file-path> [tool]
+argument-hint: <file-path> [codacy]
 ---
 
 # Codacy Analysis Command

@@ -178,16 +178,6 @@ export async function orchestrateElementRebrand(input: OrchestratorInput): Promi
           props: {}
         };
         
-      case 'text-block':
-        // For text, call rebrand-content.ts
-        // In a real implementation, we would generate new text content
-        const textContent = currentContent.description;
-        rebrandEventEmitter.emit('elementRebranded', {
-          elementType: 'text-block',
-          textContent
-        });
-        return { textContent };
-        
       case 'button':
         // For buttons, use dynamic component discovery to get available variants
         const availableButtonComponents = await componentDiscovery.discoverComponents('components/buttons');

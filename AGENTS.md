@@ -17,7 +17,7 @@ Single-page web app for dynamic component rebranding using AI-generated content 
 
 ## Build System Requirements
 - **Package Manager**: Must use pnpm (not npm/yarn) for dependency resolution
-- **Validation Sequence**: `pnpm lint --fix` → `pnpm run dev` → `curl -Is http://localhost:[PORT] | head -n 1` → `next build`
+- **Validation Sequence**: `pnpm lint --fix` → `pnpm build`
 - **Directory Convention**: All rebrand logic must stay in `app/` directory (not `src/`), using kebab-case file naming
 
 ## Success Criteria
@@ -44,7 +44,7 @@ Before you start complete always run the validation sequence
 2. check the problems tool
 3. `pnpm run dev` → Verify no terminal or console errors  
 4. `curl -Is http://localhost:[PORT] | head -n 1` → Must return `HTTP/1.1 200 OK` - must use desktop-commmander
-5. `next build` → Must complete without warnings or failures
+5. `pnpm build` → Must complete without warnings or failures
 6. If the project is in better shape than when the validation sequence first ran commit the changes
 7. If all the above are not problem and warning free repeat the 6 steps
 

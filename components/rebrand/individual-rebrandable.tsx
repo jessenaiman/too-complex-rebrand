@@ -25,7 +25,7 @@ const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({
   componentId,
   componentType = 'card'
 }) => {
-  const { isLoading, themeColors, currentImage, logoImage } = useDemoRebrand();
+  const { isLoading, themeColors, currentImage } = useDemoRebrand();
   const [localImage, setLocalImage] = useState<string | null>(null);
   const [isLocalLoading, setIsLocalLoading] = useState(false);
 

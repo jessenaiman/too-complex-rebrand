@@ -11,12 +11,9 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/home/adam/Dev/rebranded/too-complex-rebrand/"
+        "/home/dice-wizard/dev/rebrand/"
       ],
-      "disabledTools": [
-        "read_file"
-      ],
-      "disabled": true,
+      "disabled": false,
       "alwaysAllow": []
     }
   }

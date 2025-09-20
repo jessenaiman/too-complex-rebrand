@@ -16,7 +16,7 @@ interface DynamicComponentRendererProps {
   variant: string;
   children?: React.ReactNode;
   className?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -31,7 +31,7 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
   className,
   ...props
 }) => {
-  const [Component, setComponent] = useState<React.ComponentType<any> | null>(null);
+  const [Component, setComponent] = useState<React.ComponentType<Record<string, unknown>> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
