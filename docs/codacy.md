@@ -1,11 +1,34 @@
 # Codacy Integration Guide
 
-This document provides instructions on how to use Codacy for code quality analysis in this project.
+<!-- TOC -->
+- [Prerequisites](#prerequisites)
+- [Running Codacy Analysis](#running-codacy-analysis)
+  - [For Individual Files](#for-individual-files)
+  - [For Security Scanning](#for-security-scanning)
+- [Common Codacy MCP Tools](#common-codacy-mcp-tools)
+  - [Repository Analysis](#repository-analysis)
+  - [File Analysis](#file-analysis)
+  - [Pull Request Analysis](#pull-request-analysis)
+- [Code Coverage Setup](#code-coverage-setup)
+  - [Environment Configuration](#environment-configuration)
+  - [Generating Coverage Reports](#generating-coverage-reports)
+  - [Uploading Coverage to Codacy](#uploading-coverage-to-codacy)
+  - [Supported Coverage Report Formats](#supported-coverage-report-formats)
+- [Best Practices](#best-practices)
+- [Troubleshooting](#troubleshooting)
+  - [If Codacy MCP Server is Unavailable](#if-codacy-mcp-server-is-unavailable)
+ - [Repository Not Found Errors](#repository-not-found-errors)
+  - [Coverage Reporter Issues](#coverage-reporter-issues)
+- [Recent Analysis Results](#recent-analysis-results)
+<!-- /TOC -->
+
+This document provides instructions on how to use Codacy for code quality analysis and coverage reporting in this project.
 
 ## Prerequisites
 
 - Codacy MCP server must be connected and available
 - Repository must be set up in Codacy (if not already)
+- Codacy API tokens configured in `.env.local`
 
 ## Running Codacy Analysis
 
@@ -27,11 +50,6 @@ To run security vulnerability scanning:
 codacy_cli_analyze --rootPath /home/dice-wizard/dev/rebrand --tool trivy
 ```
 
-##[Investigate and Fill]
-
-- [generating-coverage](https://docs.codacy.com/coverage-reporter/#generating-coverage)
-- 
-
 ## Common Codacy MCP Tools
 
 ### Repository Analysis
@@ -47,6 +65,65 @@ codacy_cli_analyze --rootPath /home/dice-wizard/dev/rebrand --tool trivy
 ### Pull Request Analysis
 - `codacy_list_pull_request_issues` - List issues in a PR
 - `codacy_get_pull_request_files_coverage` - Get PR coverage information
+
+## Code Coverage Setup
+
+### Environment Configuration
+
+The project requires the following environment variables in `.env.local`:
+
+```bash
+CODACY_API_TOKEN='your_account_api_token'
+CODACY_PROJECT_TOKEN='your_project_token'
+```
+
+### Generating Coverage Reports
+
+For JavaScript/TypeScript projects, you can generate coverage reports using:
+
+```bash
+# Run tests with coverage
+npm test -- --coverage
+# or
+jest --coverage
+```
+
+This will generate coverage reports in the `coverage/` directory.
+
+### Uploading Coverage to Codacy
+
+#### Method 1: Using the Coverage Reporter Script
+
+```bash
+# Download and run the Codacy Coverage Reporter
+bash <(curl -Ls https://coverage.codacy.com/get.sh) report
+```
+
+#### Method 2: With Explicit Report File
+
+If the reporter cannot find your coverage file automatically:
+
+```bash
+bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r ./coverage/lcov.info
+```
+
+#### Method 3: Using Environment Variables
+
+```bash
+export CODACY_API_TOKEN=your_account_api_token
+export CODACY_PROJECT_TOKEN=your_project_token
+bash <(curl -Ls https://coverage.codacy.com/get.sh) report
+```
+
+### Supported Coverage Report Formats
+
+Codacy supports the following coverage report formats:
+- LCOV (.lcov, lcov.info)
+- Cobertura (.xml)
+- JaCoCo (.xml)
+- SimpleCov (.json)
+- Clover (.xml)
+- Gcov (.gcov)
 
 ## Best Practices
 
@@ -114,6 +191,12 @@ use_mcp_tool({
   }
 });
 ```
+
+### Coverage Reporter Issues
+
+1. **Invalid configuration error**: Ensure `CODACY_API_TOKEN` or `CODACY_PROJECT_TOKEN` is set
+2. **Cannot find report file**: Use the `-r` flag to specify the report file path
+3. **Authentication failed**: Verify your API token is correct and has proper permissions
 
 ## Recent Analysis Results
 
