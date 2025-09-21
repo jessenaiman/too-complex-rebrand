@@ -9,21 +9,19 @@ Applying <Rebranded> around an html element </Rebranded> can be restyled by wrap
 
 ### Key Features
 
+## Orchestror Component (design)
 
 1. Shows an animated loading image:
    1. [Default](../../components/ui/progress.tsx)
    2. [Buttons](../../components/loading.tsx)
-   3. [Images](../../components/ui/blur-fade.tsx) and 
+   3. [Images](../../components/ui/blur-fade.tsx)
+   4. [Card](../../components/loading.tsx) - place in the header, modify to integrate so it match the design
 2. required: [the orchestrator](../../utils/rebrand-orchestrator.ts) decides what needs to be rebranded: image, content, or style
-3. required: uses 5 [shadcn themes](../../app/global.css) as a basis to assign a rebrand base theme.
-   1. uses the default rebranded next-gen professional light and dark modes [from](../../app/global.css) on page load
-   2. the layout should have a single page nav bar that uses theme switching [theme controller](../../components/ui/animated-theme-toggler.tsx)
-   3. 
-4. optional: can contain text which matches `app/content/companies.yml` and [uses](../../utils/rebrand-content.ts)
+
+4. optional: can contain text which [uses](../../utils/rebrand-content.ts)
 5. optional: can request a [background image](../../utils/rebrand-background.ts)
 6. optional: can request a new [image from](../../utils/pollinations-image.ts)
 
-## Orchestror Component (design)
 
 TODO: refactor and a diagram to demonstrate the flow:
 - rebrand is initiated on an element
@@ -40,9 +38,13 @@ TODO: refactor and a diagram to demonstrate the flow:
 
 ## Rebrand Theme
 
+3. required: uses 5 [shadcn themes](../../app/global.css) as a basis to assign a rebrand base theme.
+   1. uses the default shadcn theme with light and dark modes [from](../../app/global.css) on page load
+   2. the layout should have a single page nav bar that uses theme switching [theme controller](../../components/ui/animated-theme-toggler.tsx)
+   
 - randomly selects one of unused [themes](../../app/global.css)
-- use a content yaml file connect the theme (use theme name as identifier) to designer and marketing: text, mood, feeling, and other ai generation content
-- when [switching themes](../../utils/rebrand-theme.ts)] applies some professional variations to the design 
+- use a company content to connect the theme (use theme name as identifier) to designer and marketing: text, mood, feeling, and other ai generation content
+- when [switching themes](../../utils/rebrand-theme.ts) applies some professional variations to the design 
   - **IMPORTANT**: responsive design and layout must not be broken
 
 ## Rebrand Content
@@ -95,7 +97,7 @@ Applying a <RebrandPage /> component will make the page by default able to chang
 - **Architecture**: All rebrand logic isolated to the `app/` directory with kebab-case naming convention
 - **Component Structure**: Uses React Context for state management and React hooks for functionality
 - **Theme System**: 5 predefined Shadcn themes with random selection and color adjustments
-- **Content System**: 5+ business profiles stored in YAML for randomization
+- **Content System**: 5+ business profiles stored in `global.css` for randomization
 - **Asset Storage**: AI-generated images stored in `public/` directory
-- **Validation Sequence**: `pnpm lint` FIX EVERYTHING →  `pnpm run dev` CHECK TERMINAL → `curl -Is http://localhost:3000 | head -n 1` CHECK TERMINAL→ `next build` CHECK TERMINAL
+- **Validation Sequence**: `pnpm lint` FIX ALL WARNINGS AND ERRORS →   `pnpm run dev` CHECK TERMINAL → `curl -Is http://localhost:3000 | head -n 1` CHECK TERMINAL→ `next build` CHECK TERMINAL
 

@@ -3,9 +3,9 @@
 Before you start complete always run the validation sequence
 
 **Validation Sequence**:  
-1. `pnpm lint --fix` → Fix all ESLint + TypeScript warnings and errors  
-2. check the problems tool, check codacy
-5. `pnpm build` → Must complete without warnings or failures
+1. `pnpm lint --fix && pnpm build` → Fix all ESLint + TypeScript warnings and errors
+2. Must complete without warnings or failures
+2. Check the problems tool, check codacy
 6. If the project is in better shape than when the validation sequence first ran commit the changes
 7. If all the above are not problem and warning free repeat the 6 steps
 

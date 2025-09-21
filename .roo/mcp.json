@@ -13,7 +13,7 @@
         "@modelcontextprotocol/server-filesystem",
         "/home/dice-wizard/dev/rebrand/"
       ],
-      "disabled": false,
+      "disabled": true,
       "alwaysAllow": []
     }
   }

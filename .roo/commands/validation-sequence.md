@@ -1,6 +1,6 @@
 **Validation Sequence**:  
-1. `pnpm lint --fix` → Fix all ESLint + TypeScript errors  
-2. check the problems tool
+1. `pnpm lint --fix && pnpm build` → Fix all ESLint + TypeScript warning and errors  
+2. check the problems tool, check [codacy](../.././codacy-check.prompt.md)
 3. `pnpm run dev` → Verify no terminal or console errors  
 4. `curl -Is http://localhost:[PORT] | head -n 1` → Must return `HTTP/1.1 200 OK` - must use desktop-commmander
 5. `next build` → Must complete without warnings or failures

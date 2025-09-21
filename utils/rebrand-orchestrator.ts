@@ -89,12 +89,16 @@ export async function orchestrateRebrand(): Promise<RebrandData> {
       imageUrl: logoImage
     });
     
+    // Validate that we got valid image URLs
+    const validBackgroundImage = backgroundImage && backgroundImage.startsWith('http') ? backgroundImage : `https://image.pollinations.ai/prompt/${encodeURIComponent(`${businessProfile.name} professional background`)}`;
+    const validLogoImage = logoImage && logoImage.startsWith('http') ? logoImage : `https://image.pollinations.ai/prompt/${encodeURIComponent(`${businessProfile.name} logo`)}`;
+
     return {
       theme,
       businessProfile,
       assets: {
-        backgroundImage,
-        logoImage
+        backgroundImage: validBackgroundImage,
+        logoImage: validLogoImage
       }
     };
  } catch (error) {
@@ -334,28 +338,47 @@ export async function generateSingleAsset(
     if (assetType === 'background') {
       const prompt = `Modern ${currentTheme.name} themed background with ${currentContent.description}, professional, high quality, 4k`;
       const [imageUrl] = await processPollinationsPromptsSequentially([{ prompt }]);
-      
+
+      // Validate the returned URL
+      if (!imageUrl || !imageUrl.startsWith('http')) {
+        throw new Error('Invalid background image URL returned from API');
+      }
+
       // Emit element rebranded event
       rebrandEventEmitter.emit('elementRebranded', {
         elementType: 'background',
         imageUrl
       });
-      
+
       return imageUrl;
     } else {
       const prompt = `${currentContent.name} logo with ${currentTheme.name} color scheme, minimalist, professional, vector style`;
       const [imageUrl] = await processPollinationsPromptsSequentially([{ prompt, options: { isLogo: true } }]);
-      
+
+      // Validate the returned URL
+      if (!imageUrl || !imageUrl.startsWith('http')) {
+        throw new Error('Invalid logo image URL returned from API');
+      }
+
       // Emit element rebranded event
       rebrandEventEmitter.emit('elementRebranded', {
         elementType: 'logo',
         imageUrl
       });
-      
+
       return imageUrl;
     }
   } catch (error) {
     console.error(`Error generating ${assetType} asset:`, error);
-    throw error;
+
+    // Return a fallback URL instead of throwing
+    const fallbackPrompt = assetType === 'background'
+      ? `${currentContent.name} professional background`
+      : `${currentContent.name} logo`;
+
+    const fallbackUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fallbackPrompt)}`;
+    console.log(`Using fallback ${assetType} URL: ${fallbackUrl}`);
+
+    return fallbackUrl;
   }
 }

@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Rebrandable from '@/components/rebrand/rebrandable';
+import Rebrand from '@/components/rebrand/rebrand';
 import { useAIContent } from '@/hooks/use-ai-content';
 import { Loading } from '@/components/loading';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 /**
  * Component that displays AI-generated content with rebranding support
@@ -38,47 +39,67 @@ const AIRebrandableContent = () => {
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8">
       {/* Rebrandable card with AI-generated image */}
-      <Rebrandable componentType="card" className="p-6 rounded-2xl shadow-xl">
-        <h2 className="text-2xl md:text-3xl font-bold mb-4">AI-Generated Branding</h2>
-        <div className="relative h-64 md:h-80 rounded-xl overflow-hidden bg-gray-800">
-          {isGenerating ? (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="text-center">
-                <Loading />
-                <p className="text-white mt-2">Generating AI Content...</p>
-              </div>
+      <Rebrand elementType="card" componentId="ai-image-card">
+        <Card className="p-6 rounded-2xl shadow-xl">
+          <CardHeader>
+            <CardTitle className="text-2xl md:text-3xl">AI-Generated Branding</CardTitle>
+            <CardDescription>Dynamic visual content powered by AI</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="relative h-64 md:h-80 rounded-xl overflow-hidden bg-muted/20 border-border/40">
+              {isGenerating ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <Loading />
+                    <p className="text-foreground mt-2">Generating AI Content...</p>
+                  </div>
+                </div>
+              ) : aiImage ? (
+                <Image
+                  src={aiImage}
+                  alt="AI Generated Background"
+                  width={400}
+                  height={256}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">🤖</div>
+                    <p className="text-muted-foreground">AI Content Loading</p>
+                  </div>
+                </div>
+              )}
             </div>
-          ) : aiImage ? (
-            <Image
-              src={aiImage}
-              alt="AI Generated Background"
-              width={400}
-              height={256}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-4xl mb-2">🤖</div>
-                <p className="text-gray-300">AI Content Loading</p>
-              </div>
-            </div>
-          )}
-        </div>
-      </Rebrandable>
+          </CardContent>
+        </Card>
+      </Rebrand>
 
       {/* Rebrandable text with AI-generated content */}
-      <Rebrandable componentType="card" className="p-6 rounded-2xl">
-        <h3 className="text-xl font-bold mb-3">Dynamic Marketing Text</h3>
-        <Rebrandable componentType="text" className="text-lg md:text-xl">
-          {aiText || 'AI-generated marketing message will appear here after rebranding'}
-        </Rebrandable>
-      </Rebrandable>
+      <Rebrand elementType="card" componentId="ai-text-card">
+        <Card className="p-6 rounded-2xl">
+          <CardHeader>
+            <CardTitle className="text-xl">Dynamic Marketing Text</CardTitle>
+            <CardDescription>AI-generated messaging</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Rebrand elementType="text-block" componentId="ai-marketing-text">
+              <p className="text-lg md:text-xl">
+                {aiText || 'AI-generated marketing message will appear here after rebranding'}
+              </p>
+            </Rebrand>
+          </CardContent>
+        </Card>
+      </Rebrand>
 
       {error && (
-        <Rebrandable componentType="card" className="p-4 bg-red-500/20 border border-red-500/40 rounded-xl">
-          <div className="text-red-300">Error loading AI content: {error}</div>
-        </Rebrandable>
+        <Rebrand elementType="card" componentId="ai-error-card">
+          <Card className="p-4 bg-destructive/20 border border-destructive/40 rounded-xl">
+            <CardContent>
+              <div className="text-destructive-foreground">Error loading AI content: {error}</div>
+            </CardContent>
+          </Card>
+        </Rebrand>
       )}
     </div>
   );

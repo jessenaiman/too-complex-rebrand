@@ -1,6 +1,8 @@
 Here are all the available Codacy MCP tools and their commands:
 
 These tools provide comprehensive code analysis, security scanning, coverage reporting, and quality metrics for your repository.
+
+
 ## Reference
 See `.github/instructions/codacy.instructions.md` for complete rules.
 

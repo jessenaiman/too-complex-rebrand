@@ -29,7 +29,9 @@ const Rebrand: React.FC<RebrandProps> = ({
     isLoading,
     triggerGlobalRebrand,
     theme,
-    businessProfile
+    businessProfile,
+    currentImage,
+    logoImage
   } = useRebrand();
   
   const [localLoading, setLocalLoading] = useState(false);
@@ -39,6 +41,11 @@ const Rebrand: React.FC<RebrandProps> = ({
 
   // Handle rebranding for this specific element
   const handleRebrand = async () => {
+    // Prevent multiple simultaneous rebrand calls
+    if (localLoading || isLoading) {
+      return;
+    }
+
     // For theme elements, trigger global rebrand
     if (elementType === 'theme') {
       await triggerGlobalRebrand();
@@ -67,6 +74,8 @@ const Rebrand: React.FC<RebrandProps> = ({
                 src={result.imageUrl}
                 alt={`${businessProfile.name} logo`}
                 className={className}
+                width={128}
+                height={48}
               />
             );
           }
@@ -142,7 +151,7 @@ const Rebrand: React.FC<RebrandProps> = ({
             foreground: 'var(--foreground)',
             muted: 'var(--muted)',
             border: 'var(--border)'
-          });
+          }, theme.name);
           break;
         case 'button':
           applyButtonTheme(componentRef.current, {
@@ -156,16 +165,16 @@ const Rebrand: React.FC<RebrandProps> = ({
           });
           break;
         case 'card':
-          // Apply theme to card
+          // Apply theme to card using CSS variables
           if (componentRef.current) {
             componentRef.current.className = `${componentRef.current.className} bg-card border-border`;
           }
           break;
       }
     }
-  }, [localRebranded, elementType]);
+  }, [localRebranded, elementType, theme.name]);
 
-  // Listen for element rebranded events
+  // Listen for element rebranded events and page-wide rebrand events
   useEffect(() => {
     const handleElementRebranded = (data: unknown) => {
       if (typeof data === 'object' && data !== null && 'elementType' in data && componentId) {
@@ -177,12 +186,48 @@ const Rebrand: React.FC<RebrandProps> = ({
       }
     };
     
+    const handlePageRebrandCompleted = (_data: unknown) => {
+      // When page-wide rebrand completes, update this component with global state
+      setLocalRebranded(true);
+      
+      // For logo and background elements, use the global images
+      if (elementType === 'logo' && logoImage) {
+        setRebrandedContent(
+          <Image
+            src={logoImage}
+            alt={`${businessProfile.name} logo`}
+            className={className}
+            width={128}
+            height={48}
+          />
+        );
+      } else if (elementType === 'background' && currentImage) {
+        setRebrandedContent(
+          <div
+            className={`${className} bg-cover bg-center`}
+            style={{ backgroundImage: `url(${currentImage})` }}
+          >
+            {children}
+          </div>
+        );
+      }
+    };
+    
+    const handleThemeChanged = (_data: unknown) => {
+      // When theme changes, update this component
+      setLocalRebranded(true);
+    };
+    
     rebrandEventEmitter.on('elementRebranded', handleElementRebranded);
+    rebrandEventEmitter.on('pageRebrandCompleted', handlePageRebrandCompleted);
+    rebrandEventEmitter.on('themeChanged', handleThemeChanged);
     
     return () => {
       rebrandEventEmitter.off('elementRebranded', handleElementRebranded);
+      rebrandEventEmitter.off('pageRebrandCompleted', handlePageRebrandCompleted);
+      rebrandEventEmitter.off('themeChanged', handleThemeChanged);
     };
-  }, [elementType, componentId]);
+  }, [elementType, componentId, logoImage, currentImage, businessProfile, className, children]);
 
   // Render loading state
   if (localLoading || isLoading) {

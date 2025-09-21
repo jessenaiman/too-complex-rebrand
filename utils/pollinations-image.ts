@@ -35,21 +35,31 @@ export async function generatePollinationsImageAsync(
   try {
     // Make a HEAD request to verify the image is available
     const response = await fetch(url, { method: 'HEAD' });
-    
-    // Even if the response isn't OK, we'll still return the URL since images might still generate
-    if (response.status === 404) {
-      // If it's a 404, the image definitely won't work
-      console.warn(`Image not found at ${url}`);
-      throw new Error(`Image not found: ${response.status} ${response.statusText}`);
+
+    // Check if response is null or invalid
+    if (!response) {
+      console.warn(`No response received from Pollinations API for ${url}`);
+      throw new Error('No response from Pollinations API');
     }
-    
-    // For other statuses, we'll return the URL anyway
+
+    // Check for various error statuses
+    if (response.status === 404 || response.status === 500 || response.status === 503) {
+      console.warn(`Pollinations API error for ${url}: ${response.status} ${response.statusText}`);
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+
+    // For successful responses or other statuses, return the URL
     console.log(`Image generation request sent for ${url} with status ${response.status}`);
     return url;
   } catch (error) {
-    console.warn("Error verifying image generation, but returning URL anyway:", error);
-    // Return the URL anyway - the image might still be generated
-    return url;
+    console.warn("Error verifying image generation:", error);
+
+    // Generate a fallback data URL or placeholder
+    const fallbackPrompt = prompt.split(' ').slice(0, 3).join(' ');
+    const fallbackUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fallbackPrompt + ' abstract background')}`;
+    console.log(`Using fallback URL: ${fallbackUrl}`);
+
+    return fallbackUrl;
   }
 }
 
@@ -77,9 +87,12 @@ export async function processPollinationsPromptsSequentially(
       console.log(`[REBRAND] Successfully generated image for prompt ${i + 1}:`, imageUrl);
     } catch (error) {
       console.error(`[REBRAND] Error generating image for prompt ${i + 1}:`, error);
-      // Add a fallback URL
-      const fallbackUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=600&nologo=true&seed=${Math.floor(Math.random() * 1000)}`;
+
+      // Create a more robust fallback URL with a simplified prompt
+      const simplePrompt = prompt.split(' ').slice(0, 5).join(' ') + ' background';
+      const fallbackUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(simplePrompt)}?width=800&height=600&nologo=true&seed=${Math.floor(Math.random() * 1000)}`;
       results.push(fallbackUrl);
+      console.log(`[REBRAND] Using fallback URL for prompt ${i + 1}:`, fallbackUrl);
     }
     
     // Add a small delay between requests to respect rate limits

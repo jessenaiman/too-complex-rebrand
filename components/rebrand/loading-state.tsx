@@ -20,7 +20,7 @@ const LoadingState: React.FC<LoadingStateProps> = ({
       return (
         <div className="flex items-center space-x-2" aria-live="polite">
           <Loading />
-          <span>{message}</span>
+          <span className="text-sm text-muted-foreground">{message}</span>
         </div>
       );
       
@@ -28,8 +28,8 @@ const LoadingState: React.FC<LoadingStateProps> = ({
       return (
         <BlurFade delay={0.25} inView>
           <div className="flex flex-col items-center space-y-2" aria-live="polite">
-            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-            <span className="text-sm text-gray-500">{message}</span>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <span className="text-sm text-muted-foreground">{message}</span>
           </div>
         </BlurFade>
       );
@@ -37,9 +37,9 @@ const LoadingState: React.FC<LoadingStateProps> = ({
     case 'default':
     default:
       return (
-        <div className="w-full" aria-live="polite">
+        <div className="w-full space-y-2" aria-live="polite">
           <Progress value={66} className="w-full" />
-          <span className="text-sm text-gray-500 mt-1">{message}</span>
+          <span className="text-sm text-muted-foreground">{message}</span>
         </div>
       );
   }

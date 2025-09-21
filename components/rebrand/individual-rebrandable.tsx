@@ -68,6 +68,7 @@ const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({
 
     try {
       // Use orchestrator to generate asset following theme → content → assets sequence
+      // TODO: Get actual current theme and business profile from context
       const assetUrl = await generateSingleAsset(
         'logo', // Generate a logo-type asset for individual components
         {
@@ -88,6 +89,7 @@ const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({
     } catch (error) {
       console.error('Error generating individual component asset:', error);
       setLocalImage(null);
+    } finally {
       setIsLocalLoading(false);
     }
   };
@@ -98,29 +100,29 @@ const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({
       onClick={handleIndividualRebrand}
     >
       {componentType === 'image' && (isLocalLoading || isLoading) ? (
-        <div className="w-full h-48 flex items-center justify-center bg-gray-800 rounded-xl">
+        <div className="w-full h-48 flex items-center justify-center bg-muted/20 rounded-xl border border-border/40">
           <div className="text-center">
-            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-            <p className="text-gray-400">Rebranding...</p>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+            <p className="text-muted-foreground text-sm">Rebranding...</p>
           </div>
         </div>
       ) : componentType === 'image' && localImage ? (
-        <Image 
-          src={localImage} 
-          alt="Rebranded component" 
+        <Image
+          src={localImage}
+          alt="Rebranded component"
           className="w-full h-48 object-cover rounded-xl"
           onError={(e) => {
             console.error("Error loading individual component image:", e);
             // Show fallback
             (e.target as HTMLImageElement).style.display = 'none';
-            (e.target as HTMLImageElement).parentElement!.innerHTML = '<div class="w-full h-48 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl flex items-center justify-center"><div class="text-center"><div class="text-2xl mb-2">📷</div><p class="text-gray-400">Image unavailable</p></div></div>';
+            (e.target as HTMLImageElement).parentElement!.innerHTML = '<div class="w-full h-48 bg-muted/20 rounded-xl flex items-center justify-center border border-border/40"><div class="text-center"><div class="text-2xl mb-2">📷</div><p class="text-muted-foreground">Image unavailable</p></div></div>';
           }}
         />
       ) : componentType === 'image' ? (
-        <div className="w-full h-48 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl flex items-center justify-center">
+        <div className="w-full h-48 bg-muted/20 rounded-xl flex items-center justify-center border border-border/40">
           <div className="text-center">
             <div className="text-2xl mb-2">📷</div>
-            <p className="text-gray-400">Click to rebrand</p>
+            <p className="text-muted-foreground">Click to rebrand</p>
           </div>
         </div>
       ) : (
@@ -129,10 +131,10 @@ const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({
       
       {/* Overlay to indicate this component is selectable */}
       <div 
-        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
+        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-background/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
         title="Click to rebrand this component"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-foreground" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
         </svg>
       </div>

@@ -76,7 +76,7 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
   if (error || !Component) {
     console.warn('Component loading error:', error);
     return (
-      <div className={`px-4 py-2 bg-red-100 text-red-800 rounded ${className}`}>
+      <div className={`px-4 py-2 bg-destructive/20 text-destructive-foreground rounded ${className}`}>
         Error: {error}
       </div>
     );
