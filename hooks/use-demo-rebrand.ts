@@ -18,7 +18,7 @@ export function useDemoRebrand() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [logoImage, setLogoImage] = useState<string | null>(null);
-  const [themeColors, setThemeColors] = useState<ThemeColors>({
+  const [themeColors] = useState<ThemeColors>({
     primary: 'from-blue-500 to-cyan-600',
     secondary: 'from-blue-400 to-cyan-600',
     text: 'text-blue-300',

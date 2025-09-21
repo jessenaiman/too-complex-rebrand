@@ -3,6 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDemoRebrand } from '@/hooks/use-demo-rebrand';
 import { generateSingleAsset, rebrandEventEmitter } from '@/utils/rebrand-orchestrator';
+import Image from 'next/image';
+
+
+//NOTE: Always use Image from 'next/image' for optimized images
 
 /**
  * Individual rebrandable component that can be selected and rebranded independently
@@ -19,13 +23,12 @@ interface IndividualRebrandableProps {
   componentType?: 'card' | 'text' | 'image';
 }
 
-const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({ 
-  children, 
+const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({
+  children,
   className = '',
-  componentId,
   componentType = 'card'
 }) => {
-  const { isLoading, themeColors, currentImage } = useDemoRebrand();
+  const { isLoading, themeColors } = useDemoRebrand();
   const [localImage, setLocalImage] = useState<string | null>(null);
   const [isLocalLoading, setIsLocalLoading] = useState(false);
 
@@ -102,7 +105,7 @@ const IndividualRebrandable: React.FC<IndividualRebrandableProps> = ({
           </div>
         </div>
       ) : componentType === 'image' && localImage ? (
-        <img 
+        <Image 
           src={localImage} 
           alt="Rebranded component" 
           className="w-full h-48 object-cover rounded-xl"

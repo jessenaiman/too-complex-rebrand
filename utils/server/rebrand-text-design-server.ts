@@ -31,6 +31,8 @@ export const getRandomTextComponent = () => {
   return textComponents[randomIndex];
 };
 
-export default {
+const rebrandTextDesignServer = {
   getRandomTextComponent
 };
+
+export default rebrandTextDesignServer;

@@ -1,5 +1,6 @@
-import { useRebrand } from './rebrand/rebrand-context'
 import { motion } from "motion/react";
+import Image from "next/image";
+import { useRebrand } from './rebrand/rebrand-context';
 
 export function Navbar() {
   const { isRebranded, isLoading, triggerGlobalRebrand, logoImage } = useRebrand();
@@ -38,9 +39,11 @@ export function Navbar() {
                   />
                 </div>
               ) : logoImage ? (
-                <img
+                <Image
                   src={logoImage}
                   alt="Brand Logo"
+                  width={40}
+                  height={40}
                   className="w-full h-full object-cover"
                 />
               ) : (

@@ -1,13 +1,17 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { RebrandProvider, useRebrand } from './rebrand-context';
 import { ShinyButton } from '@/components/ui/shiny-button';
 import { ShimmerButton } from '@/components/buttons/shimmer-button';
 import { RainbowButton } from '@/components/ui/rainbow-button';
 import Rebrand from './rebrand';
 import { orchestrateRebrand, orchestrateElementRebrand, rebrandEventEmitter, RebrandData } from '@/utils/rebrand-orchestrator';
+
+//TODO: Add jsdoc comments
+//NOTE: Always use Image from 'next/image' for optimized images
+import Image from 'next/image';
 
 // Define the type for rebrandable elements
 interface RebrandableElement {
@@ -22,15 +26,14 @@ const RebrandContent = () => {
     triggerGlobalRebrand,
     currentImage,
     logoImage,
-    businessProfile
-  } = useRebrand();
+    } = useRebrand();
 
  const [rebrandableElements, setRebrandableElements] = useState<RebrandableElement[]>([]);
 
   // Load initial images
   useEffect(() => {
     triggerGlobalRebrand();
-  }, []);
+  }, [triggerGlobalRebrand]);
 
   // Query DOM for all Rebrand elements on the page
   useEffect(() => {
@@ -77,12 +80,7 @@ const RebrandContent = () => {
     exit: { opacity: 0, y: -50 }
   };
 
-  const loadingVariants = {
-    initial: { scale: 0 },
-    animate: {
-      scale: 1
-    }
-  };
+  
 
   const spinnerVariants = {
     animate: {
@@ -131,7 +129,7 @@ const RebrandContent = () => {
       <nav className="flex justify-between items-center p-6">
         <Rebrand elementType="logo" componentId="navbar-logo">
           {logoImage ? (
-            <img src={logoImage} alt="Company Logo" className="h-12" />
+            <Image src={logoImage} alt="Company Logo" width={128} height={48} className="h-12" />
           ) : (
             <div className="h-12 w-32 bg-gray-200 rounded-lg"></div>
           )}
@@ -203,7 +201,7 @@ const RebrandContent = () => {
             {/* AI Generated Background Image */}
             <div className="relative mb-8 rounded-2xl overflow-hidden h-80">
               {currentImage ? (
-                <img
+                <Image
                   src={currentImage}
                   alt="AI Generated Background"
                   className="w-full h-full object-cover transition-opacity duration-1000"

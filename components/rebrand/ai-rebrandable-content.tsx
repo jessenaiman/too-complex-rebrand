@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Rebrandable from '@/components/rebrand/rebrandable';
 import { useAIContent } from '@/hooks/use-ai-content';
 import { Loading } from '@/components/loading';
 
 /**
  * Component that displays AI-generated content with rebranding support
- * 
+ *
  * @returns React component showing rebrandable AI content
  */
 const AIRebrandableContent = () => {
@@ -22,7 +23,7 @@ const AIRebrandableContent = () => {
         // Generate an image
         const image = await generateImage('modern business background');
         setAiImage(image);
-        
+
         // Generate some marketing text
         const text = await generateText('short marketing slogan for a innovative company');
         setAiText(text);
@@ -30,9 +31,9 @@ const AIRebrandableContent = () => {
         console.error('Failed to load AI content:', err);
       }
     };
-    
+
     loadAIContent();
-  }, []);
+  }, [generateImage, generateText]);
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8">
@@ -48,9 +49,11 @@ const AIRebrandableContent = () => {
               </div>
             </div>
           ) : aiImage ? (
-            <img 
-              src={aiImage} 
-              alt="AI Generated Background" 
+            <Image
+              src={aiImage}
+              alt="AI Generated Background"
+              width={400}
+              height={256}
               className="w-full h-full object-cover"
             />
           ) : (
@@ -63,7 +66,7 @@ const AIRebrandableContent = () => {
           )}
         </div>
       </Rebrandable>
-      
+
       {/* Rebrandable text with AI-generated content */}
       <Rebrandable componentType="card" className="p-6 rounded-2xl">
         <h3 className="text-xl font-bold mb-3">Dynamic Marketing Text</h3>
@@ -71,7 +74,7 @@ const AIRebrandableContent = () => {
           {aiText || 'AI-generated marketing message will appear here after rebranding'}
         </Rebrandable>
       </Rebrandable>
-      
+
       {error && (
         <Rebrandable componentType="card" className="p-4 bg-red-500/20 border border-red-500/40 rounded-xl">
           <div className="text-red-300">Error loading AI content: {error}</div>

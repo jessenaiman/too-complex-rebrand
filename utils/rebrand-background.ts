@@ -44,7 +44,9 @@ export const applyBackgroundAnimation = (element: HTMLElement) => {
   element.classList.add('opacity-100');
 };
 
-export default {
+const rebrandBackground = {
   getRandomBackground,
   applyBackgroundAnimation
 };
+
+export default rebrandBackground;

@@ -8,16 +8,9 @@ import { applyTextAnimation } from '@/utils/rebrand-text-design';
 import { applyButtonTheme } from '@/utils/rebrand-button';
 import LoadingState from './loading-state';
 
-// Define the type for theme colors
-interface ThemeColors {
-  primary: string;
-  secondary: string;
-  accent: string;
-  background: string;
-  foreground: string;
-  muted: string;
-  border: string;
-}
+//TODO: Add jsdoc comments
+//NOTE: Always use Image from 'next/image' for optimized images
+import Image from 'next/image';
 
 interface RebrandProps {
   children: React.ReactNode;
@@ -33,7 +26,6 @@ const Rebrand: React.FC<RebrandProps> = ({
   componentId
 }) => {
   const {
-    isRebranded,
     isLoading,
     triggerGlobalRebrand,
     theme,
@@ -71,7 +63,7 @@ const Rebrand: React.FC<RebrandProps> = ({
         case 'logo':
           if (result && typeof result === 'object' && 'imageUrl' in result && typeof result.imageUrl === 'string') {
             newContent = (
-              <img
+              <Image
                 src={result.imageUrl}
                 alt={`${businessProfile.name} logo`}
                 className={className}

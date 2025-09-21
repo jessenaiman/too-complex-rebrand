@@ -4,21 +4,18 @@
 Single-page web app for dynamic component rebranding using AI-generated content and themes. Built with React 19, Next.js 15, and shadcn/ui components.
 
 ## Critical Issues (Must Fix First)
-- **CRITICAL: Circular Import Bug** - tailwindcss or shadcn themes are being overwritten by inline css which should not be in the code.
-- **CRITICAL: Circular Import Bug** - `utils/rebrand-orchestrator.ts` imports itself via `generateSingleAsset` function, causing build failures
+- **CRITICAL: Broken layout, amd CSS** - tailwindcss or shadcn themes are being overwritten by inline css which should not be in the code.
+- **CRITICAL: Circular Import Bug** - `utils/rebrand-orchestrator.ts` imports itself via `generateSingleAsset` function, causing build 
+ - **CRITICAL: Code Architecture FAIL**//FIX: not standard react means it's not properly coded or architected.
+- **Event Emitter System** coordinates rebrand operations across components (not standard React state management)failures
 - **Orchestrator Integration Incomplete** - Components use hardcoded placeholder logic instead of connecting to orchestrator system
 - **Missing Element Type Handlers** - Many element types return placeholder data instead of actual rebrand functionality
 
 ## Non-Obvious Architecture Patterns
 - **Orchestrator Decision Flow** requires specific sequence: theme → content → assets (deviates from typical component patterns)
-- **Event Emitter System** coordinates rebrand operations across components (not standard React state management)
+
 - **Sequential AI Processing** with `processPollinationsPromptsSequentially` respects rate limits (hidden performance constraint)
 - **Theme-Content-Asset Coupling** where business profiles must match theme metadata for proper AI generation
-
-## Build System Requirements
-- **Package Manager**: Must use pnpm (not npm/yarn) for dependency resolution
-- **Validation Sequence**: `pnpm lint --fix` → `pnpm build`
-- **Directory Convention**: All rebrand logic must stay in `app/` directory (not `src/`), using kebab-case file naming
 
 ## Success Criteria
 1. A fully responsive modern website with shadcn supported theme switching using the animated-theme-toggle
@@ -27,45 +24,20 @@ Single-page web app for dynamic component rebranding using AI-generated content 
 4. Zero custom logic overwritting tailwindcss or shadcn theme. No inline brittle and breaking css elements in pages or components.
 5. Zero suggestions, warnings, fixes, and an A+ from codacy
 
-## Check Engine
-1. Review the codebase with the correct tool
-2. Review react 19+, nextjs, tailwindcss 4.1, shadcn storing the essential knoweldge using your memory mcp tool
-3. Check the git status.
-  - If we are not checked in start a new branch
-  - -> check for open a github issue connected to current branch
-  - -> if no issue is connected create a new issue
-  - commit the current status attached with the github issue number 
-5. Repeat the project plan core
-
 Before you start complete always run the validation sequence
 
 **Validation Sequence**:  
-1. `pnpm lint --fix` → Fix all ESLint + TypeScript errors  
-2. check the problems tool
-3. `pnpm run dev` → Verify no terminal or console errors  
-4. `curl -Is http://localhost:[PORT] | head -n 1` → Must return `HTTP/1.1 200 OK` - must use desktop-commmander
-5. `pnpm build` → Must complete without warnings or failures
-6. If the project is in better shape than when the validation sequence first ran commit the changes
-7. If all the above are not problem and warning free repeat the 6 steps
+1. `pnpm lint --fix` → Fix all ESLint + TypeScript warnings and errors  
+2. FIX ALL WARNINGS 
+3. `pnpm build` → Must complete without warnings or failures -> If it breaks at this point you are doing things wrong. Fix it so the next build succeeds. DO NOT KEEP BUILDING WHEN OBVIOUS ISSUES EXIST.
+4. If the project is in better shape than when the validation sequence first ran commit the changes
+5. If all the above are not problem and warning free repeat the steps again
 
 Before you submit your code as complete run the Validation Sequence  
 
-## WARNINGS
-
-Your work will always be rejected if you fail to do the following
-
-1. Did you run the Validation Sequence?
-2. Did you fulfill the users request?
-3. Does the chat log clearly show that you have used the context7 tool to validate your systax, or the codacy tool
-4. did a proper file scan for duplicates
-
+## Rules
 - Use only shadcn/ui and MagicUI components for UI—never copy MagicUI code, always install via CLI as per project rules.
-- All AI-generated assets (logo, card, hero images) must be produced via the Pollinations API, with asset orchestration following the sequence: theme → content → assets.
-- Do not touch `package.json` or install dependencies unless explicitly instructed and validated via context7 or shadcn/magicui CLI.
-- All validation must follow the sequence: `pnpm lint`, `pnpm run dev`, `curl -Is http://localhost:3000 | head -n 1`, `next build`.
-- Never write tests or touch test infrastructure unless specifically requested.
-- All project-specific naming conventions: use kebab-case for files (e.g., `use-rebrandable.ts`), and keep all logic in `app/` (not `src/`).
-- If you find any ambiguity, always defer to the latest `rebrand-project-specs.md` and ask for clarification.
+- Do not edit `package.json` or install dependencies unless explicitly instructed and validated via context7, magicui mcp tool, or a CLI installation.
 
 # Tools List
 
@@ -119,3 +91,12 @@ Use Desktop Commander tools to perform comprehensive file operations:
 16. **codacy_list_repository_tool_patterns**: Lists patterns available for a repository.
 17. **codacy_list_tools**: Lists all code analysis tools available.
 18. **codacy_list_repository_tools**: Gets analysis tools settings for a repository.
+
+## WARNINGS
+
+Your work will always be rejected if you fail to do the following
+
+1. Did you run the Validation Sequence?
+2. Did you fulfill the users request?
+3. Does the chat log clearly show that you have used the context7 tool to validate your systax, or the codacy tool
+4. did a proper file scan for duplicates

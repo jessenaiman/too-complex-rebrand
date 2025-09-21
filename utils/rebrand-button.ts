@@ -47,6 +47,8 @@ export const applyButtonTheme = (element: HTMLElement, themeColors: ThemeColors)
   });
 };
 
-export default {
+const rebrandButton = {
   applyButtonTheme
 };
+
+export default rebrandButton;

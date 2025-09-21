@@ -31,6 +31,8 @@ export const getRandomButtonComponent = () => {
   return buttonComponents[randomIndex];
 };
 
-export default {
+const rebrandButtonServer = {
   getRandomButtonComponent
 };
+
+export default rebrandButtonServer;

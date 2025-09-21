@@ -82,8 +82,10 @@ export const wrapImageWithBlurFade = (imageUrl: string) => {
   return imageUrl;
 };
 
-export default {
+const rebrandImage = {
   constructImagePrompt,
   generateRebrandImage,
   wrapImageWithBlurFade
 };
+
+export default rebrandImage;

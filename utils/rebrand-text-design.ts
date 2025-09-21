@@ -40,6 +40,8 @@ export const applyTextAnimation = (element: HTMLElement, themeColors: ThemeColor
   }
 };
 
-export default {
+const rebrandTextDesign = {
   applyTextAnimation
 };
+
+export default rebrandTextDesign;
