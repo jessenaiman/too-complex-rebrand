@@ -6,11 +6,6 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
-interface MemoryQuery {
-  term: string;
-  question: string;
-}
-
 interface MemoryResponse {
   query: string;
   answer: string;

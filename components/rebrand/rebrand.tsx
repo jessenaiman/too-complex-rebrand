@@ -186,7 +186,7 @@ const Rebrand: React.FC<RebrandProps> = ({
       }
     };
     
-    const handlePageRebrandCompleted = (_data: unknown) => {
+    const handlePageRebrandCompleted = () => {
       // When page-wide rebrand completes, update this component with global state
       setLocalRebranded(true);
       
@@ -213,7 +213,7 @@ const Rebrand: React.FC<RebrandProps> = ({
       }
     };
     
-    const handleThemeChanged = (_data: unknown) => {
+    const handleThemeChanged = () => {
       // When theme changes, update this component
       setLocalRebranded(true);
     };
