@@ -49,4 +49,4 @@ gha-creds-*.json
 .codacy/
 .qwen/
 .windsurf
-./s
+./s.env.local
