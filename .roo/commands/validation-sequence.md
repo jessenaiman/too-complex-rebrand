@@ -1,8 +1,35 @@
-**Validation Sequence**:  
-1. `pnpm lint --fix && pnpm build` → Fix all ESLint + TypeScript warning and errors  
-2. check the problems tool, check [codacy](../.././codacy-check.prompt.md)
-3. `pnpm run dev` → Verify no terminal or console errors  
-4. `curl -Is http://localhost:[PORT] | head -n 1` → Must return `HTTP/1.1 200 OK` - must use desktop-commmander
-5. `next build` → Must complete without warnings or failures
-6. If the project is in better shape than when the validation sequence first ran commit the changes
-7. If all the above are not problem and warning free repeat the 6 steps
+# Validation Sequence
+
+Run this script and provide a report if it is not all green
+
+```bash
+pnpm validate
+```
+
+## Optimized Validation Sequence
+
+```mermaid
+graph TD
+    A[Start Validation] --> B[Lint & Fix]
+    B --> C[Type Check]
+    C --> D[Health Check Test]
+    D --> E[Production Build]
+    E --> F[Smoke Test]
+    F --> G[Validation Complete]
+    
+    style A fill:#e1f5fe
+    style G fill:#c8e6c9
+    style B fill:#fff3e0
+    style C fill:#fff3e0
+    style D fill:#fce4ec
+    style E fill:#f3e5f5
+    style F fill:#fce4ec
+```
+
+## What is happening:
+
+1. **[Lint & Fix](../../scripts/validate.sh)** - `pnpm lint --fix`
+2. **[Type Check](../../scripts/validate.sh)** - `pnpm type-check`  
+3. **[Health Check](../../tests/health-check.spec.ts)** - `pnpm health-check`
+4. **[Production Build](../../scripts/validate.sh)** - `pnpm build`
+5. **[Smoke Test](../../tests/smoke-test.spec.ts)** - `pnpm smoke-test`

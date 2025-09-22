@@ -6,8 +6,13 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "type-check": "tsc --noEmit",
     "watch:lint": "onchange 'app/**/*.{ts,tsx}' -- pnpm lint --fix",
-    "watch:build": "nodemon --watch app --exec \"pnpm run build\""
+    "watch:build": "nodemon --watch app --exec \"pnpm run build\"",
+    "validate": "./scripts/validate.sh",
+    "health-check": "playwright test --grep \"health-check\"",
+    "smoke-test": "playwright test --grep \"smoke-test\"",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-beta.3",

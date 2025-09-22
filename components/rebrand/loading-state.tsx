@@ -34,6 +34,20 @@ const LoadingState: React.FC<LoadingStateProps> = ({
         </BlurFade>
       );
       
+    case 'text':
+      return (
+        <BlurFade delay={0.25} inView>
+          <div className="flex flex-col items-center space-y-2" aria-live="polite">
+            <div className="flex space-x-1">
+              <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+              <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+              <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            </div>
+            <span className="text-sm text-muted-foreground">{message}</span>
+          </div>
+        </BlurFade>
+      );
+      
     case 'default':
     default:
       return (

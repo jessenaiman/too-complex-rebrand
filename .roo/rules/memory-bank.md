@@ -90,15 +90,20 @@ Update the Memory Bank when:
 
 To ensure efficient and accurate use of the `context7` tool and the knowledge stored in the `doc/memory` directory, follow these guidelines:
 
+## Rules
+
+1. **Always include a TOC"**
+2. **Cross reference with [project-brief.md](../../docs/memory-bank/project-brief.md)
+
 1. **Context7 Usage**:
    - Use `context7` to fetch up-to-date documentation and code examples for libraries or tools relevant to the project.
    - Always resolve the library ID using `context7` before fetching documentation to ensure accuracy.
    - Specify a topic or focus area when querying `context7` to narrow down the results and save time.
 
-2. **Knowledge Stored in `doc/memory`**:
-   - The `doc/memory` directory contains essential project knowledge, including historical context, design decisions, and implementation details.
-   - Check timestamp and update the files in `doc/memory` to reflect the latest changes and insights if data is older than 1 week or directly requested.
-   - Use the information in `doc/memory` as a reference point when planning or executing tasks to maintain consistency and alignment with project goals.
+2. **Knowledge Stored in `doc/`**:
+   - The `doc/` directory contains essential project knowledge, including historical context, design decisions, and implementation details.
+   - Check timestamp and update the files in `doc/` to reflect the latest changes and insights if data is older than 1 week or directly requested.
+   - Use the information in `doc/` as a reference point when planning or executing tasks to maintain consistency and alignment with project goals.
 
 3. **Syncing Documentation**:
    - Periodically check the timestamps of files in `doc/memory` against the latest source to ensure they are up-to-date.

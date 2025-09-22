@@ -15,7 +15,7 @@ import Image from 'next/image';
 interface RebrandProps {
   children: React.ReactNode;
   className?: string;
-  elementType: 'logo' | 'button' | 'card' | 'text-block' | 'background' | 'theme';
+ elementType: 'logo' | 'button' | 'card' | 'text-block' | 'background' | 'theme';
   componentId?: string;
 }
 
@@ -176,58 +176,71 @@ const Rebrand: React.FC<RebrandProps> = ({
 
   // Listen for element rebranded events and page-wide rebrand events
   useEffect(() => {
+    let isEventHandlerActive = true;
+
     const handleElementRebranded = (data: unknown) => {
+      if (!isEventHandlerActive) return;
+
       if (typeof data === 'object' && data !== null && 'elementType' in data && componentId) {
         const elementData = data as { elementType: string };
-        if (elementData.elementType === elementType) {
-          // Update content based on the rebranded element
+        if (elementData.elementType === elementType && !localRebranded) {
+          // Only update if not already rebranded to prevent loops
           setLocalRebranded(true);
         }
       }
     };
-    
+
     const handlePageRebrandCompleted = () => {
+      if (!isEventHandlerActive) return;
+
       // When page-wide rebrand completes, update this component with global state
-      setLocalRebranded(true);
-      
-      // For logo and background elements, use the global images
-      if (elementType === 'logo' && logoImage) {
-        setRebrandedContent(
-          <Image
-            src={logoImage}
-            alt={`${businessProfile.name} logo`}
-            className={className}
-            width={128}
-            height={48}
-          />
-        );
-      } else if (elementType === 'background' && currentImage) {
-        setRebrandedContent(
-          <div
-            className={`${className} bg-cover bg-center`}
-            style={{ backgroundImage: `url(${currentImage})` }}
-          >
-            {children}
-          </div>
-        );
+      if (!localRebranded) {
+        setLocalRebranded(true);
+
+        // For logo and background elements, use the global images
+        if (elementType === 'logo' && logoImage) {
+          setRebrandedContent(
+            <Image
+              src={logoImage}
+              alt={`${businessProfile.name} logo`}
+              className={className}
+              width={128}
+              height={48}
+            />
+          );
+        } else if (elementType === 'background' && currentImage) {
+          setRebrandedContent(
+            <div
+              className={`${className} bg-cover bg-center`}
+              style={{ backgroundImage: `url(${currentImage})` }}
+            >
+              {children}
+            </div>
+          );
+        }
       }
     };
-    
+
     const handleThemeChanged = () => {
-      // When theme changes, update this component
-      setLocalRebranded(true);
+      if (!isEventHandlerActive) return;
+
+      // When theme changes, update this component only if not already rebranded
+      if (!localRebranded) {
+        setLocalRebranded(true);
+      }
     };
-    
+
     rebrandEventEmitter.on('elementRebranded', handleElementRebranded);
     rebrandEventEmitter.on('pageRebrandCompleted', handlePageRebrandCompleted);
     rebrandEventEmitter.on('themeChanged', handleThemeChanged);
-    
+
     return () => {
+      isEventHandlerActive = false;
       rebrandEventEmitter.off('elementRebranded', handleElementRebranded);
       rebrandEventEmitter.off('pageRebrandCompleted', handlePageRebrandCompleted);
       rebrandEventEmitter.off('themeChanged', handleThemeChanged);
     };
-  }, [elementType, componentId, logoImage, currentImage, businessProfile, className, children]);
+  }, [elementType, componentId, logoImage, currentImage, businessProfile, className, children, localRebranded]);
 
   // Render loading state
   if (localLoading || isLoading) {

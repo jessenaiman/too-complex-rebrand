@@ -24,7 +24,7 @@ This is a single-page web app for dynamic component rebranding using AI-generate
 ## User Experience Goals
 - Professional first design with creative integration of functionality
 - Seamless theme switching with animated theme toggle
-- Responsive design that works across all viewports (320px–4K)
+- Responsive design that works across all viewports (mobile, and 320px–4K)
 - Smooth loading animations and visual transitions
 - Accessible components following WCAG 2.1 standards
 - Intuitive user interface with clear feedback during rebranding process

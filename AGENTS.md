@@ -5,7 +5,7 @@ Single-page web app for dynamic component rebranding using AI-generated content 
 
 ## Starting Steps
 
-1) Run [engine-check] command which should inform you about the complete project
+1) Run the /engine-check command which should inform you about the complete project
 2) Before you complete a task always run the the complete command of `/validation-sequence`
 3) Rephrase the user request
 
@@ -43,12 +43,13 @@ Memories should be listed as:
 
 Fix and [implement codacy standards](./docs/)
 
-[Command list](./docs/tools/codacy-tool-list.md)
+[Command list](./docs/codacy.md)
 
-## WARNINGS
 
-Your work will always be rejected if you fail to do the following
+## TODO LIST REQUIRED
 
-1. Did you run the Validation Sequence?
-2. Did you fulfill the users request?
-3. Does the chat log clearly show that you have used the context7 tool to validate your systax, or the codacy tool
+When starting a new task, create a todo list.
+
+1. Include the task_progress parameter in your next tool call
+2. Create a comprehensive checklist of all steps needed
+3. Use markdown format: - [ ] for incomplete, - [x] for complete
